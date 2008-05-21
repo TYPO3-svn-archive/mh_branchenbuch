@@ -1,187 +1,187 @@
-plugin.tx_mhbranchenbuch_pi1 {
-
-  ######################
-  # IMPORTANT SETTINGS #
-  ######################
-  
-  admin                     = {$plugin.tx_mhbranchenbuch_pi1.admin}  
-  templateFile              = {$plugin.tx_mhbranchenbuch_pi1.templateFile}
-  
-  single_pid                = {$plugin.tx_mhbranchenbuch_pi1.single_pid}
-  search_pid                = {$plugin.tx_mhbranchenbuch_pi1.search_pid}
-  
-  maxEntriesPerUser         = {$plugin.tx_mhbranchenbuch_pi1.maxEntriesPerUser}
-  
-  ######################
-  # MODULE SETTINGS    #
-  ######################
-  
-  ### Settings for the entries
-  
-  noImage                   = {$plugin.tx_mhbranchenbuch_pi1.noImage}
-  mailTyp                   = {$plugin.tx_mhbranchenbuch_pi1.mailTyp}
-  imgMaxHeight              = {$plugin.tx_mhbranchenbuch_pi1.imgMaxHeight}
-  imgMaxWidth               = {$plugin.tx_mhbranchenbuch_pi1.imgMaxWidth}
-  mail_header               = {$plugin.tx_mhbranchenbuch_pi1.mail_header}
-  mail_from                 = {$plugin.tx_mhbranchenbuch_pi1.mail_from}
-  imageParams               = {$plugin.tx_mhbranchenbuch_pi1.imageParams}
-  linkTitle                 = {$plugin.tx_mhbranchenbuch_pi1.linkTitle}
-  linkType                  = {$plugin.tx_mhbranchenbuch_pi1.linkType}
-  linkTarget                = {$plugin.tx_mhbranchenbuch_pi1.linkTarget}
-  directRedirect            = {$plugin.tx_mhbranchenbuch_pi1.directRedirect}
-
-  ### Settings for the search-view
-  
-  search_showXS             = {$plugin.tx_mhbranchenbuch_pi1.search_showXS}
-  search_tables             = {$plugin.tx_mhbranchenbuch_pi1.search_tables}
-  
-  ### Settings for the FE-Form - View
-  
-  feForm_required           = {$plugin.tx_mhbranchenbuch_pi1.feForm_required}
-  feForm_report             = {$plugin.tx_mhbranchenbuch_pi1.feForm_report}
-  feForm_maxsize            = {$plugin.tx_mhbranchenbuch_pi1.feForm_maxsize}
-  feForm_createCity         = {$plugin.tx_mhbranchenbuch_pi1.feForm_createCity}
-
-  feForm_fields_xs          = {$plugin.tx_mhbranchenbuch_pi1.feForm_fields_xs}
-  feForm_fields_s           = {$plugin.tx_mhbranchenbuch_pi1.feForm_fields_s}
-  feForm_fields_m           = {$plugin.tx_mhbranchenbuch_pi1.feForm_fields_m}
-  feForm_fields_l           = {$plugin.tx_mhbranchenbuch_pi1.feForm_fields_l}
-  feForm_fields_xl          = {$plugin.tx_mhbranchenbuch_pi1.feForm_fields_xl}
-  feForm_fields_xxl         = {$plugin.tx_mhbranchenbuch_pi1.feForm_fields_xxl}
-  feForm_fields_xxl2        = {$plugin.tx_mhbranchenbuch_pi1.feForm_fields_xxl2}
-  
-  feForm_keywords_xs        = {$plugin.tx_mhbranchenbuch_pi1.feForm_keywords_xs}
-  feForm_keywords_s         = {$plugin.tx_mhbranchenbuch_pi1.feForm_keywords_s}
-  feForm_keywords_m         = {$plugin.tx_mhbranchenbuch_pi1.feForm_keywords_m}
-  feForm_keywords_l         = {$plugin.tx_mhbranchenbuch_pi1.feForm_keywords_l}
-  feForm_keywords_xl        = {$plugin.tx_mhbranchenbuch_pi1.feForm_keywords_xl}
-  feForm_keywords_xxl       = {$plugin.tx_mhbranchenbuch_pi1.feForm_keywords_xxl}
-  feForm_keywords_xxl2      = {$plugin.tx_mhbranchenbuch_pi1.feForm_keywords_xxl2}
-      
-  ### Settings for the TagCloud
-
-  countEntrys               = {$plugin.tx_mhbranchenbuch_pi1.countEntrys}
-  minFontSize               = {$plugin.tx_mhbranchenbuch_pi1.minFontSize}
-  maxFontSize               = {$plugin.tx_mhbranchenbuch_pi1.maxFontSize}
-  CloudColors               = {$plugin.tx_mhbranchenbuch_pi1.CloudColors}
-  TagCloudLink              = {$plugin.tx_mhbranchenbuch_pi1.TagCloudLink}
-  
-  ### Settings for the FE-Edit
-  
-  FEedit                    = {$plugin.tx_mhbranchenbuch_pi1.FEedit}
-  FEdelete                  = {$plugin.tx_mhbranchenbuch_pi1.FEdelete}
-  
-  ### Settings for the overview-view
-  
-  overviewPathSeperator     = {$plugin.tx_mhbranchenbuch_pi1.overviewPathSeperator}
-  overviewPathStart         = {$plugin.tx_mhbranchenbuch_pi1.overviewPathStart}
-  overviewMode              = {$plugin.tx_mhbranchenbuch_pi1.overviewMode}
-  overviewID                = {$plugin.tx_mhbranchenbuch_pi1.overviewID}
-  overviewSort              = {$plugin.tx_mhbranchenbuch_pi1.overviewSort}
-  cat_sortBy                = {$plugin.tx_mhbranchenbuch_pi1.cat_sortBy}
-  show_empty_cats           = {$plugin.tx_mhbranchenbuch_pi1.show_empty_cats}
-  show_cat_count            = {$plugin.tx_mhbranchenbuch_pi1.show_cat_count}
-  catImgMaxHeight           = {$plugin.tx_mhbranchenbuch_pi1.catImgMaxHeight}
-  catImgMaxWidth            = {$plugin.tx_mhbranchenbuch_pi1.catImgMaxWidth}
-  catImageParams            = {$plugin.tx_mhbranchenbuch_pi1.catImageParams}
-  map_api                   = {$plugin.tx_mhbranchenbuch_pi1.map_api}
-  map_zoom1                 = {$plugin.tx_mhbranchenbuch_pi1.map_zoom1}
-  map_zoom2                 = {$plugin.tx_mhbranchenbuch_pi1.map_zoom2}
-  map_zoom3                 = {$plugin.tx_mhbranchenbuch_pi1.map_zoom3}
-  map_zoom4                 = {$plugin.tx_mhbranchenbuch_pi1.map_zoom4}
-  map_showImage             = {$plugin.tx_mhbranchenbuch_pi1.map_showImage}
-  
-  ### LATEST-View
-  
-  // How much entries should be displayed
-  limitLatest               = {$plugin.tx_mhbranchenbuch_pi1.limitLatest}
-  
-  ### Banner-ROTATION
-
-  rotationLimit             = {$plugin.tx_mhbranchenbuch_pi1.rotationLimit}
-  rotationExclude           = {$plugin.tx_mhbranchenbuch_pi1.rotationExclude}
-  rotationTarget            = {$plugin.tx_mhbranchenbuch_pi1.rotationTarget}
-  redirectTime              = {$plugin.tx_mhbranchenbuch_pi1.redirectTime}
-  
-  ### Alphabetical-Menu
-  
-  letterAll                 = {$plugin.tx_mhbranchenbuch_pi1.letterAll}
-  
-  ######################
-  # WRAPS              #
-  ######################
-  
-  // Standard-Wrap for a Cloud
-  TagCloud_stdWrap.wrap     = |
-  
-  // Wraps for the entries
-  title_stdWrap.wrap        = |
-  
-  category_stdWrap.wrap     = |
-  
-  tel_stdWrap.required      = 1
-  tel_stdWrap.wrap          = Telephone:&nbsp;|
-  
-  fax_stdWrap.required      = 1
-  fax_stdWrap.wrap          = Fax:&nbsp;|
-  
-  mobile_stdWrap.required   = 1
-  mobile_stdWrap.wrap       = Mobilephone:&nbsp;|
-  
-  address_stdWrap.wrap      = |
-  
-  email_stdWrap             = Mail
-  email_stdWrap.wrap        = |
-  
-  www_stdWrap               = WWW
-
-  more_stdWrap              = Read more
-  more_stdWrap.wrap         = |
- 
-  movie_stdWrap             = Movie
-  
-  listEntries_edit          = edit
-  listEntries_del           = delete
-  
-  letter.wrap               =
-  
-  ######################
-  # PAGEBROWSER        #
-  ######################
-  
-  // The max number of pages to include in the browse bar
-  maxPages                  = 4
-  
-  // this var switches the display of the pagelinks from pagenumbers to ranges 
-  // f.e.: 1-5 6-10 11-15... instead of 1 2 3...
-  showRange                 = 0
-  
-  // 1 = "<< First" and "LAST >>" will be shown and point to the first or last page.
-  showFirstLast             = 0
-  
-  showResultCount           = 0
-  
-  // 1 = the active (current) page should be displayed as pure text 
-  // 0 = the active (current) page should be displayed as a link to itself
-  dontLinkActivePage        = 1
-  
-  // This defines were the current page is shown in the list of pages in the Pagebrowser.
-  // If this var is an integer it will be interpreted as position in the list of pages. 
-  // If its value is the keyword "center" the current page will be shown in the middle of the pagelist.
-  pagefloat                 = center
-      
-  // How many results to show 
-  resultsPerPage            = 10
-}
-
-
-plugin.tx_mhbranchenbuch_pi1._LOCAL_LANG.de {
-  pi_list_browseresults_prev = < Zurueck
-  pi_list_browseresults_page = Seite
-  pi_list_browseresults_next = Naechste >
-  pi_list_browseresults_first = &lt;&lt; Erste
-  pi_list_browseresults_last = Letzte &gt;&gt;
-  pi_list_browseresults_displays = %s bis %s Eintraege von insgesammt %s
-  pi_list_browseresults_displays_advanced = Von ###FROM### bis ###TO### Eintraege von insgesammt ###OUT_OF###
-  pi_list_browseresults_to = zu
-}
+plugin.tx_mhbranchenbuch_pi1 {
+
+  ######################
+  # IMPORTANT SETTINGS #
+  ######################
+  
+  admin                     = {$plugin.tx_mhbranchenbuch_pi1.admin}  
+  templateFile              = {$plugin.tx_mhbranchenbuch_pi1.templateFile}
+  
+  single_pid                = {$plugin.tx_mhbranchenbuch_pi1.single_pid}
+  search_pid                = {$plugin.tx_mhbranchenbuch_pi1.search_pid}
+  
+  maxEntriesPerUser         = {$plugin.tx_mhbranchenbuch_pi1.maxEntriesPerUser}
+  
+  ######################
+  # MODULE SETTINGS    #
+  ######################
+  
+  ### Settings for the entries
+  
+  noImage                   = {$plugin.tx_mhbranchenbuch_pi1.noImage}
+  mailTyp                   = {$plugin.tx_mhbranchenbuch_pi1.mailTyp}
+  imgMaxHeight              = {$plugin.tx_mhbranchenbuch_pi1.imgMaxHeight}
+  imgMaxWidth               = {$plugin.tx_mhbranchenbuch_pi1.imgMaxWidth}
+  mail_header               = {$plugin.tx_mhbranchenbuch_pi1.mail_header}
+  mail_from                 = {$plugin.tx_mhbranchenbuch_pi1.mail_from}
+  imageParams               = {$plugin.tx_mhbranchenbuch_pi1.imageParams}
+  linkTitle                 = {$plugin.tx_mhbranchenbuch_pi1.linkTitle}
+  linkType                  = {$plugin.tx_mhbranchenbuch_pi1.linkType}
+  linkTarget                = {$plugin.tx_mhbranchenbuch_pi1.linkTarget}
+  directRedirect            = {$plugin.tx_mhbranchenbuch_pi1.directRedirect}
+
+  ### Settings for the search-view
+  
+  search_showXS             = {$plugin.tx_mhbranchenbuch_pi1.search_showXS}
+  search_tables             = {$plugin.tx_mhbranchenbuch_pi1.search_tables}
+  
+  ### Settings for the FE-Form - View
+  
+  feForm_required           = {$plugin.tx_mhbranchenbuch_pi1.feForm_required}
+  feForm_report             = {$plugin.tx_mhbranchenbuch_pi1.feForm_report}
+  feForm_maxsize            = {$plugin.tx_mhbranchenbuch_pi1.feForm_maxsize}
+  feForm_createCity         = {$plugin.tx_mhbranchenbuch_pi1.feForm_createCity}
+
+  feForm_fields_xs          = {$plugin.tx_mhbranchenbuch_pi1.feForm_fields_xs}
+  feForm_fields_s           = {$plugin.tx_mhbranchenbuch_pi1.feForm_fields_s}
+  feForm_fields_m           = {$plugin.tx_mhbranchenbuch_pi1.feForm_fields_m}
+  feForm_fields_l           = {$plugin.tx_mhbranchenbuch_pi1.feForm_fields_l}
+  feForm_fields_xl          = {$plugin.tx_mhbranchenbuch_pi1.feForm_fields_xl}
+  feForm_fields_xxl         = {$plugin.tx_mhbranchenbuch_pi1.feForm_fields_xxl}
+  feForm_fields_xxl2        = {$plugin.tx_mhbranchenbuch_pi1.feForm_fields_xxl2}
+  
+  feForm_keywords_xs        = {$plugin.tx_mhbranchenbuch_pi1.feForm_keywords_xs}
+  feForm_keywords_s         = {$plugin.tx_mhbranchenbuch_pi1.feForm_keywords_s}
+  feForm_keywords_m         = {$plugin.tx_mhbranchenbuch_pi1.feForm_keywords_m}
+  feForm_keywords_l         = {$plugin.tx_mhbranchenbuch_pi1.feForm_keywords_l}
+  feForm_keywords_xl        = {$plugin.tx_mhbranchenbuch_pi1.feForm_keywords_xl}
+  feForm_keywords_xxl       = {$plugin.tx_mhbranchenbuch_pi1.feForm_keywords_xxl}
+  feForm_keywords_xxl2      = {$plugin.tx_mhbranchenbuch_pi1.feForm_keywords_xxl2}
+      
+  ### Settings for the TagCloud
+
+  countEntrys               = {$plugin.tx_mhbranchenbuch_pi1.countEntrys}
+  minFontSize               = {$plugin.tx_mhbranchenbuch_pi1.minFontSize}
+  maxFontSize               = {$plugin.tx_mhbranchenbuch_pi1.maxFontSize}
+  CloudColors               = {$plugin.tx_mhbranchenbuch_pi1.CloudColors}
+  TagCloudLink              = {$plugin.tx_mhbranchenbuch_pi1.TagCloudLink}
+  
+  ### Settings for the FE-Edit
+  
+  FEedit                    = {$plugin.tx_mhbranchenbuch_pi1.FEedit}
+  FEdelete                  = {$plugin.tx_mhbranchenbuch_pi1.FEdelete}
+  
+  ### Settings for the overview-view
+  
+  overviewPathSeperator     = {$plugin.tx_mhbranchenbuch_pi1.overviewPathSeperator}
+  overviewPathStart         = {$plugin.tx_mhbranchenbuch_pi1.overviewPathStart}
+  overviewMode              = {$plugin.tx_mhbranchenbuch_pi1.overviewMode}
+  overviewID                = {$plugin.tx_mhbranchenbuch_pi1.overviewID}
+  overviewSort              = {$plugin.tx_mhbranchenbuch_pi1.overviewSort}
+  cat_sortBy                = {$plugin.tx_mhbranchenbuch_pi1.cat_sortBy}
+  show_empty_cats           = {$plugin.tx_mhbranchenbuch_pi1.show_empty_cats}
+  show_cat_count            = {$plugin.tx_mhbranchenbuch_pi1.show_cat_count}
+  catImgMaxHeight           = {$plugin.tx_mhbranchenbuch_pi1.catImgMaxHeight}
+  catImgMaxWidth            = {$plugin.tx_mhbranchenbuch_pi1.catImgMaxWidth}
+  catImageParams            = {$plugin.tx_mhbranchenbuch_pi1.catImageParams}
+  map_api                   = {$plugin.tx_mhbranchenbuch_pi1.map_api}
+  map_zoom1                 = {$plugin.tx_mhbranchenbuch_pi1.map_zoom1}
+  map_zoom2                 = {$plugin.tx_mhbranchenbuch_pi1.map_zoom2}
+  map_zoom3                 = {$plugin.tx_mhbranchenbuch_pi1.map_zoom3}
+  map_zoom4                 = {$plugin.tx_mhbranchenbuch_pi1.map_zoom4}
+  map_showImage             = {$plugin.tx_mhbranchenbuch_pi1.map_showImage}
+  
+  ### LATEST-View
+  
+  // How much entries should be displayed
+  limitLatest               = {$plugin.tx_mhbranchenbuch_pi1.limitLatest}
+  
+  ### Banner-ROTATION
+
+  rotationLimit             = {$plugin.tx_mhbranchenbuch_pi1.rotationLimit}
+  rotationExclude           = {$plugin.tx_mhbranchenbuch_pi1.rotationExclude}
+  rotationTarget            = {$plugin.tx_mhbranchenbuch_pi1.rotationTarget}
+  redirectTime              = {$plugin.tx_mhbranchenbuch_pi1.redirectTime}
+  
+  ### Alphabetical-Menu
+  
+  letterAll                 = {$plugin.tx_mhbranchenbuch_pi1.letterAll}
+  
+  ######################
+  # WRAPS              #
+  ######################
+  
+  // Standard-Wrap for a Cloud
+  TagCloud_stdWrap.wrap     = |
+  
+  // Wraps for the entries
+  title_stdWrap.wrap        = |
+  
+  category_stdWrap.wrap     = |
+  
+  tel_stdWrap.required      = 1
+  tel_stdWrap.wrap          = Telephone:&nbsp;|
+  
+  fax_stdWrap.required      = 1
+  fax_stdWrap.wrap          = Fax:&nbsp;|
+  
+  mobile_stdWrap.required   = 1
+  mobile_stdWrap.wrap       = Mobilephone:&nbsp;|
+  
+  address_stdWrap.wrap      = |
+  
+  email_stdWrap             = Mail
+  email_stdWrap.wrap        = |
+  
+  www_stdWrap               = WWW
+
+  more_stdWrap              = Read more
+  more_stdWrap.wrap         = |
+ 
+  movie_stdWrap             = Movie
+  
+  listEntries_edit          = edit
+  listEntries_del           = delete
+  
+  letter.wrap               =
+  
+  ######################
+  # PAGEBROWSER        #
+  ######################
+  
+  // The max number of pages to include in the browse bar
+  maxPages                  = 4
+  
+  // this var switches the display of the pagelinks from pagenumbers to ranges 
+  // f.e.: 1-5 6-10 11-15... instead of 1 2 3...
+  showRange                 = 0
+  
+  // 1 = "<< First" and "LAST >>" will be shown and point to the first or last page.
+  showFirstLast             = 0
+  
+  showResultCount           = 0
+  
+  // 1 = the active (current) page should be displayed as pure text 
+  // 0 = the active (current) page should be displayed as a link to itself
+  dontLinkActivePage        = 1
+  
+  // This defines were the current page is shown in the list of pages in the Pagebrowser.
+  // If this var is an integer it will be interpreted as position in the list of pages. 
+  // If its value is the keyword "center" the current page will be shown in the middle of the pagelist.
+  pagefloat                 = center
+      
+  // How many results to show 
+  resultsPerPage            = 10
+}
+
+
+plugin.tx_mhbranchenbuch_pi1._LOCAL_LANG.de {
+  pi_list_browseresults_prev = < Zurueck
+  pi_list_browseresults_page = Seite
+  pi_list_browseresults_next = Naechste >
+  pi_list_browseresults_first = &lt;&lt; Erste
+  pi_list_browseresults_last = Letzte &gt;&gt;
+  pi_list_browseresults_displays = %s bis %s Eintraege von insgesammt %s
+  pi_list_browseresults_displays_advanced = Von ###FROM### bis ###TO### Eintraege von insgesammt ###OUT_OF###
+  pi_list_browseresults_to = zu
+}

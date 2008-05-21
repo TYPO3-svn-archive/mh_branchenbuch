@@ -3,7 +3,6 @@ if (!defined ('TYPO3_MODE')) 	die ('Access denied.');
 
 t3lib_extMgm::allowTableOnStandardPages('tx_mhbranchenbuch_firmen');
 
-# diff test
 
 t3lib_extMgm::addToInsertRecords('tx_mhbranchenbuch_firmen');
 
