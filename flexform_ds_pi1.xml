@@ -1,0 +1,189 @@
+<T3DataStructure>
+  <meta>
+    <langDisable>1</langDisable>
+  </meta>
+  <sheets>
+  
+    <sDEF>
+      <ROOT>
+        <TCEforms>
+          <sheetTitle>LLL:EXT:mh_branchenbuch/locallang_db.php:tt_content.pi_flexform.sheet_general</sheetTitle>
+        </TCEforms>
+        <type>array</type>
+        <el>
+          <what_to_display>
+            <TCEforms>
+              <label>LLL:EXT:mh_branchenbuch/locallang_db.php:tt_content.pi_flexform.what_to_display</label>
+              <config>
+                <type>select</type>
+                <items type="array">		
+                  <numIndex index="0" type="array">
+                    <numIndex index="0">LIST</numIndex>
+                    <numIndex index="1">LIST</numIndex>
+                  </numIndex>
+                  <numIndex index="1" type="array">
+                    <numIndex index="0">LATEST</numIndex>
+                    <numIndex index="1">LATEST</numIndex>
+                  </numIndex>
+                  <numIndex index="8" type="array">
+                    <numIndex index="0">OVERVIEW</numIndex>
+                    <numIndex index="1">OVERVIEW</numIndex>
+                  </numIndex>
+                  <numIndex index="4" type="array">
+                    <numIndex index="0">SINGLE</numIndex>
+                    <numIndex index="1">SINGLE</numIndex>
+                  </numIndex>
+                  <numIndex index="2" type="array">
+                    <numIndex index="0">SEARCH</numIndex>
+                    <numIndex index="1">SEARCH</numIndex>
+                  </numIndex>
+                  <numIndex index="3" type="array">
+                    <numIndex index="0">TAGCLOUD</numIndex>
+                    <numIndex index="1">TAGCLOUD</numIndex>
+                  </numIndex>
+                  <numIndex index="10" type="array">
+                    <numIndex index="0">ALPHABETICAL-MENU</numIndex>
+                    <numIndex index="1">ALPHABETICAL-MENU</numIndex>
+                  </numIndex>
+                  <numIndex index="5" type="array">
+                    <numIndex index="0">STATISTICS</numIndex>
+                    <numIndex index="1">STATISTICS</numIndex>
+                  </numIndex>
+                  <numIndex index="9" type="array">
+                    <numIndex index="0">ROTATION</numIndex>
+                    <numIndex index="1">ROTATION</numIndex>
+                  </numIndex>
+                  <numIndex index="6" type="array">
+                    <numIndex index="0">ADD-FORM</numIndex>
+                    <numIndex index="1">ADD-FORM</numIndex>
+                  </numIndex>
+                  <numIndex index="7" type="array">
+                    <numIndex index="0">EDIT-FORM</numIndex>
+                    <numIndex index="1">EDIT-FORM</numIndex>
+                  </numIndex>
+                </items>
+                <maxitems>100</maxitems>
+                <size>6</size>
+                <selectedListStyle>width:150px</selectedListStyle>
+                <itemListStyle>width:150px</itemListStyle>
+              </config>
+            </TCEforms>
+          </what_to_display>
+          
+          <display_categories>
+            <TCEforms>
+              <label>LLL:EXT:mh_branchenbuch/locallang_db.php:tt_content.pi_flexform.category_selection</label>
+              <config>
+                <type>select</type>
+                <foreign_table>tx_mhbranchenbuch_kategorien</foreign_table>
+                <foreign_table_where>ORDER BY name</foreign_table_where>
+                <size>10</size>
+                <maxitems>100</maxitems>
+                <selectedListStyle>width:150px</selectedListStyle>
+                <itemListStyle>width:150px</itemListStyle>
+              </config>
+            </TCEforms>
+          </display_categories>
+          
+          <template_file>
+            <TCEforms>
+              <label>LLL:EXT:mh_branchenbuch/locallang_db.php:tt_content.pi_flexform.template_file</label>
+              <config>
+                <type>group</type>
+                <internal_type>file</internal_type>
+                <allowed>tmpl,html,htm</allowed>
+                <max_size>500</max_size>
+                <uploadfolder>uploads/tx_mhbranchenbuch/</uploadfolder>
+                <minitems>0</minitems>
+                <maxitems>1</maxitems>
+                <size>1</size>
+                <selectedListStyle>Width:180px</selectedListStyle>
+              </config>
+            </TCEforms>
+          </template_file>
+          
+          <limitLatest>
+            <TCEforms>
+              <label>LLL:EXT:mh_branchenbuch/locallang_db.php:tt_content.pi_flexform.limitLatest</label>
+              <config>
+                <type>input</type>
+                <eval>num</eval>
+                <size>2</size>
+              </config>
+            </TCEforms>
+          </limitLatest>
+          
+          <single_pid>
+            <TCEforms>
+              <label>LLL:EXT:mh_branchenbuch/locallang_db.php:tt_content.pi_flexform.single_pid</label>
+              <config>
+                <type>input</type>
+                <eval>num</eval>
+                <size>2</size>
+              </config>
+            </TCEforms>
+          </single_pid>
+        
+        </el>
+      </ROOT>
+    </sDEF>
+    
+    <sLIST>
+      <ROOT>
+        <TCEforms>
+          <sheetTitle>LLL:EXT:mh_branchenbuch/locallang_db.php:tt_content.pi_flexform.sheet_list</sheetTitle>
+        </TCEforms>
+        <type>array</type>
+        <el>
+          
+          <displayFederalstates>
+            <TCEforms>
+              <label>LLL:EXT:mh_branchenbuch/locallang_db.php:tt_content.pi_flexform.federal</label>
+              <config>
+                <type>select</type>
+                <foreign_table>tx_mhbranchenbuch_bundesland</foreign_table>
+                <foreign_table_where>ORDER BY tx_mhbranchenbuch_bundesland.name</foreign_table_where>
+                <size>10</size>
+                <maxitems>100</maxitems>
+                <selectedListStyle>width:150px</selectedListStyle>
+                <itemListStyle>width:150px</itemListStyle>
+              </config>
+            </TCEforms>
+          </displayFederalstates>
+          
+          <displayAdministrative>
+            <TCEforms>
+              <label>LLL:EXT:mh_branchenbuch/locallang_db.php:tt_content.pi_flexform.administrative</label>
+              <config>
+                <type>select</type>
+                <foreign_table>tx_mhbranchenbuch_landkreis</foreign_table>
+                <foreign_table_where>ORDER BY tx_mhbranchenbuch_landkreis.name</foreign_table_where>
+                <size>10</size>
+                <maxitems>100</maxitems>
+                <selectedListStyle>width:150px</selectedListStyle>
+                <itemListStyle>width:150px</itemListStyle>
+              </config>
+            </TCEforms>
+          </displayAdministrative>
+          
+          <displayCities>
+            <TCEforms>
+              <label>LLL:EXT:mh_branchenbuch/locallang_db.php:tt_content.pi_flexform.city</label>
+              <config>
+                <type>select</type>
+                <foreign_table>tx_mhbranchenbuch_ort</foreign_table>
+                <foreign_table_where>ORDER BY tx_mhbranchenbuch_ort.name</foreign_table_where>
+                <size>10</size>
+                <maxitems>100</maxitems>
+                <selectedListStyle>width:150px</selectedListStyle>
+                <itemListStyle>width:150px</itemListStyle>
+              </config>
+            </TCEforms>
+          </displayCities>
+        
+        </el>
+      </ROOT>
+    </sLIST>
+    
+  </sheets>
+</T3DataStructure>

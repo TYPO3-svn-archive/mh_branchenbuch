@@ -1,0 +1,35 @@
+fieldset.tx_mhbranchenbuch_newEntry { padding:5px; font-size:0.8em; border:1px solid #ddd; width:500px; }
+
+fieldset.tx_mhbranchenbuch_newEntry input,
+fieldset.tx_mhbranchenbuch_newEntry select,
+fieldset.tx_mhbranchenbuch_newEntry textarea { border:1px solid #ddd; padding:0; margin:5px; }
+fieldset.tx_mhbranchenbuch_newEntry input { padding:2px; margin:3px; }
+
+fieldset.tx_mhbranchenbuch_newEntry br { clear:left; padding:0; margin:0; }
+fieldset.tx_mhbranchenbuch_newEntry label { 
+  background-color:#f5f5f5; 
+  float:left; 
+  padding:5px;
+  margin:1px; 
+  width:150px; 
+}
+
+fieldset.tx_mhbranchenbuch_newEntry label.required  {
+  font-weight:bold;
+}
+
+fieldset.tx_mhbranchenbuch_newEntry span  { 
+  font-size:0.8em;
+  color:#ccc;
+  width:150px; 
+}
+
+.hidden { 
+  display:none;
+}
+
+.unhide {
+  display:block;
+}
+
+.tx_mhbranchenbuch_newCity  { background-color:#ffb03b; }

@@ -1,0 +1,61 @@
+/**
+ * Plugin 'Branchenbuch' for the 'mh_branchenbuch' extension.
+ *
+ * @author	Martin Hesse <mail@martin-hesse.info>
+ * 
+ * SAMPLE CSS  
+ */
+
+.tx_mh_branchenbuch-standard,
+.tx_mh_branchenbuch-advanced,
+.tx_mh_branchenbuch-premium,
+.tx_mh_branchenbuch-premium-1,
+.tx_mh_branchenbuch-premium-2,
+.tx_mh_branchenbuch-premium-3 {
+  height:150px; 
+  width:490px; 
+  padding:5px;
+  margin:0px; 
+}
+
+.tx_mh_branchenbuch-standard,
+.tx_mh_branchenbuch-advanced
+{
+  border:1px solid #ececde; 
+}
+
+.tx_mh_branchenbuch-premium   {
+  background: #ececde url(l.jpg) no-repeat;
+}
+
+
+.tx_mh_branchenbuch-premium-1 {
+  background: #ececde url(xl_1.jpg) no-repeat; 
+}
+
+.tx_mh_branchenbuch-premium-2 {
+  background: #ececde url(xl_2.jpg) no-repeat; 
+}
+
+.tx_mh_branchenbuch-premium-3 {
+  background: #ececde url(xl_3.jpg) no-repeat; 
+}
+
+.tx_mh_branchenbuch-tagcloud  { padding:3px; float:left; }
+
+.tx_mh_branchenbuch-advertise { }
+
+.tx_mh_branchenbuch-statistics { }
+
+
+.tx_mh_branchenbuch_table {
+  border:1px solid #ddd;
+}
+
+.tx_mh_branchenbuch_table th {
+  background-color:#ddd; color:333;
+}
+
+.tx_mh_branchenbuch_table td {
+  background-color:#fafafa;
+}
