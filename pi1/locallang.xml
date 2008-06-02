@@ -226,7 +226,7 @@
 			<label index="feform_detailed_desc">Detailierte Informationen über Ihre Firma können Sie hier eintragen.</label>
 			<label index="feform_job">Freie Stelle vorhanden</label>
 			<label index="feform_job_desc">Aktivieren Sie diese Checkbox um Besucher darauf aufmerksam zu machen, dass Sie eine freie Stelle zu vergeben zu haben.</label>
-			<label index="feform_finish_legend">Letzte Angaben ...</label>
+			<label index="feform_finish_legend">Allgemeine Geschäftsbedingungen</label>
 			<label index="feform_terms">AGB</label>
 			<label index="feform_terms_desc">Ja, ich habe die AGBs gelesen und akzeptiert!</label>
 			<label index="feform_submit">Abschicken</label>
@@ -337,6 +337,5 @@
   	  <label index="mailbody_administrativedistrict">Landkreis:</label>
   	  <label index="mailbody_city">Stadt:</label>
     </languageKey>
-		
 	</data>
 </T3locallang>

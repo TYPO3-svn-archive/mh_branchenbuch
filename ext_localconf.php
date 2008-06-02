@@ -23,4 +23,7 @@ t3lib_extMgm::addPItoST43($_EXTKEY,'pi1/class.tx_mhbranchenbuch_pi1.php','_pi1',
 
 // RealURL-AutoConf
 $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['ext/realurl/class.tx_realurl_autoconfgen.php']['extensionConfiguration'][$_EXTKEY] = 'EXT:mh_branchenbuch/class.tx_mhbranchenbuch_realurl.php:tx_mhbranchenbuch_realurl->getConfig';
+
+// Widget
+$GLOBALS ['TYPO3_CONF_VARS']['SC_OPTIONS']['ext/mydashboard/class.tx_mydashboard_widgetmgm.php']['addWidget']['mhbranchenbuch_overview'] = 'EXT:mh_branchenbuch/widgets/class.tx_mhbranchenbuch_overview.php:tx_mhbranchenbuch_overview';
 ?>
