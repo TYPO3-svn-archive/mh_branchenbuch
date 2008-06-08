@@ -117,6 +117,8 @@
 			<label index="feeditform_cancel">Cancel</label>
 			<label index="feeditform_do_edit">Edit</label>
 			<label index="feeditform_do_delete">Delete</label>
+			<label index="feeditform_object1">Items:</label>
+			<label index="feeditform_object2">Selected:</label>
 			<label index="statistic">The company directory have %stat_all entries. %stat_hidden entries are not public yet and %stat_deleted entries are deleted. We have %stat_cat categories. Overall our visitor have clicked %stat_clicks_all times on a logo from a company, %stat_clicks_today today and %stat_clicks_yesterday yesterday.</label>
       <label index="overview_step1">Federal State:</label>
 		  <label index="overview_step2">Administrative District:</label>
@@ -283,6 +285,8 @@
 			<label index="feeditform_cancel">Abbrechen</label>
 			<label index="feeditform_do_edit">Bearbeiten</label>
 			<label index="feeditform_do_delete">Löschen</label>
+			<label index="feeditform_object1">Objekte:</label>
+			<label index="feeditform_object2">Ausgewählt:</label>
 			<label index="statistic">Das Branchenverzeichnis hat %stat_all Einträge. Davon sind %stat_hidden Einträge nicht sichtbar und %stat_deleted gelöscht. Die Einträge sind in %stat_cat Kategorien untergeordnet. Insgesammt haben unsere Besucher %stat_clicks_all mal auf ein Logo geklickt, davon %stat_clicks_today heute und %stat_clicks_yesterday gestern.</label>
 			<label index="overview_step1">Bundesland:</label>
 		  <label index="overview_step2">Landkreis:</label>

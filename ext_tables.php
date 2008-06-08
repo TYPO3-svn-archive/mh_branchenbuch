@@ -1,6 +1,9 @@
 <?php
 if (!defined ('TYPO3_MODE')) 	die ('Access denied.');
 
+// class for displaying the category tree in BE forms.
+include_once(t3lib_extMgm::extPath($_EXTKEY).'class.tx_mhbranchenbuch_treeview.php');
+
 t3lib_extMgm::allowTableOnStandardPages('tx_mhbranchenbuch_firmen');
 
 
@@ -20,6 +23,7 @@ $TCA["tx_mhbranchenbuch_firmen"] = array (
 			'starttime' => 'starttime',	
 			'endtime' => 'endtime',
 		),
+		'treeParentField' => 'root_uid',
 		'dynamicConfigFile' => t3lib_extMgm::extPath($_EXTKEY).'tca.php',
 		'iconfile'          => t3lib_extMgm::extRelPath($_EXTKEY).'icon_tx_mhbranchenbuch_firmen.gif',
 	),
@@ -43,7 +47,8 @@ $TCA["tx_mhbranchenbuch_kategorien"] = array (
 		'cruser_id' => 'cruser_id',
 		'sortby'    => 'sorting',
 		'default_sortby' => "ORDER BY crdate",	
-		'delete' => 'deleted',	
+		'delete' => 'deleted',
+		'treeParentField' => 'root_uid',
 		'enablecolumns' => array (		
 			'disabled' => 'hidden',	
 			'fe_group' => 'fe_group',
@@ -52,7 +57,7 @@ $TCA["tx_mhbranchenbuch_kategorien"] = array (
 		'iconfile'          => t3lib_extMgm::extRelPath($_EXTKEY).'icon_tx_mhbranchenbuch_kategorien.gif',
 	),
 	"feInterface" => array (
-		"fe_admin_fieldList" => "hidden, fe_group, name, image, description",
+		"fe_admin_fieldList" => "hidden, fe_group, name, image, description, root_uid",
 	)
 );
 

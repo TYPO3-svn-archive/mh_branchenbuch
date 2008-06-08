@@ -62,49 +62,46 @@ $TCA["tx_mhbranchenbuch_firmen"] = array (
 			)
 		),
 		"kategorie" => Array (		
-			"exclude" => 0,		
+			"exclude" => 1,		
 			"label" => "LLL:EXT:mh_branchenbuch/locallang_db.xml:tx_mhbranchenbuch_firmen.kategorie",		
-			"config" => Array (
-				"type" => "select",	
-				"foreign_table" => "tx_mhbranchenbuch_kategorien",	
-				"foreign_table_where" => "AND tx_mhbranchenbuch_kategorien.pid=###STORAGE_PID### ORDER BY tx_mhbranchenbuch_kategorien.name",	
-				"size" => 10,	
-				"minitems" => 0,
-				"maxitems" => 99,	
-				"wizards" => Array(
-					"_PADDING" => 2,
-					"_VERTICAL" => 1,
-					"add" => Array(
-						"type" => "script",
-						"title" => "Create new record",
-						"icon" => "add.gif",
-						"params" => Array(
-							"table"=>"tx_mhbranchenbuch_kategorien",
-							"pid" => "###CURRENT_PID###",
-							"setValue" => "prepend"
+      'config' => Array (
+				'type' => 'select',
+				'form_type' => 'user',
+				'userFunc' => 'tx_mhbranchenbuch_treeview->displayCategoryTree',
+				'treeView' => 1,
+				'treeName' => 'txchtreeviewexample',
+        'treeMaxDepth' => 999,
+				'size' => 10,
+				'selectedListStyle' => 'width:150px',
+				'minitems' => 0,
+				'maxitems' => 100,
+				'foreign_table' => 'tx_mhbranchenbuch_kategorien',
+				'wizards' => Array(
+					'_PADDING' => 2,
+					'_VERTICAL' => 1,
+					'add' => Array(
+						'type' => 'script',
+						'title' => 'LLL:EXT:mh_branchenbuch/locallang_db.xml:tx_mhbranchenbuch_kategorien.createNewParentCategory',
+						'icon' => 'add.gif',
+						'params' => Array(
+							'table'=>'tx_mhbranchenbuch_kategorien',
+							'pid' => '###CURRENT_PID###',
+							'setValue' => 'set'
 						),
-						"script" => "wizard_add.php",
+						'script' => 'wizard_add.php',
 					),
-					"list" => Array(
-						"type" => "script",
-						"title" => "List",
-						"icon" => "list.gif",
-						"params" => Array(
-							"table"=>"tx_mhbranchenbuch_kategorien",
-							"pid" => "###CURRENT_PID###",
+					'list' => Array(
+						'type' => 'script',
+						'title' => 'LLL:EXT:mh_branchenbuch/locallang_db.xml:tx_mhbranchenbuch_kategorien.listCategories',
+						'icon' => 'list.gif',
+						'params' => Array(
+							'table'=>'tx_mhbranchenbuch_kategorien',
+							'pid' => '###CURRENT_PID###',
 						),
-						"script" => "wizard_list.php",
-					),
-					"edit" => Array(
-						"type" => "popup",
-						"title" => "Edit",
-						"script" => "wizard_edit.php",
-						"popup_onlyOpenIfSelected" => 1,
-						"icon" => "edit2.gif",
-						"JSopenParams" => "height=350,width=580,status=0,menubar=0,scrollbars=1",
+						'script' => 'wizard_list.php',
 					),
 				),
-			)
+      ),
 		),
     "bundesland" => Array (		
 			"exclude" => 1,		
@@ -337,7 +334,7 @@ $TCA["tx_mhbranchenbuch_firmen"] = array (
 		),
 	),
 	"types" => array (
-		"0" => array("showitem" => "hidden;;1;;1-1-1, cruser_id, kategorie, bundesland, landkreis, ort, firma, typ, adresse, telefon, fax, handy, link, video, email, custom1, custom2, custom3, bild, keywords, detail;;;richtext[cut|copy|paste|formatblock|textcolor|bold|italic|underline|left|center|right|orderedlist|unorderedlist|outdent|indent|link|table|image|line|chMode]:rte_transform[mode=ts_css|imgpath=uploads/mh_branchenbuch/rte/], map_lat, map_lng, hit_count, job")
+		"0" => array("showitem" => "hidden;;1;;1-1-1, cruser_id, kategorie;;;;3-3-3, bundesland, landkreis, ort, firma, typ, adresse, telefon, fax, handy, link, video, email, custom1, custom2, custom3, bild, keywords, detail;;;richtext[cut|copy|paste|formatblock|textcolor|bold|italic|underline|left|center|right|orderedlist|unorderedlist|outdent|indent|link|table|image|line|chMode]:rte_transform[mode=ts_css|imgpath=uploads/mh_branchenbuch/rte/], map_lat, map_lng, hit_count, job")
 	),
 	"palettes" => array (
 		"1" => array("showitem" => "starttime, endtime")
@@ -386,17 +383,45 @@ $TCA["tx_mhbranchenbuch_kategorien"] = array (
 		"root_uid" => Array (		
 			"exclude" => 1,		
 			"label" => "LLL:EXT:mh_branchenbuch/locallang_db.xml:tx_mhbranchenbuch_kategorien.root_uid",		
-			"config" => Array (
-				"type" => "select",
-				"items" => Array (
-            Array("",0),
-        ),
-				"foreign_table" => "tx_mhbranchenbuch_kategorien",	
-				"foreign_table_where" => "ORDER BY tx_mhbranchenbuch_kategorien.name",	
-				"size" => 1,	
-				"minitems" => 0,
-				"maxitems" => 1,
-			)
+      'config' => Array (
+				'type' => 'select',
+				'form_type' => 'user',
+				'userFunc' => 'tx_mhbranchenbuch_treeview->displayCategoryTree',
+				'treeView' => 1,
+				'treeName' => 'txchtreeviewexample',
+        'treeMaxDepth' => 999,
+				'size' => 1,
+				'autoSizeMax' => 100,
+				'selectedListStyle' => 'width:150px',
+				'minitems' => 0,
+				'maxitems' => 1,
+				'foreign_table' => 'tx_mhbranchenbuch_kategorien',
+				'wizards' => Array(
+					'_PADDING' => 2,
+					'_VERTICAL' => 1,
+					'add' => Array(
+						'type' => 'script',
+						'title' => 'LLL:EXT:mh_branchenbuch/locallang_db.xml:tx_mhbranchenbuch_kategorien.createNewParentCategory',
+						'icon' => 'add.gif',
+						'params' => Array(
+							'table'=>'tx_mhbranchenbuch_kategorien',
+							'pid' => '###CURRENT_PID###',
+							'setValue' => 'set'
+						),
+						'script' => 'wizard_add.php',
+					),
+					'list' => Array(
+						'type' => 'script',
+						'title' => 'LLL:EXT:mh_branchenbuch/locallang_db.xml:tx_mhbranchenbuch_kategorien.listCategories',
+						'icon' => 'list.gif',
+						'params' => Array(
+							'table'=>'tx_mhbranchenbuch_kategorien',
+							'pid' => '###CURRENT_PID###',
+						),
+						'script' => 'wizard_list.php',
+					),
+				),
+      ),
 		),
 		"image" => Array (		
 			"exclude" => 0,		
@@ -435,7 +460,7 @@ $TCA["tx_mhbranchenbuch_kategorien"] = array (
 		),
 	),
 	"types" => array (
-		"0" => array("showitem" => "hidden;;1;;1-1-1, name, root_uid, image, description;;;richtext[cut|copy|paste|formatblock|textcolor|bold|italic|underline|left|center|right|orderedlist|unorderedlist|outdent|indent|link|table|image|line|chMode]:rte_transform[mode=ts_css|imgpath=uploads/mh_branchenbuch/rte/]")
+		"0" => array("showitem" => "hidden;;1;;1-1-1, name, root_uid;;;;3-3-3, image, description;;;richtext[cut|copy|paste|formatblock|textcolor|bold|italic|underline|left|center|right|orderedlist|unorderedlist|outdent|indent|link|table|image|line|chMode]:rte_transform[mode=ts_css|imgpath=uploads/mh_branchenbuch/rte/]")
 	),
 	"palettes" => array (
 		"1" => array("showitem" => "fe_group")

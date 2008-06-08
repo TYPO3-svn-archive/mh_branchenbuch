@@ -397,7 +397,7 @@ class tx_mhbranchenbuch_pi1 extends tslib_pibase {
       
       $markerArray['###VALUE_SEARCH###']    = t3lib_div::_GP('keyword');
       $markerArray['###VALUE_SEARCH2###']   = t3lib_div::_GP('keyword2');
-      $markerArray['###ACTION_URI###']      = 'index.php?id=' . $this->search_pid . '&amp;no_cache=1';
+      $markerArray['###ACTION_URI###']      = $this->pi_getPageLink($this->search_pid,'',array('no_cache' => 1));
       
     }
     // if keyword (who) is active (AND/OR)
@@ -513,12 +513,12 @@ class tx_mhbranchenbuch_pi1 extends tslib_pibase {
       
       $markerArray['###VALUE_SEARCH###']    = t3lib_div::_GP('keyword');
       $markerArray['###VALUE_SEARCH2###']   = t3lib_div::_GP('keyword2');
-      $markerArray['###ACTION_URI###']      = 'index.php?id=' . $this->search_pid . '&amp;no_cache=1';
+      $markerArray['###ACTION_URI###']      = $this->pi_getPageLink($this->search_pid,'',array('no_cache' => 1));
     }
     // if booth empty
     else 
     {
-      $markerArray['###ACTION_URI###']      = 'index.php?id=' . $this->search_pid . '&amp;no_cache=1';
+      $markerArray['###ACTION_URI###']      = $this->pi_getPageLink($this->search_pid,'',array('no_cache' => 1));
       $markerArray['###SEARCHRESULT###']    = $this->pi_getLL('search_default');
       $markerArray['###VALUE_SEARCH###']    = '';
       $markerArray['###VALUE_SEARCH2###']   = '';
@@ -841,6 +841,7 @@ class tx_mhbranchenbuch_pi1 extends tslib_pibase {
           pid IN (" . $pid . ")
         AND
           substring(firma,1,1) = '" . $letter . "'
+        $query
       ");
 
       if(@$GLOBALS['TYPO3_DB']->sql_num_rows($res)) {
@@ -1810,7 +1811,7 @@ class tx_mhbranchenbuch_pi1 extends tslib_pibase {
             $markerArray['###LID###']  = $lid;
             $markerArray['###OID###']  = $oid;
             
-            $catHTML    = '<select onchange="tx_mhbranchenbuch_selCat(this.options[this.selectedIndex].value,this.options[this.selectedIndex].text);" id="tempCats" name="tempCats" size="5" multiple="multiple">';
+            $catHTML    = '<dl class="tx_mhbranchenbuch_objects tx_mhbranchenbuch_objects_float"><dt>' .  $this->pi_getLL('feeditform_object1') . '</dt><dd><select onchange="tx_mhbranchenbuch_selCat(this.options[this.selectedIndex].value,this.options[this.selectedIndex].text);" id="tempCats" name="tempCats" size="5" multiple="multiple">';
             $categories = explode(',',$row['kategorie']);
     
             $catName = $GLOBALS['TYPO3_DB']->sql(TYPO3_db,"SELECT `name`, `uid` FROM " . $this->dbTable2 . " WHERE `deleted` = 0 ORDER BY `name`");
@@ -1819,7 +1820,7 @@ class tx_mhbranchenbuch_pi1 extends tslib_pibase {
                 $catHTML .= '<option value="' . $row2['uid'] . '">' . $row2['name'] . '</option>';
               }
             }
-            $catHTML .= '</select><select id="selectedCats" name="tx_mhbranchenbuch_postVar[kategorie][]" size="5" multiple="multiple"></select>';
+            $catHTML .= '</select></dd></dl><dl class="tx_mhbranchenbuch_objects"><dt>' .  $this->pi_getLL('feeditform_object2') . '</dt><dd><select onchange="tx_mhbranchenbuch_delCat(this.selectedIndex);" id="selectedCats" name="tx_mhbranchenbuch_postVar[kategorie][]" size="5" multiple="multiple"></select></dd></dl>';
                 
             $markerArray['###ROOTLINE###']            = $this->getOViewRootline($bid,$lid,$oid);
             $markerArray['###SELECT_CATEGORIES###']   = $catHTML;
@@ -2180,7 +2181,7 @@ class tx_mhbranchenbuch_pi1 extends tslib_pibase {
             
             $markerArray['###BACK###'] = $this->pi_linkTP($this->pi_getLL('back'),array($this->prefixId.'[edit]'=> $UID),0, $this->single_pid);
             
-            // send mail that a user hast edit his entry
+            // send mail that a user edit his entry
             if($this->feForm_report > 0 && $this->admin != '') {
               mail($this->admin, $this->pi_getLL('feform_mailsubject_edit'), $this->getMailBody($UID), "From: ".$this->mail_from);
             } 
@@ -2305,7 +2306,7 @@ class tx_mhbranchenbuch_pi1 extends tslib_pibase {
       }
       
     } else {
-      // Benutzer nicht eingeloggt ...
+      // User is not logged in
       $template   = $this->cObj->getSubpart($this->template,"###ERROR###");
       $markerArray['###LANG_ERROR_HEADER###'] = $this->pi_getLL('error_header');
       $markerArray['###LANG_BACK###']         = $this->pi_getLL('back');
@@ -2332,7 +2333,7 @@ class tx_mhbranchenbuch_pi1 extends tslib_pibase {
     $userId = $GLOBALS['TSFE']->fe_user->user['uid'];
     
     if($this->FEdelete == 1) {
-      // if fe-user == author
+      // If fe-user == author
       $permissionCheck = $GLOBALS['TYPO3_DB']->sql(TYPO3_db,"
         SELECT 
           `uid`
@@ -2391,24 +2392,24 @@ class tx_mhbranchenbuch_pi1 extends tslib_pibase {
     if($delete && $hidden) {
       $delAndHidden .= '';
     } elseif($delete == FALSE && $hidden) {
-      $delAndHidden .= 'deleted = 0 '; 
+      $delAndHidden .= '`deleted` = 0 '; 
     } elseif($delete && $hidden == FALSE) {
-      $delAndHidden	.= 'hidden = 0 ';
+      $delAndHidden	.= '`hidden` = 0 ';
     } elseif($delete == FALSE && $hidden == FALSE) {
-      $delAndHidden .= 'deleted = 0 AND hidden = 0 ';
+      $delAndHidden .= '`deleted` = 0 AND `hidden` = 0 ';
     }
        
     if($database) {
       $temp = $GLOBALS['TYPO3_DB']->sql(TYPO3_db,"
         SELECT 
-          uid, name, hidden, deleted
+          `uid`, `name`, `hidden`, `deleted`
         FROM  
           `" . $database . "`
         WHERE 
           $delAndHidden
           " . $conf['where'] . "
         ORDER BY 
-          name
+          `name`
       ");
 
       $content = ''; #init
@@ -2705,8 +2706,8 @@ class tx_mhbranchenbuch_pi1 extends tslib_pibase {
         $name    = $row['name'];
         
         $markerArray['###COUNT###'] = mysql_numrows($res_c);
-        $markerArray['###NAME###']  = $this->pi_linkTP($name,array($this->prefixId . '[bid]' => $bid, $this->prefixId . '[lid]' => $lid, $this->prefixId . '[oid]' => $row['uid']),1,$this->id);
-        
+        $markerArray['###NAME###']  = $this->pi_linkTP($name,array($this->prefixId . '[bid]' => $bid, $this->prefixId . '[lid]' => $lid, $this->prefixId . '[oid]' => $row['uid']),1,$this->single_pid);
+
         $rows .= $this->cObj->substituteMarkerArrayCached($sspart,$markerArray);
       }
     } else {
@@ -2964,10 +2965,10 @@ class tx_mhbranchenbuch_pi1 extends tslib_pibase {
         $this->prefixId . '[oid]' => $oid
       );
       
-      $f = $this->pi_linkTP($this->overviewPathStart,array(),1,$this->id);
-      $b = $this->pi_linkTP($row['bname'],$urlConf_b,1,$this->id);
-      $l = $this->pi_linkTP($row['lname'],$urlConf_l,1,$this->id);
-      $o = $this->pi_linkTP($row['oname'],$urlConf_o,1,$this->id);
+      $f = $this->pi_linkTP($this->overviewPathStart,array(),1,$this->single_pid);
+      $b = $this->pi_linkTP($row['bname'],$urlConf_b,1,$this->single_pid);
+      $l = $this->pi_linkTP($row['lname'],$urlConf_l,1,$this->single_pid);
+      $o = $this->pi_linkTP($row['oname'],$urlConf_o,1,$this->single_pid);
       $k = $row['kname'];
       
       $sep = $this->overviewPathSeperator;
@@ -3367,12 +3368,24 @@ class tx_mhbranchenbuch_pi1 extends tslib_pibase {
       
       function tx_mhbranchenbuch_selCat(value,text)  {
         var a = _$("tempCats").options;
+        var b = _$("selectedCats").options;
+        
         for(var i=0;i<a.length;i++) { 
           if(a[i].selected) {
+            for(var x=0;x<b.length;x++){
+              if(b[x].value == value) { return; }
+            }
             newVal = new Option(text);
             document.getElementById("selectedCats").options[document.getElementById("selectedCats").length] = newVal;
             newVal.value = value;
           }
+        }
+      }
+      
+      function tx_mhbranchenbuch_delCat(value)  {
+        var a = _$("selectedCats").options[value];
+        if(a) {
+          document.getElementById("selectedCats").options[value] = null;
         }
       }
       
@@ -3506,12 +3519,12 @@ class tx_mhbranchenbuch_pi1 extends tslib_pibase {
     
     $markerArray          = array(); #init
     $wrappedSubpartArray  = array(); #init
-    $output               = '';
+    $output               = ''; #init
     
     if(strlen($catID) > 0) { $catID  = explode(',',$catID); } else { $catID = FALSE; }
     
-    $i              = 0; #init
-    $query          = ''; #init
+    $i      = 0; #init
+    $query  = ''; #init
     
     if($catID) {
       $query    = 'AND ';
@@ -3528,21 +3541,21 @@ class tx_mhbranchenbuch_pi1 extends tslib_pibase {
       $x_query  = FALSE;
     }
     
-    $query .= $query ? ' AND root_uid = ' . $root_uid : 'AND root_uid = ' . $root_uid;
+    $query .= $query ? ' AND `root_uid` = ' . $root_uid : 'AND `root_uid` = ' . $root_uid;
     
     $getCats = $GLOBALS['TYPO3_DB']->sql(TYPO3_db,"
       SELECT
-        uid,
-        name,
-        image,
-        description,
-        root_uid
+        `uid`,
+        `name`,
+        `image`,
+        `description`,
+        `root_uid`
       FROM
-        " . $this->dbTable2 . "
+        `" . $this->dbTable2 . "`
       WHERE
-        deleted = 0
+        `deleted` = 0
         AND 
-        hidden = 0
+        `hidden` = 0
         " . $query . "
       ORDER BY " . $this->conf['cat_sortBy']
     );
@@ -3555,17 +3568,17 @@ class tx_mhbranchenbuch_pi1 extends tslib_pibase {
           SELECT
             *
           FROM
-            " . $this->dbTable1 . "
+            `" . $this->dbTable1 . "`
           WHERE
               FIND_IN_SET(" . $row['uid'] . ", kategorie)
             AND
-              ort = " . intval($oid) . "
+              `ort` = " . intval($oid) . "
             AND
-              hidden = 0
+              `hidden` = 0
             AND
-              deleted = 0
+              `deleted` = 0
             AND
-              pid IN (" . $pid . ")
+              `pid` IN (" . $pid . ")
         ");
   
         if($this->show_empty_cats == 0 && mysql_numrows($getCount) <= 0) {

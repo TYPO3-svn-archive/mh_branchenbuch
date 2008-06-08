@@ -48,6 +48,8 @@
 			<label index="tx_mhbranchenbuch_kategorien.image">Image</label>
 			<label index="tx_mhbranchenbuch_kategorien.description">Description</label>
 			<label index="tx_mhbranchenbuch_kategorien.root_uid">Parent Category</label>
+			<label index="tx_mhbranchenbuch_kategorien.createNewParentCategory">Create New Parent Category</label>
+      <label index="tx_mhbranchenbuch_kategorien.listCategories">List Categories</label>
 			<label index="tt_content.list_type_pi1">Yellow Pages (Branchenbuch)</label>
 			<label index="tt_content.pi_flexform.sheet_general">General Settings</label>
 			<label index="tt_content.pi_flexform.sheet_list">LIST Settings</label>
@@ -68,7 +70,7 @@
 			<label index="tt_content.pi_flexform.federal">Only show Entries in this Federal State:</label>
 			<label index="tt_content.pi_flexform.administrative">Only show Entries in this Administrative District:</label>
 			<label index="tt_content.pi_flexform.city">Only show Entries in this City:</label>
-		</languageKey>
+    </languageKey>
 		<languageKey index="de" type="array">
 		  <label index="tx_mhbranchenbuch_bundesland">Bundesland (Branchenbuch)</label>
 			<label index="tx_mhbranchenbuch_bundesland.name">Bundesland</label>
@@ -111,6 +113,8 @@
 			<label index="tx_mhbranchenbuch_kategorien.image">Bild</label>
 			<label index="tx_mhbranchenbuch_kategorien.description">Beschreibung</label>
 			<label index="tx_mhbranchenbuch_kategorien.root_uid">Übergeordnete Kategorie</label>
+      <label index="tx_mhbranchenbuch_kategorien.createNewParentCategory">Erstelle neue Unterkategorie</label>
+      <label index="tx_mhbranchenbuch_kategorien.listCategories">Kategorien auflisten</label>
 			<label index="tt_content.list_type_pi1">Branchenbuch</label>
 			<label index="tt_content.pi_flexform.sheet_general">Allgemeine Einstellungen</label>
 			<label index="tt_content.pi_flexform.sheet_list">LIST Einstellungen</label>
