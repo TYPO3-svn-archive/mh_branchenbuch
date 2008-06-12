@@ -6,7 +6,7 @@ $TCA["tx_mhbranchenbuch_firmen"]["ctrl"]["requestUpdate"] = 'bundesland,landkrei
 $TCA["tx_mhbranchenbuch_firmen"] = array (
 	"ctrl" => $TCA["tx_mhbranchenbuch_firmen"]["ctrl"],
 	"interface" => array (
-		"showRecordFieldList" => "hidden,starttime,endtime,cruser_id,kategorie,bundesland,landkreis,ort,firma,typ,adresse,telefon,fax,handy,link,video,email,custom1,custom2,custom3,bild,keywords,detail,map_lat,map_lng,hit_count,job"
+		"showRecordFieldList" => "hidden,starttime,endtime,cruser_id,kategorie,bundesland,landkreis,ort,firma,forename,lastname,typ,adresse,telefon,fax,handy,link,video,email,custom1,custom2,custom3,bild,keywords,detail,map_lat,map_lng,hit_count,job"
 	),
 	"feInterface" => $TCA["tx_mhbranchenbuch_firmen"]["feInterface"],
 	"columns" => array (
@@ -155,6 +155,22 @@ $TCA["tx_mhbranchenbuch_firmen"] = array (
 				"type" => "input",	
 				"size" => "30",	
 				"eval" => "required",
+			)
+		),
+		"forename" => Array (		
+			"exclude" => 0,		
+			"label" => "LLL:EXT:mh_branchenbuch/locallang_db.xml:tx_mhbranchenbuch_firmen.forename",		
+			"config" => Array (
+				"type" => "input",	
+				"size" => "30",	
+			)
+		),
+		"lastname" => Array (		
+			"exclude" => 0,		
+			"label" => "LLL:EXT:mh_branchenbuch/locallang_db.xml:tx_mhbranchenbuch_firmen.lastname",		
+			"config" => Array (
+				"type" => "input",	
+				"size" => "30",	
 			)
 		),
 		"typ" => Array (		
@@ -334,7 +350,7 @@ $TCA["tx_mhbranchenbuch_firmen"] = array (
 		),
 	),
 	"types" => array (
-		"0" => array("showitem" => "hidden;;1;;1-1-1, cruser_id, kategorie;;;;3-3-3, bundesland, landkreis, ort, firma, typ, adresse, telefon, fax, handy, link, video, email, custom1, custom2, custom3, bild, keywords, detail;;;richtext[cut|copy|paste|formatblock|textcolor|bold|italic|underline|left|center|right|orderedlist|unorderedlist|outdent|indent|link|table|image|line|chMode]:rte_transform[mode=ts_css|imgpath=uploads/mh_branchenbuch/rte/], map_lat, map_lng, hit_count, job")
+		"0" => array("showitem" => "hidden;;1;;1-1-1, cruser_id, kategorie;;;;3-3-3, bundesland, landkreis, ort, firma, forename, lastname, typ, adresse, telefon, fax, handy, link, video, email, custom1, custom2, custom3, bild, keywords, detail;;;richtext[cut|copy|paste|formatblock|textcolor|bold|italic|underline|left|center|right|orderedlist|unorderedlist|outdent|indent|link|table|image|line|chMode]:rte_transform[mode=ts_css|imgpath=uploads/mh_branchenbuch/rte/], map_lat, map_lng, hit_count, job")
 	),
 	"palettes" => array (
 		"1" => array("showitem" => "starttime, endtime")

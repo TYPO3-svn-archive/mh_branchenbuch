@@ -16,6 +16,8 @@
 			<label index="tx_mhbranchenbuch_firmen">Companies (Branchenbuch / Yellow Pages)</label>
 			<label index="tx_mhbranchenbuch_firmen.kategorie">Category</label>
 			<label index="tx_mhbranchenbuch_firmen.firma">Company</label>
+			<label index="tx_mhbranchenbuch_firmen.forename">Forename</label>
+			<label index="tx_mhbranchenbuch_firmen.lastname">Lastname</label>
 			<label index="tx_mhbranchenbuch_firmen.typ.I.0">S-Entry</label>
 			<label index="tx_mhbranchenbuch_firmen.typ.I.1">M-Entry</label>
 			<label index="tx_mhbranchenbuch_firmen.typ.I.2">L-Entry</label>
@@ -82,6 +84,8 @@
 			<label index="tx_mhbranchenbuch_firmen">Firmen (Branchenbuch)</label>
 			<label index="tx_mhbranchenbuch_firmen.kategorie">Kategorie</label>
 			<label index="tx_mhbranchenbuch_firmen.firma">Firma</label>
+			<label index="tx_mhbranchenbuch_firmen.forename">Vorname</label>
+			<label index="tx_mhbranchenbuch_firmen.lastname">Nachname</label>
 			<label index="tx_mhbranchenbuch_firmen.typ.I.0">S-Eintrag</label>
 			<label index="tx_mhbranchenbuch_firmen.typ.I.1">M-Eintrag</label>
 			<label index="tx_mhbranchenbuch_firmen.typ.I.2">L-Eintrag</label>

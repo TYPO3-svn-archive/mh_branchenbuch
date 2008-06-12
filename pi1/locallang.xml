@@ -31,6 +31,7 @@
 			<label index="step3_2_city_submit">Submit new city</label>
 			<label index="step4_header">Schritt 4 - Your Entry</label>
 			<label index="feform_important">Important Settings</label>
+			<label index="feform_type">Type of entry</label>
 			<label index="feform_entry">Entry:</label>
 			<label index="feform_xs">XS-Entry</label>
 			<label index="feform_s">S-Entry</label>
@@ -44,6 +45,8 @@
 			<label index="feform_categorywish_desc">Enter here a category if you dont find your category in the list above.</label>
 			<label index="feform_general">General Information</label>
 			<label index="feform_company">Company:</label>
+			<label index="feform_forename">First Name:</label>
+			<label index="feform_lastname">Last Name:</label>
 			<label index="feform_address">Address:</label>
 			<label index="feform_tel">Telephone:</label>
 			<label index="feform_fax">Fax:</label>
@@ -95,6 +98,8 @@
 			<label index="feeditform_category">Category:</label>
 			<label index="feeditform_keywords">Keywords:</label>
 			<label index="feeditform_company">Company:</label>
+			<label index="feeditform_forename">Vorname:</label>
+			<label index="feeditform_lastname">Nachname:</label>
 			<label index="feeditform_address">Address:</label>
 			<label index="feeditform_tel">Telephone:</label>
 			<label index="feeditform_fax">Fax:</label>
@@ -172,6 +177,16 @@
   	  <label index="mailbody_federalstate">Federal State:</label>
   	  <label index="mailbody_administrativedistrict">Administrative District:</label>
   	  <label index="mailbody_city">City:</label>
+  	  <label index="overviewPathStart">Homepage</label>
+  	  <label index="telephone">Telephone:</label>
+  	  <label index="fax">Fax:</label>
+  	  <label index="mobile">Mobilephone:</label>
+  	  <label index="mail">Mail</label>
+  	  <label index="www">Homepage</label>
+  	  <label index="movie">View movie</label>
+  	  <label index="job">Job vacancy available</label>
+  	  <label index="more">Details</label>
+  	  <label index="vcard">vCard</label>
     </languageKey>
 		
 		<languageKey index="de" type="array">
@@ -199,6 +214,7 @@
 			<label index="step3_2_city_submit">Neue Stadt hinzufügen</label>
 			<label index="step4_header">Schritt 4 - Ihr Eintrag</label>
 			<label index="feform_important">Wichtige Daten</label>
+			<label index="feform_type">Eintragsart</label>
 			<label index="feform_entry">Ihr Eintrag:</label>
 			<label index="feform_xs">XS-Eintrag</label>
 			<label index="feform_s">S-Eintrag</label>
@@ -212,6 +228,8 @@
 			<label index="feform_categorywish_desc">Konnten Sie keine Kategorie in der Liste finden? Dann teilen Sie uns hier Ihre Wunschkategorie mit.</label>
 			<label index="feform_general">Allgemeine Informationen</label>
 			<label index="feform_company">Firma:</label>
+			<label index="feform_forename">Vorname:</label>
+			<label index="feform_lastname">Nachname:</label>
 			<label index="feform_address">Adresse:</label>
 			<label index="feform_tel">Telefon:</label>
 			<label index="feform_fax">Fax:</label>
@@ -263,6 +281,8 @@
 			<label index="feeditform_category">Kategorie:</label>
 			<label index="feeditform_keywords">Schlüsselwörter (Keywords):</label>
 			<label index="feeditform_company">Firma:</label>
+			<label index="feeditform_forename">Vorname:</label>
+			<label index="feeditform_lastname">Nachname:</label>
 			<label index="feeditform_address">Adresse:</label>
 			<label index="feeditform_tel">Telefon:</label>
 			<label index="feeditform_fax">Fax:</label>
@@ -340,6 +360,16 @@
   	  <label index="mailbody_federalstate">Bundesland:</label>
   	  <label index="mailbody_administrativedistrict">Landkreis:</label>
   	  <label index="mailbody_city">Stadt:</label>
+  	  <label index="overviewPathStart">Startseite</label>
+  	  <label index="telephone">Telefon:</label>
+  	  <label index="fax">Fax:</label>
+  	  <label index="mobile">Handy:</label>
+  	  <label index="mail">E-Mail</label>
+  	  <label index="www">Homepage</label>
+  	  <label index="movie">Video anschauen</label>
+  	  <label index="job">Job vorhanden</label>
+  	  <label index="more">Mehr</label>
+  	  <label index="vcard">vCard</label>
     </languageKey>
 	</data>
 </T3locallang>

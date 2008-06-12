@@ -23,7 +23,8 @@
 ***************************************************************/
 
 require_once(PATH_tslib.'class.tslib_pibase.php');
-require_once('class.tx_mhbranchenbuch_ts.php');
+require_once(t3lib_extMgm::extPath('mh_branchenbuch').'lib/class.tx_mhbranchenbuch_ts.php');
+require_once(t3lib_extMgm::extPath('mh_treeview').'lib/class.tx_mhtreeview.php');
 
 /**
  * Plugin 'Branchenbuch' for the 'mh_branchenbuch' extension.
@@ -56,6 +57,8 @@ class tx_mhbranchenbuch_pi1 extends tslib_pibase {
   var $template;
   var $id;
   var $freeCap = FALSE;
+  
+  
 	/**
 	 * The main method of the PlugIn
 	 *
@@ -70,8 +73,6 @@ class tx_mhbranchenbuch_pi1 extends tslib_pibase {
 
 		$this->tsArray = t3lib_div::makeInstance('tx_mhbranchenbuch_ts');
 		
-    #$GLOBALS["TSFE"]->set_no_cache();
-    
     // Flexformdaten beziehen ...
     $this->pi_initPIflexForm();
     
@@ -196,6 +197,8 @@ class tx_mhbranchenbuch_pi1 extends tslib_pibase {
     $query    = FALSE; #init
     $c_query  = FALSE; #init
     
+    $sortBy   = $this->list_sortBy ? $this->list_sortBy : 'firma ASC';
+    
     // Add Categories to query ...
     if($catId) {
       $query    .= 'AND ';
@@ -287,7 +290,7 @@ class tx_mhbranchenbuch_pi1 extends tslib_pibase {
           f.pid IN (" . $pid . ")
           " . $query . "
         ORDER BY
-          f.firma ASC
+          f.$sortBy
         LIMIT " . $limit . "
       ");
     
@@ -307,7 +310,7 @@ class tx_mhbranchenbuch_pi1 extends tslib_pibase {
     $markerArray          = array();
     $wrappedSubpartArray  = array();
     
-    $keyword              = t3lib_div::_GP('keyword');
+    $keyword1             = t3lib_div::_GP('keyword');
     $keyword2             = t3lib_div::_GP('keyword2');
     
     $selectBox            = t3lib_div::_GP('tx_mh_branchenbuch_postVar');
@@ -315,9 +318,8 @@ class tx_mhbranchenbuch_pi1 extends tslib_pibase {
     $bundesland           = $this->piVars['bid'];
     $landkreis            = $this->piVars['lid'];
     $ort                  = $this->piVars['oid'];
-    
-    $sTable               = explode(',',$this->search_tables);
-    $sTableCount          = count($sTable);
+     
+    $query                = FALSE; #init
     
     // Some language
     $markerArray['###LANG_SEARCH_WHO###']     = $this->pi_getLL('search_who');
@@ -326,51 +328,19 @@ class tx_mhbranchenbuch_pi1 extends tslib_pibase {
     
     $template = $this->cObj->getSubpart($this->template,"###SEARCHBOX###");
     
-    // if keyword2 (where) is just active ....
-    if($keyword == "" && $keyword2 != "" && $keyword2 != "%") {
-      
-      $tempKeyword2 = mysql_real_escape_string(trim($keyword2));
-        
-      // Sucht anhand von Keyword2 nach moeglichen Städte ...
-      $getCity      = $GLOBALS['TYPO3_DB']->sql(TYPO3_db,"
-        SELECT
-          *
-        FROM
-          " . $this->dbTable5 . "
-        WHERE
-          name LIKE '%" . $tempKeyword2 . "%'
-      ");
-      
-      if($GLOBALS['TYPO3_DB']->sql_num_rows($getCity)) {
-        $inCity = array(); #init
-        while($cRow = mysql_fetch_assoc($getCity)) {
-          $inCity[] = $cRow['uid']; 
-        }
-      }
-      
-      // Sucht anhand von Keyword2 nach moeglichen Landkreisen ...
-      $getAdminsitrativeDistrict  = $GLOBALS['TYPO3_DB']->sql(TYPO3_db,"
-        SELECT
-          *
-        FROM
-          " . $this->dbTable4 . "
-        WHERE
-          name LIKE '%" . $tempKeyword2 . "%'
-      ");
-      
-      if($GLOBALS['TYPO3_DB']->sql_num_rows($getAdminsitrativeDistrict)) {
-        $inAdminDistrict = array(); #init
-        while($lRow = mysql_fetch_assoc($getAdminsitrativeDistrict)) {
-          $inAdminDistrict[] = $lRow['uid']; 
-        }
-      }
-      
-      $lookKeyword2 = ''; #init
-      $lookKeyword2 .= count($inCity) > 0 ? " AND FIND_IN_SET(f.ort,'" . implode(',',$inCity) . "') "  : '';
-      $lookKeyword2 .= count($inAdminDistrict) > 0 ? " AND FIND_IN_SET(f.landkreis,'" . implode(',',$inAdminDistrict) . "') "  : '';
-      
-      $showXS = $this->search_showXS == 1 ? '' : ' AND f.typ != 7';
-
+    $minLengthKeyword1 = $this->minLengthKeyword1 ? $this->minLengthKeyword1 : 3;
+    $minLengthKeyword2 = $this->minLengthKeyword2 ? $this->minLengthKeyword2 : 3;
+    
+    if($keyword1 != "" && $keyword1 != "%" && strlen(trim($keyword1)) >= $minLengthKeyword1) {
+      $query .= ' AND ';
+      $query .= $this->getSearchResultsKeyword1($keyword1);
+    }
+    
+    if($keyword2 != "" && $keyword2 != "%" && strlen(trim($keyword2)) >= $minLengthKeyword2) {
+      $query .= $this->getSearchResultsKeyword2($keyword2);
+    }
+    
+    if($query) {
       $res = $GLOBALS['TYPO3_DB']->sql(TYPO3_db,"
         SELECT
           f.*,
@@ -380,151 +350,127 @@ class tx_mhbranchenbuch_pi1 extends tslib_pibase {
           JOIN " . $this->dbTable2 . " k ON k.uid = f.kategorie
         WHERE
           f.pid IN ($pid)
-          " . $showXS . "
-          " . $lookKeyword2 . "
+          $query
         ORDER BY
           f.firma ASC
       ");
-
-      if($GLOBALS['TYPO3_DB']->sql_num_rows($res)) 
-      {
+      
+      if($GLOBALS['TYPO3_DB']->sql_num_rows($res)) {
         $markerArray['###SEARCHRESULT###']  = $this->getItem($res,TRUE,'',$pageBrowser); 
-      } 
+      }
       else 
       {
         $markerArray['###SEARCHRESULT###']  = $this->pi_getLL('search_not_found');
-      }   
-      
-      $markerArray['###VALUE_SEARCH###']    = t3lib_div::_GP('keyword');
-      $markerArray['###VALUE_SEARCH2###']   = t3lib_div::_GP('keyword2');
-      $markerArray['###ACTION_URI###']      = $this->pi_getPageLink($this->search_pid,'',array('no_cache' => 1));
-      
-    }
-    // if keyword (who) is active (AND/OR)
-    elseif ($keyword != "" && $keyword != "%" && strlen($keyword) > 2) 
-    {
-      $keyword      = explode(' ',$keyword);
-      $cPVar        = count($keyword);
-      $query        = ''; #init
-      $i            = 0; #init
-      $c            = 0; #init
-
-      if(strlen($keyword2) > 2) {
-        $tempKeyword2 = mysql_real_escape_string(trim($keyword2));
-        
-        // Sucht anhand von Keyword2 nach moeglichen Staedte ...
-        $getCity      = $GLOBALS['TYPO3_DB']->sql(TYPO3_db,"
-          SELECT
-            *
-          FROM
-            " . $this->dbTable5 . "
-          WHERE
-            name LIKE '%" . $tempKeyword2 . "%'
-        ");
-        
-        if($GLOBALS['TYPO3_DB']->sql_num_rows($getCity)) {
-          $inCity = array(); #init
-          while($cRow = mysql_fetch_assoc($getCity)) {
-            $inCity[] = $cRow['uid']; 
-          }
-        }
-        
-        // Sucht anhand von Keyword2 nach moeglichen Landkreisen ...
-        $getAdminsitrativeDistrict  = $GLOBALS['TYPO3_DB']->sql(TYPO3_db,"
-          SELECT
-            *
-          FROM
-            " . $this->dbTable4 . "
-          WHERE
-            name LIKE '%" . $tempKeyword2 . "%'
-        ");
-        
-        if($GLOBALS['TYPO3_DB']->sql_num_rows($getAdminsitrativeDistrict)) {
-          $inAdminDistrict = array(); #init
-          while($lRow = mysql_fetch_assoc($getAdminsitrativeDistrict)) {
-            $inAdminDistrict[] = $lRow['uid']; 
-          }
-        }
-        
       }
-      
-      $lookKeyword2 = ''; #init
-      $lookKeyword2 .= count($inCity) > 0 ? " AND FIND_IN_SET(f.ort,'" . implode(',',$inCity) . "') "  : '';
-      $lookKeyword2 .= count($inAdminDistrict) > 0 ? " AND FIND_IN_SET(f.landkreis,'" . implode(',',$inAdminDistrict) . "') "  : '';
-    	
-      foreach($keyword AS $string) {
-    		If($i > 0) {
-          If($cPVar>1) { 
-            $query .= ' AND ';  
-          } else {
-            $query .= ' OR ';
-          }
-          $i=0; 
-        }
-        foreach($sTable AS $search_table) {
-          if($c<($sTableCount*$cPVar)) {
-            $query .= "f.$search_table LIKE '%$string%' OR ";
-            $c++; 
-          }
-        }
-        $query = substr($query,0,strlen($query)-strlen(' OR '));
-    		$i++;
-    	}
-    	
-      $query2 = explode('AND',$query);
-      
-      $x = 1; #init;
-      $xMax = count($query2);
-      foreach($query2 AS $tquery) {
-        $new_query .= '(' . $tquery . ')';
-        if($x>0 && $x<$xMax) {
-          $new_query .= ' AND ';
-        }
-        $x++;
-      }
-      
-      $showXS = $this->search_showXS == 1 ? '' : ' AND f.typ != 7';
-
-      $res = $GLOBALS['TYPO3_DB']->sql(TYPO3_db,"
-        SELECT
-          f.*,
-          k.name AS kname
-        FROM
-          " . $this->dbTable1 . " f
-          JOIN " . $this->dbTable2 . " k ON k.uid = f.kategorie
-        WHERE
-          f.pid IN (" . $pid . ")
-          AND
-          (" . $new_query . ")
-          " . $showXS . "
-          " . $lookKeyword2 . "
-        ORDER BY
-          f.firma ASC
-      ");
-
-      if($GLOBALS['TYPO3_DB']->sql_num_rows($res)) 
-      {
-        $markerArray['###SEARCHRESULT###']  = $this->getItem($res,TRUE,'',$pageBrowser); 
-      } 
-      else 
-      {
-        $markerArray['###SEARCHRESULT###']  = $this->pi_getLL('search_not_found');
-      }   
-      
-      $markerArray['###VALUE_SEARCH###']    = t3lib_div::_GP('keyword');
-      $markerArray['###VALUE_SEARCH2###']   = t3lib_div::_GP('keyword2');
-      $markerArray['###ACTION_URI###']      = $this->pi_getPageLink($this->search_pid,'',array('no_cache' => 1));
-    }
-    // if booth empty
-    else 
-    {
-      $markerArray['###ACTION_URI###']      = $this->pi_getPageLink($this->search_pid,'',array('no_cache' => 1));
-      $markerArray['###SEARCHRESULT###']    = $this->pi_getLL('search_default');
-      $markerArray['###VALUE_SEARCH###']    = '';
-      $markerArray['###VALUE_SEARCH2###']   = '';
     }
     
+    if(!$keyword2 && !$keyword1) {
+      $markerArray['###SEARCHRESULT###']    = $this->pi_getLL('search_default');
+    } elseif (!$query) {
+      $markerArray['###SEARCHRESULT###']  = $this->pi_getLL('search_not_found');
+    }
+    
+    $markerArray['###VALUE_SEARCH###']    = t3lib_div::_GP('keyword');
+    $markerArray['###VALUE_SEARCH2###']   = t3lib_div::_GP('keyword2');
+    $markerArray['###ACTION_URI###']      = $this->pi_getPageLink($this->search_pid,'',array('no_cache' => 1));
+        
     return $this->cObj->substituteMarkerArrayCached($template,$markerArray,array(),$wrappedSubpartArray);
+  }
+  
+  
+  
+
+  function getSearchResultsKeyword1($keyword) {
+    $keyword      = explode(' ',$keyword);
+    $cPVar        = count($keyword);
+    $sTable       = explode(',',$this->search_tables);
+    $sTableCount  = count($sTable);
+    
+    $query        = FALSE; #init
+    $i            = 0; #init
+    $c            = 0; #init
+
+    foreach($keyword AS $searchString) {
+  		If($i > 0) {
+        If($cPVar>1) { 
+          $query .= ' AND ';  
+        } else {
+          $query .= ' OR ';
+        }
+        $i=0; 
+      }
+      foreach($sTable AS $search_table) {
+        if($c<($sTableCount*$cPVar)) {
+          $query .= "f.$search_table LIKE '%$searchString%' OR ";
+          $c++; 
+        }
+      }
+      $query = substr($query,0,strlen($query)-strlen(' OR '));
+  		$i++;
+  	}
+  	
+    $query2 = explode('AND',$query);
+    
+    $x = 1; #init;
+    $xMax = count($query2);
+    foreach($query2 AS $tquery) {
+      $new_query .= '(' . $tquery . ')';
+      if($x>0 && $x<$xMax) {
+        $new_query .= ' AND ';
+      }
+      $x++;
+    }
+    
+    $showXS = $this->search_showXS == 1 ? FALSE : ' AND f.typ != 7';
+  
+    return "(" . $new_query . ")" . $showXS;
+  }
+  
+  
+  
+  function getSearchResultsKeyword2($keyword) {
+    $keyword = mysql_real_escape_string(trim($keyword));
+    // Search match in the city database
+    $getCity      = $GLOBALS['TYPO3_DB']->sql(TYPO3_db,"
+      SELECT
+        `uid`, `name`
+      FROM
+        `" . $this->dbTable5 . "`
+      WHERE
+        `name` LIKE '%" . $keyword . "%'
+    ");
+    
+    if($GLOBALS['TYPO3_DB']->sql_num_rows($getCity)) {
+      $inCity = array(); #init
+      while($cRow = mysql_fetch_assoc($getCity)) {
+        $inCity[] = $cRow['uid']; 
+      }
+    }
+    
+    // Search match in the administrative district database
+    $getAdminsitrativeDistrict  = $GLOBALS['TYPO3_DB']->sql(TYPO3_db,"
+      SELECT
+        `uid`, `name`
+      FROM
+        `" . $this->dbTable4 . "`
+      WHERE
+        `name` LIKE '%" . $keyword . "%'
+    ");
+    
+    if($GLOBALS['TYPO3_DB']->sql_num_rows($getAdminsitrativeDistrict)) {
+      $inAdminDistrict = array(); #init
+      while($lRow = mysql_fetch_assoc($getAdminsitrativeDistrict)) {
+        $inAdminDistrict[] = $lRow['uid']; 
+      }
+    }
+    
+    $lookKeyword  = ''; #init
+    $lookKeyword  .= count($inCity) > 0 ? " AND FIND_IN_SET(f.ort,'" . implode(',',$inCity) . "') "  : FALSE;
+    $lookKeyword  .= count($inAdminDistrict) > 0 ? " AND FIND_IN_SET(f.landkreis,'" . implode(',',$inAdminDistrict) . "') "  : FALSE;
+    
+    $showXS = $this->search_showXS == 1 ? FALSE : ' AND f.typ != 7';
+
+    return $lookKeyword == FALSE ? FALSE : $lookKeyword.$showXS;
   }
 
 
@@ -846,7 +792,7 @@ class tx_mhbranchenbuch_pi1 extends tslib_pibase {
 
       if(@$GLOBALS['TYPO3_DB']->sql_num_rows($res)) {
         $cssStyle = ($letter == $postVarLetter) ? 'mhbranchenbuch_letter_act' : 'mhbranchenbuch_letter';
-        $menu_temp .= '<li class="' . $cssStyle . '">' . $this->pi_linkTP($this->cObj->stdWrap($letter,$this->conf['letter.']), array($this->prefixId . '[letter]' => $letter),1,$this->id) . '</li>';
+        $menu_temp .= '<li class="' . $cssStyle . '">' . $this->pi_linkTP($this->cObj->stdWrap($letter,$this->conf['letter_stdWrap.']), array($this->prefixId . '[letter]' => $letter),1,$this->id) . '</li>';
       } else {
         $menu_temp .= '<li class="mhbranchenbuch_letter">' . $this->cObj->stdWrap($letter,$this->conf['emptyLetter.']) . '</li>';
       }
@@ -956,9 +902,13 @@ class tx_mhbranchenbuch_pi1 extends tslib_pibase {
       	$markerArray['###PHONE###']    = $this->cObj->stdWrap($row['telefon'],$this->conf['tel_stdWrap.']);
       	$markerArray['###FAX###']      = $this->cObj->stdWrap($row['fax'],$this->conf['fax_stdWrap.']);
       	$markerArray['###MOBILE###']   = $this->cObj->stdWrap($row['handy'],$this->conf['mobile_stdWrap.']);
-      	$markerArray['###JOB###']      = ($row['job'] == 1) ? $this->pi_linkTP($this->cObj->stdWrap($this->conf['job'],$this->conf['job.']), array($this->prefixId . '[detail]' => $row['uid']),1,$this->single_pid) : '';
-      	$markerArray['###VIDEO###']    = strlen($row['video'])>0 ? $this->pi_linkTP($this->cObj->stdWrap($this->conf['video'],$this->conf['video.']),array($this->prefixId . '[video]' => $row['uid']),1,$this->single_pid) : '';
+      	$markerArray['###JOB###']      = ($row['job'] == 1) ? $this->pi_linkTP($this->cObj->stdWrap($this->conf['job_stdWrap'],$this->conf['job_stdWrap.']), array($this->prefixId . '[detail]' => $row['uid']),1,$this->single_pid) : '';
+      	$markerArray['###VIDEO###']    = strlen($row['video'])>0 ? $this->pi_linkTP($this->cObj->stdWrap($this->conf['video_stdWrap'],$this->conf['video_stdWrap.']),array($this->prefixId . '[video]' => $row['uid']),1,$this->single_pid) : '';
       	$markerArray['###MORE###']     = strlen($row['detail'])>0 ? $this->pi_linkTP($this->cObj->stdWrap($this->conf['more_stdWrap'],$this->conf['more_stdWrap.']),array($this->prefixId . '[detail]' => $row['uid']),1,$this->single_pid) : '';
+        $markerArray['###FORENAME###'] = $row['forename'];
+        $markerArray['###LASTNAME###'] = $row['lastname'];
+        
+        $markerArray['###VCARD###']    = $this->pi_linkTP($this->cObj->stdWrap($this->conf['vcard_stdWrap'],$this->conf['vcard_stdWrap.']),array($this->prefixId.'[vcard]'=> $row['uid']),'',$this->single_pid);
         
         $markerArray['###CUSTOM1###']  = $this->cObj->stdWrap($row['custom1'],$this->conf['custom1.']);
         $markerArray['###CUSTOM2###']  = $this->cObj->stdWrap($row['custom2'],$this->conf['custom2.']);
@@ -967,10 +917,10 @@ class tx_mhbranchenbuch_pi1 extends tslib_pibase {
         $linkType = explode(',',$this->linkType);
         
         if(strlen($row['detail'])>0 && $this->linkTitle == 1 && in_array($row['typ'],$linkType)) {
-          $markerArray['###TITLE###'] = $this->pi_linkTP($this->cObj->stdWrap($row['firma'],$this->conf['title_stdWrap.']),array($this->prefixId.'[detail]'=> $row['uid']),'',$this->single_pid);
+          $markerArray['###TITLE###'] = $this->pi_linkTP($this->cObj->stdWrap($row['firma'],$this->conf['title_stdWrap.']),array($this->prefixId.'[detail]'=> $row['uid']),1,$this->single_pid);
         } else {
           if(isset($row['link']) && $this->linkTitle == 1 && in_array($row['typ'],$linkType)) {
-            $markerArray['###TITLE###'] = $this->cObj->getTypoLink($this->cObj->stdWrap($row['firma'],$this->conf['title_stdWrap.']), $row['link'], '', $this->conf['linkTarget']);
+            $markerArray['###TITLE###'] = $this->cObj->getTypoLink($this->cObj->stdWrap($row['firma'],$this->conf['title_stdWrap.']), $row['link'], 1, $this->conf['linkTarget']);
           } else {
             $markerArray['###TITLE###'] = $this->cObj->stdWrap($row['firma'],$this->conf['title_stdWrap.']);
           }
@@ -1046,7 +996,7 @@ class tx_mhbranchenbuch_pi1 extends tslib_pibase {
       	if(!$row['link']) {
           $markerArray['###WWW###'] = ''; 
         } else {    
-          $markerArray['###WWW###'] = $this->cObj->getTypoLink($this->conf['www_stdWrap'],$row['link'],'', $this->conf['linkTarget']);     
+          $markerArray['###WWW###'] = $this->cObj->getTypoLink($this->cObj->stdWrap($this->conf['www_stdWrap'],$this->conf['www_stdWrap.']),$row['link'],'', $this->conf['linkTarget']);     
         }
        
         // Voller output ...
@@ -1226,6 +1176,24 @@ class tx_mhbranchenbuch_pi1 extends tslib_pibase {
     elseif(isset($this->piVars['cat'])) 
     {
       return $this->displayAll($pid,$this->piVars['cat']);
+    }
+    elseif(isset($this->piVars['vcard']))
+    {
+      $res    = $GLOBALS['TYPO3_DB']->sql(TYPO3_db,"
+        SELECT
+          f.*,
+          k.name AS kname,
+          o.name AS city
+        FROM
+          " . $this->dbTable1 . " f
+          LEFT JOIN " . $this->dbTable2 . " k ON k.uid = f.kategorie 
+          LEFT JOIN " . $this->dbTable5 . " o ON o.uid = f.ort
+        WHERE
+          f.uid = " . $this->piVars['vcard'] . "
+        LIMIT 1
+      ");
+      
+      return $this->getVCard($res);
     }
     else 
     {
@@ -1510,6 +1478,8 @@ class tx_mhbranchenbuch_pi1 extends tslib_pibase {
   */
   function displayFEForm($pid) {
     
+    $treeview = t3lib_div::makeInstance('tx_mhtreeview');
+    
     $GLOBALS["TSFE"]->set_no_cache();
     
     // Some language
@@ -1521,7 +1491,7 @@ class tx_mhbranchenbuch_pi1 extends tslib_pibase {
       'feform_address', 'feform_tel', 'feform_fax', 'feform_mobile', 'feform_www', 'feform_email', 'feform_upload_legend',
       'feform_upload_choose', 'feform_keywords_legend', 'feform_keywords_desc', 'feform_detailed_legend', 'feform_detailed_desc',
       'feform_job', 'feform_job_desc', 'feform_finish_legend', 'feform_terms', 'feform_terms_desc', 'feform_submit', 
-      'feform_success_header', 'feform_success_text'
+      'feform_success_header', 'feform_success_text', 'feform_type', 'feform_forename','feform_lastname'
     );
     
     foreach ($arrayAll as $marker) {
@@ -1540,6 +1510,7 @@ class tx_mhbranchenbuch_pi1 extends tslib_pibase {
       $bid          = $this->piVars['bid'];
       $lid          = $this->piVars['lid'];
       $oid          = $this->piVars['oid'];
+      $type         = $this->piVars['type'];
       
       $content      = ''; #init
       $postVar      = array();
@@ -1557,9 +1528,9 @@ class tx_mhbranchenbuch_pi1 extends tslib_pibase {
       // Form send?
       if($postFormId > 0) {
              
-        // Here are the Formdata
-        $x        = t3lib_div::_GP('tx_mhbranchenbuch_postVar');
-        
+        // Get POST-Data ...
+        $x  = t3lib_div::_GP('tx_mhbranchenbuch_postVar');
+                
         // Check required fields ...
         if($required_fields) {
           foreach($required_fields AS $required_field) {
@@ -1581,8 +1552,6 @@ class tx_mhbranchenbuch_pi1 extends tslib_pibase {
             }
           }
           
-          $category = is_array($postVar['kategorie']) ? implode(',',$postVar['kategorie']) : $postVar['kategorie'];
-  
           // Get uploaded picture
           if($_FILES['tx_mhbranchenbuch']['name']) {
             require_once (PATH_t3lib .'class.t3lib_basicfilefunc.php');
@@ -1603,59 +1572,34 @@ class tx_mhbranchenbuch_pi1 extends tslib_pibase {
           
           $postVar['job'] = ($postVar['job'] == '1') ? '1' : '0';
           
-          // Is a valid category choosen?
-          if($category) {
-            $insertArray = array(
-              'pid'         => $pid,
-              'crdate'      => time(),
-              'cruser_id'   => $GLOBALS['TSFE']->fe_user->user['uid'],
-              'hidden'      => 1,
-              'kategorie'   => $category,
-              'firma'       => $postVar['firma'],
-              'adresse'     => $postVar['anschrift'],
-              'telefon'     => $postVar['telefon'],
-              'fax'         => $postVar['fax'],
-              'link'        => $postVar['www'],
-              'email'       => $postVar['email'],
-              'keywords'    => $postVar['keywords'],
-              'handy'       => $postVar['handy'],
-              'typ'         => $postVar['typ'],
-              'bundesland'  => $postVar['bundesland'],
-              'landkreis'   => $postVar['landkreis'],
-              'ort'         => $postVar['ort'],
-              'job'         => $postVar['job'],
-              'detail'      => $postVar['details'],
-              'custom1'     => $postVar['custom1'],
-              'custom2'     => $postVar['custom2'],
-              'custom3'     => $postVar['custom3'],
-              'bild'        => $uploadName
-             );
-          } else {
-            $insertArray = array(
-              'pid'         => $pid,
-              'crdate'      => time(),
-              'cruser_id'   => $GLOBALS['TSFE']->fe_user->user['uid'],
-              'hidden'      => 1,
-              'firma'       => $postVar['firma'],
-              'adresse'     => $postVar['anschrift'],
-              'telefon'     => $postVar['telefon'],
-              'fax'         => $postVar['fax'],
-              'link'        => $postVar['www'],
-              'email'       => $postVar['email'],
-              'keywords'    => $postVar['keywords'],
-              'handy'       => $postVar['handy'],
-              'typ'         => $postVar['typ'],
-              'bundesland'  => $postVar['bundesland'],
-              'landkreis'   => $postVar['landkreis'],
-              'ort'         => $postVar['ort'],
-              'job'         => $postVar['job'],
-              'detail'      => $postVar['details'],
-              'custom1'     => $postVar['custom1'],
-              'custom2'     => $postVar['custom2'],
-              'custom3'     => $postVar['custom3'],
-              'bild'        => $uploadName
-            );
-          }
+          $insertArray = array(
+            'pid'         => $pid,
+            'crdate'      => time(),
+            'cruser_id'   => $GLOBALS['TSFE']->fe_user->user['uid'],
+            'hidden'      => 1,
+            'kategorie'   => $postVar['kategorie'],
+            'forename'    => $postVar['forename'],
+            'lastname'    => $postVar['lastname'],
+            'firma'       => $postVar['firma'],
+            'adresse'     => $postVar['anschrift'],
+            'telefon'     => $postVar['telefon'],
+            'fax'         => $postVar['fax'],
+            'link'        => $postVar['www'],
+            'email'       => $postVar['email'],
+            'keywords'    => $postVar['keywords'],
+            'handy'       => $postVar['handy'],
+            'typ'         => $postVar['typ'],
+            'bundesland'  => $postVar['bundesland'],
+            'landkreis'   => $postVar['landkreis'],
+            'ort'         => $postVar['ort'],
+            'job'         => $postVar['job'],
+            'detail'      => $postVar['details'],
+            'custom1'     => $postVar['custom1'],
+            'custom2'     => $postVar['custom2'],
+            'custom3'     => $postVar['custom3'],
+            'bild'        => $uploadName
+           );
+         
           
           $query = $GLOBALS['TYPO3_DB']->INSERTquery($this->dbTable1, $insertArray);
           
@@ -1694,10 +1638,10 @@ class tx_mhbranchenbuch_pi1 extends tslib_pibase {
         // STEP 1
         $template   = $this->cObj->getSubpart($this->template,"###FE_SIGNUP_STEP1###");
         $conf1      = array(
-          #'value'     => t3lib_div::getIndpEnv('TYPO3_SITE_URL') . $this->pi_getPageLink($this->id,'',array($this->prefixId . '[bid]' => '')),
-          'value'     => 'index.php?id=' . $this->id . '&amp;' . $this->prefixId . '[bid]=',
+          'value'     => $this->pi_getPageLink($this->id,'',array($this->prefixId . '[bid]' => '')),
+          #'value'     => 'index.php?id=' . $this->id . '&amp;' . $this->prefixId . '[bid]=',
           'addSelect' => 'onChange="MM_jumpMenu(\'parent\',this,0)"',
-          'noCache'   => 1,
+          #'noCache'   => 1,
         );
         $markerArray['###ITEMS###'] = $this->makeDropdownSelect($bid, $this->dbTable3, 'step1', $conf1);
         $output .= $this->cObj->substituteMarkerArrayCached($template,$markerArray,array(),$wrappedSubpartArray);
@@ -1706,11 +1650,11 @@ class tx_mhbranchenbuch_pi1 extends tslib_pibase {
         if ($bid) { 
           $template   = $this->cObj->getSubpart($this->template,"###FE_SIGNUP_STEP2###");
           $conf2      = array(
-            #'value'     => t3lib_div::getIndpEnv('TYPO3_SITE_URL') . $this->pi_getPageLink($this->id,'',array($this->prefixId . '[bid]' => $bid, $this->prefixId . '[lid]' => '')),
-            'value'     => 'index.php?id=' . $this->id . '&amp;' . $this->prefixId . '[bid]='  . $bid . '&amp;' . $this->prefixId . '[lid]=',
+            'value'     => $this->pi_getPageLink($this->id,'',array($this->prefixId . '[bid]' => $bid, $this->prefixId . '[lid]' => '')),
+            #'value'     => 'index.php?id=' . $this->id . '&amp;' . $this->prefixId . '[bid]='  . $bid . '&amp;' . $this->prefixId . '[lid]=',
             'addSelect' => 'onChange="MM_jumpMenu(\'parent\',this,0)"',
             'where'     => ' AND bundesland = ' . $bid,
-            'noCache'   => 1,
+            #'noCache'   => 1,
           );
           $markerArray['###ITEMS###'] = $this->makeDropdownSelect($lid, $this->dbTable4, 'step2', $conf2);
           $output .= $this->cObj->substituteMarkerArrayCached($template,$markerArray,array(),$wrappedSubpartArray);
@@ -1720,11 +1664,11 @@ class tx_mhbranchenbuch_pi1 extends tslib_pibase {
         if ($lid) {
           $template   = $this->cObj->getSubpart($this->template,"###FE_SIGNUP_STEP3###");
           $conf3      = array(
-            #'value'     => t3lib_div::getIndpEnv('TYPO3_SITE_URL') . $this->pi_getPageLink($this->id,'',array($this->prefixId . '[bid]' => $bid, $this->prefixId . '[lid]' => $lid, $this->prefixId . '[oid]' => '')),
-            'value'     => 'index.php?id=' . $this->id . '&amp;' . $this->prefixId . '[bid]='  . $bid . '&amp;' . $this->prefixId . '[lid]=' . $lid . '&amp;' . $this->prefixId . '[oid]=',
+            'value'     => $this->pi_getPageLink($this->id,'',array($this->prefixId . '[bid]' => $bid, $this->prefixId . '[lid]' => $lid, $this->prefixId . '[oid]' => '')),
+            #'value'     => 'index.php?id=' . $this->id . '&amp;' . $this->prefixId . '[bid]='  . $bid . '&amp;' . $this->prefixId . '[lid]=' . $lid . '&amp;' . $this->prefixId . '[oid]=',
             'addSelect' => 'onChange="MM_jumpMenu(\'parent\',this,0)"',
             'where'     => ' AND landkreis = ' . $lid,
-            'noCache'   => 1,
+            #'noCache'   => 1,
             'hidden'    => 1,
           );
           
@@ -1772,59 +1716,113 @@ class tx_mhbranchenbuch_pi1 extends tslib_pibase {
           
           } else {
             
-            $template   = $this->cObj->getSubpart($this->template,"###FE_SIGNUP_STEP4###");
-            $markerArray['###UPLOAD_MAXSIZE###'] = $this->feForm_maxsize;
-            
-            $markerArray['###LANG_FEFORM_UPLOAD_SIZE###'] = $this->sprintf2($this->pi_getLL('feform_upload_size'), 
-              array(
-                'size' => $this->feForm_maxsize
-              )
-            );
-            
-            $markerArray['###LANG_FEFORM_KEYWORDS_COUNT###'] = $this->sprintf2($this->pi_getLL('feform_keywords_count'),
-              array(
-                'keywords' => '<b id="tx_mhbranchenbuch_words">?</b>'  
-              )
-            );
-            
-            // User is logged in?
-            if($GLOBALS['TSFE']->fe_user->user['uid'] > 0) {
-              // Fill out the fileds which are allready available in FE-User-Table
-              $markerArray['###NAME###']    = $GLOBALS['TSFE']->fe_user->user['name'];
-              $markerArray['###EMAIL###']   = $GLOBALS['TSFE']->fe_user->user['email'];
-              $markerArray['###TEL###']     = $GLOBALS['TSFE']->fe_user->user['telephone'];
-              $markerArray['###FAX###']     = $GLOBALS['TSFE']->fe_user->user['fax'];
-              $markerArray['###WWW###']     = $GLOBALS['TSFE']->fe_user->user['www'];
-              $markerArray['###COMPANY###'] = $GLOBALS['TSFE']->fe_user->user['company'];
-              $markerArray['###ADDRESS###'] = $GLOBALS['TSFE']->fe_user->user['address']."\n".$GLOBALS['TSFE']->fe_user->user['zip']." " . $GLOBALS['TSFE']->fe_user->user['city'];
-            } else {
-              $markerArray['###NAME###']    = '';
-              $markerArray['###EMAIL###']   = '';
-              $markerArray['###TEL###']     = '';
-              $markerArray['###FAX###']     = '';
-              $markerArray['###WWW###']     = '';
-              $markerArray['###COMPANY###'] = '';
-              $markerArray['###ADDRESS###'] = '';
-            }
-            
-            $markerArray['###BID###']  = $bid;
-            $markerArray['###LID###']  = $lid;
-            $markerArray['###OID###']  = $oid;
-            
-            $catHTML    = '<dl class="tx_mhbranchenbuch_objects tx_mhbranchenbuch_objects_float"><dt>' .  $this->pi_getLL('feeditform_object1') . '</dt><dd><select onchange="tx_mhbranchenbuch_selCat(this.options[this.selectedIndex].value,this.options[this.selectedIndex].text);" id="tempCats" name="tempCats" size="5" multiple="multiple">';
-            $categories = explode(',',$row['kategorie']);
-    
-            $catName = $GLOBALS['TYPO3_DB']->sql(TYPO3_db,"SELECT `name`, `uid` FROM " . $this->dbTable2 . " WHERE `deleted` = 0 ORDER BY `name`");
-            if($GLOBALS['TYPO3_DB']->sql_num_rows($catName)) {
-              while($row2 = mysql_fetch_array($catName)) {
-                $catHTML .= '<option value="' . $row2['uid'] . '">' . $row2['name'] . '</option>';
-              }
-            }
-            $catHTML .= '</select></dd></dl><dl class="tx_mhbranchenbuch_objects"><dt>' .  $this->pi_getLL('feeditform_object2') . '</dt><dd><select onchange="tx_mhbranchenbuch_delCat(this.selectedIndex);" id="selectedCats" name="tx_mhbranchenbuch_postVar[kategorie][]" size="5" multiple="multiple"></select></dd></dl>';
-                
+            $main_template   = $this->cObj->getSubpart($this->template,"###FE_SIGNUP_STEP4###");
+
+            $markerArray['###URI###'] = 'index.php?id=' . $this->id . '&amp;' . $this->prefixId . '[bid]='  . $bid . '&amp;' . $this->prefixId . '[lid]=' . $lid . '&amp;' . $this->prefixId . '[oid]=' . $oid . '&amp;' . $this->prefixId . '[type]=';
             $markerArray['###ROOTLINE###']            = $this->getOViewRootline($bid,$lid,$oid);
-            $markerArray['###SELECT_CATEGORIES###']   = $catHTML;
-            $output .= $this->cObj->substituteMarkerArrayCached($template,$markerArray,array(),$wrappedSubpartArray);
+            
+            $markerArray['###SELECTED_XS###']         = $type == '7' ? 'selected="selected"' : FALSE;
+            $markerArray['###SELECTED_ADVERTISE###']  = $type == '6' ? 'selected="selected"' : FALSE;
+            $markerArray['###SELECTED_XXL2###']       = $type == '5' ? 'selected="selected"' : FALSE;
+            $markerArray['###SELECTED_XXL###']        = $type == '4' ? 'selected="selected"' : FALSE;
+            $markerArray['###SELECTED_XL###']         = $type == '3' ? 'selected="selected"' : FALSE;
+            $markerArray['###SELECTED_L###']          = $type == '2' ? 'selected="selected"' : FALSE;
+            $markerArray['###SELECTED_M###']          = $type == '1' ? 'selected="selected"' : FALSE;
+            $markerArray['###SELECTED_S###']          = $type == '0' ? 'selected="selected"' : FALSE;
+            
+            $output .= $this->cObj->substituteMarkerArrayCached($main_template,$markerArray,array(),$wrappedSubpartArray);
+            
+            $type_valid  = array(
+              7 => 'XS',
+              6 => 'ADVERTISE',
+              5 => 'XXL2',
+              4 => 'XXL',
+              3 => 'XL',
+              2 => 'L',
+              1 => 'M',
+              0 => 'S'
+            );
+ 
+            if(array_key_exists($type,$type_valid)) {
+
+              $template   = $this->cObj->getSubpart($this->template,"###FE_SIGNUP_FIELDS###");
+                  
+              $markerArray['###UPLOAD_MAXSIZE###'] = $this->feForm_maxsize;
+              
+              $markerArray['###LANG_FEFORM_UPLOAD_SIZE###'] = $this->sprintf2($this->pi_getLL('feform_upload_size'), 
+                array(
+                  'size' => $this->feForm_maxsize
+                )
+              );
+              
+              $markerArray['###LANG_FEFORM_KEYWORDS_COUNT###'] = $this->sprintf2($this->pi_getLL('feform_keywords_count'),
+                array(
+                  'keywords' => '<b id="tx_mhbranchenbuch_words">?</b>'  
+                )
+              );
+              
+              // User is logged in?
+              if($GLOBALS['TSFE']->fe_user->user['uid'] > 0) {
+                // Fill out the fields which are allready available in FE-User-Table
+                $markerArray['###NAME###']      = $GLOBALS['TSFE']->fe_user->user['name'];
+                $markerArray['###EMAIL###']     = $GLOBALS['TSFE']->fe_user->user['email'];
+                $markerArray['###TEL###']       = $GLOBALS['TSFE']->fe_user->user['telephone'];
+                $markerArray['###FAX###']       = $GLOBALS['TSFE']->fe_user->user['fax'];
+                $markerArray['###WWW###']       = $GLOBALS['TSFE']->fe_user->user['www'];
+                $markerArray['###COMPANY###']   = $GLOBALS['TSFE']->fe_user->user['company'];
+                $markerArray['###ADDRESS###']   = $GLOBALS['TSFE']->fe_user->user['address']."\n".$GLOBALS['TSFE']->fe_user->user['zip']." " . $GLOBALS['TSFE']->fe_user->user['city'];
+                $markerArray['###FORENAME###']  = $GLOBALS['TSFE']->fe_user->user['first_name'];
+                $markerArray['###LASTNAME###']  = $GLOBALS['TSFE']->fe_user->user['last_name'];
+              } else {
+                $markerArray['###NAME###']      = '';
+                $markerArray['###EMAIL###']     = '';
+                $markerArray['###TEL###']       = '';
+                $markerArray['###FAX###']       = '';
+                $markerArray['###WWW###']       = '';
+                $markerArray['###COMPANY###']   = '';
+                $markerArray['###ADDRESS###']   = '';
+                $markerArray['###FORENAME###']  = '';
+                $markerArray['###LASTNAME###']  = '';
+              }
+              
+              $markerArray['###BID###']  = $bid;
+              $markerArray['###LID###']  = $lid;
+              $markerArray['###OID###']  = $oid;
+              $markerArray['###TYPE###'] = $type;
+              
+              $treeview->init($this->dbTable2, 'root_uid', 'Ein-/Ausklappen', array('uid','name'), array('JS_Func' => 'tx_mhbranchenbuch_TreeviewSelCat', 'JS_Event' => 'href', 'JS_Input' => 'uid,name', 'id' => 'tempCats'));
+              $catHTML  = '<dl class="tx_mhbranchenbuch_objects tx_mhbranchenbuch_objects_float"><dt>' .  $this->pi_getLL('feeditform_object1') . '</dt><dd>' . $treeview->getTree() . '</dd></dl>';
+              $catHTML  .= '<dl class="tx_mhbranchenbuch_objects"><dt>' .  $this->pi_getLL('feeditform_object2') . '</dt><dd><select onchange="tx_mhbranchenbuch_delCat(this.selectedIndex,this.value);" id="selectedCats" size="5" multiple="multiple"></select></dd></dl>';
+                  
+              $markerArray['###SELECT_CATEGORIES###']   = $catHTML;
+              
+              // Get upload fields ...
+              $upload_fields  = $this->feForm_uploadFields ? $this->feForm_uploadFields : 1;
+              $upload_field   = '';
+              for($count_temp = 1; $count_temp <= $upload_fields; $count_temp++) {
+                if($count_temp > 1) { 
+                  $upload_form_name = 'tx_mhbranchenbuch_customImage[]';
+                } else {
+                  $upload_form_name = 'tx_mhbranchenbuch';
+                }
+                $upload_field .= '<label for="upload' . $count_temp . '">'. $this->pi_getLL('feform_upload_choose') . '</label><input type="file" id="upload' . $count_temp . '" size="30" name="' . $upload_form_name . '" accept="*.jpg,*.gif,*.jpeg" />';
+              }
+              
+              $markerArray['###UPLOAD_FIELDS###'] = $upload_field;
+              
+              // Get custom fields
+              $field          = 'feForm_fields_' . strtolower($type_valid[$type]);
+              $custom_fields  = explode(',',$this->$field);
+              
+              $temp_tpl = ''; #init
+              
+              foreach($custom_fields AS $custom_field) {
+                $temp_tpl .= $this->cObj->getSubpart($this->template,"###FEFORM_FIELD_" . strtoupper($custom_field) . "###");
+                $markerArray['###CUSTOM_FIELDS###'] = $this->cObj->substituteMarkerArrayCached($temp_tpl,$markerArray,array(),$wrappedSubpartArray);
+              }
+              
+              $output .= $this->cObj->substituteMarkerArrayCached($template,$markerArray,array(),$wrappedSubpartArray);
+            } // End if $typ
           }
         }
         return $output;
@@ -2027,6 +2025,7 @@ class tx_mhbranchenbuch_pi1 extends tslib_pibase {
   */
   function displayEditForm($pid) {
     
+    $treeview             = t3lib_div::makeInstance('tx_mhtreeview');
     $userId               = $GLOBALS['TSFE']->fe_user->user['uid'];
     $formId               = t3lib_div::_GP('formid');
     
@@ -2047,7 +2046,9 @@ class tx_mhbranchenbuch_pi1 extends tslib_pibase {
       'feeditform_job_desc', 'feeditform_general', 'feeditform_upload_choose', 'feeditform_upload_size',
       'feeditform_keywords_legend', 'feeditform_keywords_desc', 'feeditform_keywords_count', 'feeditform_detailed_legend',
       'feeditform_detailed_desc', 'feeditform_job', 'feeditform_job_desc', 'feeditform_upload_legend', 
-      'feeditform_current_upload', 'feeditform_delPic',
+      'feeditform_current_upload', 'feeditform_delPic', 'feeditform_forename', 'feeditform_lastname',
+      'feform_xs', 'feform_s', 'feform_m', 'feform_l', 'feform_xl', 'feform_xxl', 'feform_xxl2', 
+      'choose', 'feform_entry', 'feform_type'
     );
     
     foreach($arrayAll AS $marker) {
@@ -2092,49 +2093,27 @@ class tx_mhbranchenbuch_pi1 extends tslib_pibase {
             }
           }
           
-          $category = is_array($postVar['kategorie']) ? implode(',',$postVar['kategorie']) : $postVar['kategorie'];
-          
-          // Wurde eine vorhandene Kategorie ausgewählt? 
-          if($category) 
-          {
-            $updateArray = array(
-              'kategorie'   => $category,
-              'firma'       => $postVar['firma'],
-              'adresse'     => $postVar['anschrift'],
-              'telefon'     => $postVar['telefon'],
-              'fax'         => $postVar['fax'],
-              'link'        => $postVar['www'],
-              'email'       => $postVar['email'],
-              'keywords'    => $postVar['keywords'],
-              'handy'       => $postVar['handy'],
-              'job'         => $postVar['job'],
-              'detail'      => $postVar['details'],
-              'custom1'     => $postVar['custom1'],
-              'custom2'     => $postVar['custom2'],
-              'custom3'     => $postVar['custom3']
-             );
-          } 
-          else
-          {
-            $updateArray = array(
-              'firma'       => $postVar['firma'],
-              'adresse'     => $postVar['anschrift'],
-              'telefon'     => $postVar['telefon'],
-              'fax'         => $postVar['fax'],
-              'link'        => $postVar['www'],
-              'email'       => $postVar['email'],
-              'keywords'    => $postVar['keywords'],
-              'handy'       => $postVar['handy'],
-              'job'         => $postVar['job'],
-              'detail'      => $postVar['details'],
-              'custom1'     => $postVar['custom1'],
-              'custom2'     => $postVar['custom2'],
-              'custom3'     => $postVar['custom3']
-            );
-          }
+          $updateArray = array(
+            'kategorie'   => $postVar['kategorie'],
+            'firma'       => $postVar['firma'],
+            'forename'    => $postVar['forename'],
+            'lastname'    => $postVar['lastname'],
+            'adresse'     => $postVar['anschrift'],
+            'telefon'     => $postVar['telefon'],
+            'fax'         => $postVar['fax'],
+            'link'        => $postVar['www'],
+            'email'       => $postVar['email'],
+            'keywords'    => $postVar['keywords'],
+            'handy'       => $postVar['handy'],
+            'job'         => $postVar['job'],
+            'detail'      => $postVar['details'],
+            'custom1'     => $postVar['custom1'],
+            'custom2'     => $postVar['custom2'],
+            'custom3'     => $postVar['custom3']
+          );
           
           // Delete uploaded picture
-          if(t3lib_div::_GP('delPic'))  { 
+          if(t3lib_div::_GP('delPic'))  {
             $row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc(
               $GLOBALS['TYPO3_DB']->exec_SELECTquery(
                 'bild', 
@@ -2203,10 +2182,19 @@ class tx_mhbranchenbuch_pi1 extends tslib_pibase {
             $updateLocation = $GLOBALS['TYPO3_DB']->UPDATEquery($this->dbTable1, 'uid=' . intval($UID), array('ort' => $oid));
           }
           
+          // Update Entry-Type ...
+          $type = $this->piVars['type'];
+          
+          if($type) {
+            $updateLocation = $GLOBALS['TYPO3_DB']->UPDATEquery($this->dbTable1, 'uid=' . intval($UID), array('typ' => $type));
+          }
+          
           if($updateLocation) {
             $GLOBALS['TYPO3_DB']->sql(TYPO3_db, $updateLocation);
             header("LOCATION: index.php?id=" . $this->id . "&" . $this->prefixId . "[edit]=" . $UID . "&no_cache=1");
           }
+          
+          
           
           // Check Keyword-Length on Pageload
           $GLOBALS['TSFE']->pSetup['bodyTagAdd'] = 'onload="tx_mhbranchenbuch_checkKeywords(document.getElementById(\'keywords\').value);"';
@@ -2233,21 +2221,22 @@ class tx_mhbranchenbuch_pi1 extends tslib_pibase {
               $markerArray["###db_$feld###"] = $inhalt;
             }
             
-            $catHTML    = '<select name="tx_mhbranchenbuch_postVar[kategorie][]" size="5" multiple="multiple">';
             $categories = explode(',',$row['kategorie']);
-
+           
+            $treeview->init($this->dbTable2, 'root_uid', 'Ein-/Ausklappen', array('uid','name'), array('JS_Func' => 'tx_mhbranchenbuch_TreeviewSelCat', 'JS_Event' => 'href', 'JS_Input' => 'uid,name', 'active_id' => $categories));
+            $catHTML    = '<dl class="tx_mhbranchenbuch_objects tx_mhbranchenbuch_objects_float"><dt>' .  $this->pi_getLL('feeditform_object1') . '</dt><dd>' . $treeview->getTree() . '</dd></dl>';
+            $catHTML    .= '<dl class="tx_mhbranchenbuch_objects"><dt>' .  $this->pi_getLL('feeditform_object2') . '</dt><dd><select onchange="tx_mhbranchenbuch_delCat(this.selectedIndex,this.value);" id="selectedCats" size="5" multiple="multiple">';
+          
             $catName = $GLOBALS['TYPO3_DB']->sql(TYPO3_db,"SELECT `name`, `uid` FROM " . $this->dbTable2 . " WHERE `deleted` = 0 AND `hidden` = 0 ORDER BY `name`");
             if($GLOBALS['TYPO3_DB']->sql_num_rows($catName)) {
               while($row2 = mysql_fetch_array($catName)) {
                 if(in_array($row2['uid'], $categories)) {
-                  $catHTML .= '<option value="' . $row2['uid'] . '" selected="selected">' . $row2['name'] . '</option>';
-                } else {
                   $catHTML .= '<option value="' . $row2['uid'] . '">' . $row2['name'] . '</option>';
                 }
               }
             }
-            $catHTML .= '</select>';
-            
+            $catHTML .= '</select></dd></dl>';
+
             // Image Settings
             $file                         = ($row['bild'] == '') ? $this->conf['noImage'] : 'uploads/tx_mhbranchenbuch/' . $row['bild'];
             $imgTSConfig                  = Array();
@@ -2275,32 +2264,67 @@ class tx_mhbranchenbuch_pi1 extends tslib_pibase {
             );
             
             $markerArray['###SELECT_CATEGORIES###'] = $catHTML;
-            
+
             $fCfg = array(
-              'value'     => 'index.php?id=' . $this->id . '&amp;' . $this->prefixId . '[edit]=' . $row['uid'] . '&amp;' . $this->prefixId . '[bid]=',
+              #'value'     => 'index.php?id=' . $this->id . '&amp;' . $this->prefixId . '[edit]=' . $row['uid'] . '&amp;' . $this->prefixId . '[bid]=',
+              'value'     => $this->pi_getPageLink($this->id,'',array($this->prefixId . '[edit]' => $row['uid'], $this->prefixId . '[bid]' => $bid)),
               'addSelect' => 'onChange="MM_jumpMenu(\'parent\',this,0)"',
               'noCache'   => 1
             );
             
             $lCfg = array(
-              'value'     => 'index.php?id=' . $this->id . '&amp;' . $this->prefixId . '[edit]=' . $row['uid'] . '&amp;' . $this->prefixId . '[lid]=',
+              #'value'     => 'index.php?id=' . $this->id . '&amp;' . $this->prefixId . '[edit]=' . $row['uid'] . '&amp;' . $this->prefixId . '[lid]=',
+              'value'     => $this->pi_getPageLink($this->id,'',array($this->prefixId . '[edit]' => $row['uid'], $this->prefixId . '[lid]' => $lid)),
               'addSelect' => 'onChange="MM_jumpMenu(\'parent\',this,0)"',
               'noCache'   => 1,
               'where'     => ' AND bundesland = ' . $row['bundesland']
             );
             
             $oCfg = array(
-              'value'     => 'index.php?id=' . $this->id . '&amp;' . $this->prefixId . '[edit]=' . $row['uid'] . '&amp;' . $this->prefixId . '[oid]=',
+              #'value'     => 'index.php?id=' . $this->id . '&amp;' . $this->prefixId . '[edit]=' . $row['uid'] . '&amp;' . $this->prefixId . '[oid]=',
+              'value'     => $this->pi_getPageLink($this->id,'',array($this->prefixId . '[edit]' => $row['uid'], $this->prefixId . '[oid]' => $oid)),
               'addSelect' => 'onChange="MM_jumpMenu(\'parent\',this,0)"',
               'noCache'   => 1,
               'where'     => ' AND landkreis = ' . $row['landkreis']
             );
+
             
             $markerArray['###SELECT_FEDERAL_STATES###']           = $this->makeDropdownSelect($row['bundesland'], $this->dbTable3, 'bundesland', $fCfg);
             $markerArray['###SELECT_ADMINISTRATIVE_DISTRICT###']  = $this->makeDropdownSelect($row['landkreis'], $this->dbTable4, 'landkreis', $lCfg);
-            $markerArray['###SELECT_CITIES###']                   = $this->makeDropdownSelect($row['ort'], $this->dbTable5, 'ort', $oCfg);         
+            $markerArray['###SELECT_CITIES###']                   = $this->makeDropdownSelect($row['ort'], $this->dbTable5, 'ort', $oCfg);
+            
+            // Get custom fields
+            $type_valid  = array(
+              7 => 'XS',
+              6 => 'ADVERTISE',
+              5 => 'XXL2',
+              4 => 'XXL',
+              3 => 'XL',
+              2 => 'L',
+              1 => 'M',
+              0 => 'S'
+            );
+            
+            foreach($type_valid AS $check_selected => $check_value) {
+              if($check_selected == $row['typ']) {
+                $markerArray['###SELECTED_' . $check_value . '###'] = 'selected="selected"';
+              } else {
+                $markerArray['###SELECTED_' . $check_value . '###'] = FALSE;
+              }
+            }
+                  
+            $markerArray['###URI###'] = 'index.php?no_cache=1&amp;id=' . $this->id . '&amp;' . $this->prefixId . '[edit]='  . $UID . '&amp;' . $this->prefixId . '[type]=';
+            
+            $field          = 'feForm_fields_' . strtolower($type_valid[$row['typ']]);
+            $custom_fields  = explode(',',$this->$field);
+            
+            $temp_tpl = ''; #init
+            
+            foreach($custom_fields AS $custom_field) {
+              $temp_tpl .= $this->cObj->getSubpart($this->template,"###FE_EDIT_FIELD_" . strtoupper($custom_field) . "###");
+              $markerArray['###CUSTOM_FIELDS###'] = $this->cObj->substituteMarkerArrayCached($temp_tpl,$markerArray,array(),$wrappedSubpartArray);
+            }
           }
-          
         }
         
       }
@@ -2850,7 +2874,7 @@ class tx_mhbranchenbuch_pi1 extends tslib_pibase {
           " . $x_query . "
         ORDER BY
           f.crdate DESC
-          LIMIT " . $this->limitLatest);
+          LIMIT " . $this->limitLatestOverview);
       
       $markerArray['###LATEST###']    = $this->getItem($getLast,TRUE);
       $markerArray['###ROOTLINE###']  = $this->getOViewRootline($bid,$lid,$oid,$kid);
@@ -2965,7 +2989,7 @@ class tx_mhbranchenbuch_pi1 extends tslib_pibase {
         $this->prefixId . '[oid]' => $oid
       );
       
-      $f = $this->pi_linkTP($this->overviewPathStart,array(),1,$this->single_pid);
+      $f = $this->pi_linkTP($this->pi_getLL('overviewPathStart'),array(),1,$this->single_pid);
       $b = $this->pi_linkTP($row['bname'],$urlConf_b,1,$this->single_pid);
       $l = $this->pi_linkTP($row['lname'],$urlConf_l,1,$this->single_pid);
       $o = $this->pi_linkTP($row['oname'],$urlConf_o,1,$this->single_pid);
@@ -3257,9 +3281,6 @@ class tx_mhbranchenbuch_pi1 extends tslib_pibase {
   
   /**
   * Helper function
-  *     
-  *  
-  * @return	JS & CSS Inlcude  
   */
   function sprintf2($str='', $vars=array(), $char='%') {
     if (!$str) return '';
@@ -3285,12 +3306,6 @@ class tx_mhbranchenbuch_pi1 extends tslib_pibase {
     <link rel="stylesheet" type="text/css" href="' . t3lib_extMgm::siteRelPath($this->extKey). 'res/feForm.css" />
     <script type="text/javascript">
     <!--
-    
-      function MM_jumpMenu(targ,selObj,restore) {
-        eval(targ+".location=\'"+selObj.options[selObj.selectedIndex].value+"\'");
-        if (restore) selObj.selectedIndex=0;
-      }
-      
       var typ       = new Array();
       typ[0]        = "'  . trim($this->feForm_fields_s) . '";
       typ[1]        = "'  . trim($this->feForm_fields_m) . '";
@@ -3298,7 +3313,7 @@ class tx_mhbranchenbuch_pi1 extends tslib_pibase {
       typ[3]        = "'  . trim($this->feForm_fields_xl) . '";
       typ[4]        = "'  . trim($this->feForm_fields_xxl) . '";
       typ[5]        = "'  . trim($this->feForm_fields_xxl2) . '";
-      typ[6]        = "nothing";
+      typ[6]        = "'  . trim($this->feForm_fields_advertise) . '";
       typ[7]        = "'  . trim($this->feForm_fields_xs) . '";
       
       var keywords  = new Array();
@@ -3311,92 +3326,18 @@ class tx_mhbranchenbuch_pi1 extends tslib_pibase {
       keywords[6]   = "1";
       keywords[7]   = "'  . $this->feForm_keywords_xs . '";
       
-      function getElementsByClassName(myName) {
-        var tags = ["div", "span", "fieldset"];
-        var result = [];
-        var searchExpression = new RegExp("\\b" + myName + "\\b");
-        for (var i = 0; i < tags.length; i++ ) {
-          var objects = document.getElementsByTagName( tags[ i ] );
-          for (var j = 0; j < objects.length; j++ )
-          if ( objects[ j ].className.match( searchExpression ) )
-            result.push( objects[ j ] );
-          }
-        return result;
-      }
-  
-      function tx_mhbranchenbuch_hideAll() {
-        document.getElementById("tx_mhbranchenbuch_keywordsFieldset").className = "hidden";
-        document.getElementById("tx_mhbranchenbuch_uploadFieldset").className = "hidden";
-        document.getElementById("tx_mhbranchenbuch_detailedFieldset").className = "hidden";
-        
-        //var disableObjRes = getElementsByClassName("unhide");
-        //if(disableObjRes) {
-        //  for (var x = 0; x < disableObjRes.length; x++) {
-        //    disableObjRes[x].className = "hidden";
-        //  }
-        //}
-      }
-      
-      function tx_mhbranchenbuch_getFields(val) {
-        var enableFields = typ[val].split(",");
-        for (var i = 0; i < enableFields.length; i++) {
-          var enableObj = document.getElementById("tx_mhbranchenbuch_" + enableFields[i]);
-          if (enableObj) {
-            enableObj.className = "unhide";
-          }
-        }
-      }
-      
-      function tx_mhbranchenbuch_checkKeywords() {
-        var tempStr     = document.tx_mhbranchenbuch_feForm.keywords.value;
-        var strLength   = tempStr.split(" ").length;
-        var validLength = keywords[document.getElementById("mhbranchenbuch_typ").value];
-        var tempWords   = (validLength-strLength)+1;
-        
-        document.getElementById("tx_mhbranchenbuch_words").innerHTML = tempWords;
-        
-        if(strLength <= validLength) {
-          tempMemory = tempStr;
-        } else {
-          document.tx_mhbranchenbuch_feForm.keywords.value = tempMemory;
-        } 
-      }
-      
-      function tx_mhbranchenbuch_resetKeywords() {
-        document.getElementById("keywords").disabled = false;
-      }
-      
-      function tx_mhbranchenbuch_selCat(value,text)  {
-        var a = _$("tempCats").options;
-        var b = _$("selectedCats").options;
-        
-        for(var i=0;i<a.length;i++) { 
-          if(a[i].selected) {
-            for(var x=0;x<b.length;x++){
-              if(b[x].value == value) { return; }
-            }
-            newVal = new Option(text);
-            document.getElementById("selectedCats").options[document.getElementById("selectedCats").length] = newVal;
-            newVal.value = value;
-          }
-        }
-      }
-      
-      function tx_mhbranchenbuch_delCat(value)  {
-        var a = _$("selectedCats").options[value];
-        if(a) {
-          document.getElementById("selectedCats").options[value] = null;
-        }
-      }
-      
-      function _$(e) {
-        if(document.getElementById(e))
-          return document.getElementById(e);
-        else
-          alert (e + " gibts net");
-      }
-    -->
-    </script>';
+      var category  = new Array();
+      category[0]   = "'  . $this->feForm_categories_s . '";
+      category[1]   = "'  . $this->feForm_categories_m . '";
+      category[2]   = "'  . $this->feForm_categories_l . '";
+      category[3]   = "'  . $this->feForm_categories_xl . '";
+      category[4]   = "'  . $this->feForm_categories_xxl . '";
+      category[5]   = "'  . $this->feForm_categories_xxl2 . '";
+      category[6]   = "'  . $this->feForm_categories_advertise . '";
+      category[7]   = "'  . $this->feForm_categories_xs . '";
+    //-->
+    </script>
+    <script type="text/javascript" src="' . t3lib_extMgm::siteRelPath($this->extKey). 'res/tx_mhbranchenbuch_functions.js"></script>';
     
     return $GLOBALS['TSFE']->additionalHeaderData[$this->extKey] = $headerData;
   }
@@ -3499,6 +3440,7 @@ class tx_mhbranchenbuch_pi1 extends tslib_pibase {
   }
   
   
+  
   /**
   * getCategories
   * 
@@ -3580,8 +3522,10 @@ class tx_mhbranchenbuch_pi1 extends tslib_pibase {
             AND
               `pid` IN (" . $pid . ")
         ");
-  
-        if($this->show_empty_cats == 0 && mysql_numrows($getCount) <= 0) {
+        
+        $count = $GLOBALS['TYPO3_DB']->sql_num_rows($getCount);
+        
+        if($this->show_empty_cats == 0 && $count <= 0) {
           continue;
         }
         
@@ -3594,11 +3538,10 @@ class tx_mhbranchenbuch_pi1 extends tslib_pibase {
         
         $name     = $row['name'];
         
-        $catCount = $this->show_cat_count == '1' ? mysql_numrows($getCount) : FALSE;
+        $catCount = $this->show_cat_count == '1' ? $count : FALSE;
         
         $markerArray['###NAME###']  = $this->pi_linkTP($name, $urlConf, 1, $this->single_pid);
-        $markerArray['###COUNT###'] = $catCount;
-        
+       
         // Image Settings
         if($row['image']) {
           $file                         = 'uploads/tx_mhbranchenbuch/'. $row['image'];
@@ -3627,20 +3570,60 @@ class tx_mhbranchenbuch_pi1 extends tslib_pibase {
         );
 
         if($GLOBALS['TYPO3_DB']->sql_num_rows($subCategories) > 0) {
+          if($catCount) {
+            // ToDo: count all entries of the cat (FIND_IN_SET(k.uid, f.kategorie)), see tagcloud
+            $count += $GLOBALS['TYPO3_DB']->sql_num_rows($subCategories);
+          }
           $markerArray['###SUBCATEGORY###'] = $this->getCategories($pid,$bid,$lid,$oid,'',$row['uid']);
         } else {
           $markerArray['###SUBCATEGORY###'] = FALSE;
         }
-        
+        $markerArray['###COUNT###'] = $count;
         $rows .= $this->cObj->substituteMarkerArrayCached($subpart,$markerArray);
       }
       
     }
-    
     $wrappedSubpartArray['###ITEMS###'] = $rows;   
     return $this->cObj->substituteMarkerArrayCached($template, $markerArray, $wrappedSubpartArray);
-  }
+  } // End method: getCategories();
   
+  
+  
+  /**
+  * getVCard
+  * 
+  * @param int $res: database query
+  *    
+  * @return	a generated vCard
+  */
+  function getVCard($res) {
+    
+    require_once(t3lib_extMgm::extPath('mh_branchenbuch').'lib/class.tx_mhbranchenbuch_vcard.php');
+    $vCard = t3lib_div::makeInstance('tx_mhbranchenbuch_vcard');
+
+    if($GLOBALS['TYPO3_DB']->sql_num_rows($res)) {
+      while($row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) {
+                  
+        // Ignore deleted and hidden entries
+        if($row['deleted'] == '1' OR $row['hidden'] == '1') continue;
+        
+        $vCard->data['first_name']   = $row['forename'];
+        $vCard->data['last_name']    = $row['lastname'];
+        $vCard->data['company']      = $row['firma']; 
+        $vCard->data['work_address'] = $row['adresse'];
+        $vCard->data['work_city']    = $row['city'];
+        $vCard->data['office_tel']   = $row['telefon'];
+        $vCard->data['cell_tel']     = $row['handy'];
+        $vCard->data['fax_tel']      = $row['fax']; 
+        $vCard->data['email1']       = $row['email'];
+        $vCard->data['url']          = $row['link'];
+        $vCard->data['note']       = $row['detail'];
+        $vCard->filename             = $this->vCard_filename ? $this->vCard_filename : $row['firma'];
+        return $vCard->download();
+      }
+    }
+  } // End method: getVCard();
+        
 } // END CLASS
 
 

@@ -2,7 +2,7 @@
 if (!defined ('TYPO3_MODE')) 	die ('Access denied.');
 
 // class for displaying the category tree in BE forms.
-include_once(t3lib_extMgm::extPath($_EXTKEY).'class.tx_mhbranchenbuch_treeview.php');
+include_once(t3lib_extMgm::extPath($_EXTKEY).'lib/class.tx_mhbranchenbuch_treeview.php');
 
 t3lib_extMgm::allowTableOnStandardPages('tx_mhbranchenbuch_firmen');
 

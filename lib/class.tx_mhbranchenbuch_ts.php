@@ -29,6 +29,7 @@ class tx_mhbranchenbuch_ts extends tslib_pibase {
       'search_tables',
       'search_showXS',
       'limitLatest',
+      'limitLatestOverview',
       'display_not_found',
       'single_pid',
       'search_pid',
@@ -40,9 +41,9 @@ class tx_mhbranchenbuch_ts extends tslib_pibase {
       'minFontSize',
       'CloudColors',
       'countEntrys',
-      'TagCloudLink',
-      'feForm_required',
+      'TagCloudLink',      
       'admin',
+      'feForm_required',
       'feForm_report',
       'feForm_maxsize',
       'feForm_createCity',
@@ -60,6 +61,14 @@ class tx_mhbranchenbuch_ts extends tslib_pibase {
       'feForm_keywords_xl',
       'feForm_keywords_xxl',
       'feForm_keywords_xxl2',
+      'feForm_uploadFields',
+      'feForm_categories_xs',
+      'feForm_categories_s',
+      'feForm_categories_m',
+      'feForm_categories_l',
+      'feForm_categories_xl',
+      'feForm_categories_xxl',
+      'feForm_categories_xxl2',
       'FEdelete',
       'FEedit',
       'imgMaxHeight',
@@ -67,7 +76,6 @@ class tx_mhbranchenbuch_ts extends tslib_pibase {
       'imageParams',
       'overviewMode',
       'overviewPathSeperator',
-      'overviewPathStart',
       'overviewID',
       'overviewSort',
       'resultsPerPage',
@@ -98,12 +106,15 @@ class tx_mhbranchenbuch_ts extends tslib_pibase {
       'map_zoom4',
       'map_showImage',
       'letterAll',
-      'maxEntriesPerUser'
+      'maxEntriesPerUser',
+      'list_sortBy',
+      'minLengthKeyword1',
+      'minLengthKeyword2',
     );
   }
 }
 
-if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/mh_branchenbuch/pi1/class.tx_mhbranchenbuch_ts.php'])	{
-	include_once($TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/mh_branchenbuch/pi1/class.tx_mhbranchenbuch_ts.php']);
+if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/mh_branchenbuch/lib/class.tx_mhbranchenbuch_ts.php'])	{
+	include_once($TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/mh_branchenbuch/lib/class.tx_mhbranchenbuch_ts.php']);
 }
 ?>

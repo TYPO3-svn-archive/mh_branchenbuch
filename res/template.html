@@ -11,6 +11,7 @@
     <p style="">
       <span style="font-weight:bold;">###TITLE###</span> 
       <br />
+      ###FORENAME### ###LASTNAME###<br />
       ###ADDRESS###
       <br />
       ###PHONE### ###FAX###
@@ -26,6 +27,7 @@
     <p style="">
       <span style="font-weight:bold;">###TITLE###</span> 
       <br />
+      ###FORENAME### ###LASTNAME###<br />
       ###ADDRESS###
       <br />
       ###PHONE### ###FAX###
@@ -42,6 +44,7 @@
       <p style="">
       <span style="font-weight:bold;">###TITLE###</span>
       <br />
+      ###FORENAME### ###LASTNAME###<br />
       ###ADDRESS###
       <br /><br />
       ###PHONE### ###FAX###
@@ -59,6 +62,7 @@
     <p style="">
       <span style="font-weight:bold;">###TITLE###</span>
       <br />
+      ###FORENAME### ###LASTNAME###<br />
       ###ADDRESS###
       <br /><br />
       ###PHONE### ###FAX###
@@ -82,6 +86,7 @@
     <p style="">
       <span style="font-weight:bold;">###TITLE###</span>
       <br />
+      ###FORENAME### ###LASTNAME###<br />
       ###ADDRESS###
       <br /><br />
       ###PHONE### ###FAX###
@@ -107,6 +112,7 @@
     <p style="">
       <span style="font-weight:bold;">###TITLE###</span>
       <br />
+      ###FORENAME### ###LASTNAME###<br />
       ###ADDRESS###
       <br /><br />
       ###PHONE### ###FAX###
@@ -132,6 +138,7 @@
     <p style="">
       <span style="font-weight:bold;">###TITLE###</span>
       <br />
+      ###FORENAME### ###LASTNAME###<br />
       ###ADDRESS###
       <br /><br />
       ###PHONE### ###FAX### ###MOBILE###
@@ -168,7 +175,7 @@
     <br /><br />
     <p>###PHONE### ###FAX###<br />###MOBILE###</p>
     
-  	<p style="text-align:right;">###WWW### ###EMAIL###</p>
+  	<p style="text-align:right;">###WWW### ###EMAIL### ###VCARD###</p>
   	<br />
   	<hr style="clear:both;" />
   	<br />
@@ -190,7 +197,7 @@
     <br /><br />
     <p>###PHONE### ###FAX###<br />###MOBILE###</p>
     
-  	<p style="text-align:right;">###WWW### ###EMAIL###</p>
+  	<p style="text-align:right;">###WWW### ###EMAIL### ###VCARD###</p>
   	<br />
   	<hr style="clear:both;" />
   	<br />
@@ -213,7 +220,7 @@
     <br /><br />
     <p>###PHONE### ###FAX###<br />###MOBILE###</p>
     
-  	<p style="text-align:right;">###WWW### ###EMAIL###</p>
+  	<p style="text-align:right;">###WWW### ###EMAIL### ###VCARD###</p>
   	<br />
   	<hr style="clear:both;" />
   	<br />
@@ -236,7 +243,7 @@
     <br /><br />
     <p>###PHONE### ###FAX###<br />###MOBILE###</p>
     
-  	<p style="text-align:right;">###WWW### ###EMAIL###</p>
+  	<p style="text-align:right;">###WWW### ###EMAIL### ###VCARD###</p>
   	<br />
   	<hr style="clear:both;" />
   	<br />
@@ -259,7 +266,7 @@
     <br /><br />
     <p>###PHONE### ###FAX###<br />###MOBILE###</p>
     
-  	<p style="text-align:right;">###WWW### ###EMAIL###</p>
+  	<p style="text-align:right;">###WWW### ###EMAIL### ###VCARD###</p>
   	<br />
   	<hr style="clear:both;" />
   	<br />
@@ -282,7 +289,7 @@
     <br /><br />
     <p>###PHONE### ###FAX###<br />###MOBILE###</p>
     
-  	<p style="text-align:right;">###WWW### ###EMAIL###</p>
+  	<p style="text-align:right;">###WWW### ###EMAIL### ###VCARD###</p>
   	<br />
   	<hr style="clear:both;" />
   	<br />
@@ -305,7 +312,7 @@
     <br /><br />
     <p>###PHONE### ###FAX###<br />###MOBILE###</p>
     
-  	<p style="text-align:right;">###WWW### ###EMAIL###</p>
+  	<p style="text-align:right;">###WWW### ###EMAIL###  ###VCARD###</p>
   	<br />
   	<hr style="clear:both;" />
   	<br />
@@ -408,87 +415,89 @@
 
 
 <!-- ###FE_SIGNUP_STEP1### begin -->
-  <form method="post" action="">
-    <fieldset class="tx_mhbranchenbuch_newEntry">
-      <legend for="bundesland">###LANG_STEP1_LEGEND###</legend>
-      <label id="bundesland">###LANG_CHOOSE###</label>
-      ###ITEMS###
-      <br />
-    </fieldset>
-  </form>
+  <fieldset class="tx_mhbranchenbuch_newEntry">
+    <legend for="bundesland">###LANG_STEP1_LEGEND###</legend>
+    <label id="bundesland">###LANG_CHOOSE###</label>
+    ###ITEMS###
+    <br />
+  </fieldset>
 <!-- ###FE_SIGNUP_STEP1### end -->
 
 
 
 <!-- ###FE_SIGNUP_STEP2### begin -->
   <br />
-  <form method="post" action="">
-    <fieldset class="tx_mhbranchenbuch_newEntry">
-      <legend for="landkreis">###LANG_STEP2_LEGEND###</legend>
-      <label id="landkreis">###LANG_CHOOSE###</label>
-      ###ITEMS###
-      <br />
-    </fieldset>
-  </form>
+  <fieldset class="tx_mhbranchenbuch_newEntry">
+    <legend for="landkreis">###LANG_STEP2_LEGEND###</legend>
+    <label id="landkreis">###LANG_CHOOSE###</label>
+    ###ITEMS###
+    <br />
+  </fieldset>
 <!-- ###FE_SIGNUP_STEP2### end -->
 
 
 
 <!-- ###FE_SIGNUP_STEP3### begin -->
   <br />
-  <form method="post" action="">
-    <fieldset class="tx_mhbranchenbuch_newEntry">
-      <legend for="ort">###LANG_STEP3_LEGEND###</legend>
-      <label id="ort">###LANG_CHOOSE###</label>
-      ###ITEMS###
-      <br />
-    </fieldset>
-  </form>
+  <fieldset class="tx_mhbranchenbuch_newEntry">
+    <legend for="ort">###LANG_STEP3_LEGEND###</legend>
+    <label id="ort">###LANG_CHOOSE###</label>
+    ###ITEMS###
+    <br />
+  </fieldset>
 <!-- ###FE_SIGNUP_STEP3### end -->
 
 
 
 <!-- ###FE_SIGNUP_STEP3_2### begin -->
   <br />
-  <form method="post" action="">
-    <fieldset class="tx_mhbranchenbuch_newEntry">
-      <legend for="city_new">###LANG_STEP3_2_LEGEND###</legend>
-      <label id="name_new">###LANG_STEP3_2_CITY###</label>
-      <input type="text" name="name_new" id="name_new" /><input type="submit" value="###LANG_STEP3_2_CITY_SUBMIT###" />
-      <br />
-    </fieldset>
-  </form>
+  <fieldset class="tx_mhbranchenbuch_newEntry">
+    <legend for="city_new">###LANG_STEP3_2_LEGEND###</legend>
+    <label id="name_new">###LANG_STEP3_2_CITY###</label>
+    <input type="text" name="name_new" id="name_new" /><input type="submit" value="###LANG_STEP3_2_CITY_SUBMIT###" />
+    <br />
+  </fieldset>
 <!-- ###FE_SIGNUP_STEP3_2### end -->
 
 
 
 <!-- ###FE_SIGNUP_STEP4### begin -->
-  <div class="tx_mh_branchenbuch-feform">
-    <h1>###LANG_STEP4_HEADER###</h1>
-    <p>###ROOTLINE###</p>
+  <br />
+  <h1>###LANG_STEP4_HEADER###</h1>
+  <p>###ROOTLINE###</p>
+  <fieldset class="tx_mhbranchenbuch_newEntry">
+    <legend for="newEntry">###LANG_FEFORM_TYPE###</legend>
     
-    <form name="tx_mhbranchenbuch_feForm" id="tx_mhbranchenbuch_feForm" method="post" action="" enctype="multipart/form-data">
-      
+    <label for="mhbranchenbuch_typ" class="required">###LANG_FEFORM_ENTRY###</label>
+    <select id="mhbranchenbuch_typ" name="tx_mhbranchenbuch_postVar[typ]" onChange="MM_jumpMenu('parent',this,0)">
+      <option value="" disabled="disabled" selected="selected">###LANG_CHOOSE###</option>
+      <option value="###URI###7" ###SELECTED_XS###>###LANG_FEFORM_XS###</option>
+      <option value="###URI###0" ###SELECTED_S###>###LANG_FEFORM_S###</option>
+      <option value="###URI###1" ###SELECTED_M###>###LANG_FEFORM_M###</option>
+      <option value="###URI###2" ###SELECTED_L###>###LANG_FEFORM_L###</option>
+      <option value="###URI###3" ###SELECTED_XL###>###LANG_FEFORM_XL###</option>
+      <option value="###URI###4" ###SELECTED_XXL###>###LANG_FEFORM_XXL###</option>
+      <option value="###URI###5" ###SELECTED_XXL2###>###LANG_FEFORM_XXL2###</option>
+    </select>
+    <br />
+  </fieldset>
+  <br />
+<!-- ###FE_SIGNUP_STEP4### end -->
+
+
+
+<!-- ###FE_SIGNUP_FIELDS### begin -->
+  <div class="tx_mh_branchenbuch-feform">
+    <form name="tx_mhbranchenbuch_feForm" id="tx_mhbranchenbuch_feForm" method="post" action="" enctype="multipart/form-data" onsubmit="tx_mhbranchenbuch_submitCat();">
       <input type="hidden" name="formid" value="1" />
       <input type="hidden" name="tx_mhbranchenbuch_postVar[bundesland]" value="###BID###" />
       <input type="hidden" name="tx_mhbranchenbuch_postVar[landkreis]" value="###LID###" />
       <input type="hidden" name="tx_mhbranchenbuch_postVar[ort]" value="###OID###" />
+      <input type="hidden" name="tx_mhbranchenbuch_postVar[kategorie]" id="tx_mhbranchenbuch_category" value="">
+      <input type="hidden" name="tx_mhbranchenbuch_postVar[typ]" value="###TYPE###" id="tx_mhbranchenbuch_typeCount" />
       
       <fieldset class="tx_mhbranchenbuch_newEntry">
         <legend for="newEntry">###LANG_FEFORM_IMPORTANT###</legend>
-        
-        <label for="mhbranchenbuch_typ" class="required">###LANG_FEFORM_ENTRY###</label>
-        <select id="mhbranchenbuch_typ" name="tx_mhbranchenbuch_postVar[typ]" onchange="tx_mhbranchenbuch_hideAll(),tx_mhbranchenbuch_getFields(this.value);">
-          <option value="" disabled="disabled" selected="selected">###LANG_CHOOSE###</option>
-          <option value="7">###LANG_FEFORM_XS###</option>
-          <option value="0">###LANG_FEFORM_S###</option>
-          <option value="1">###LANG_FEFORM_M###</option>
-          <option value="2">###LANG_FEFORM_L###</option>
-          <option value="3">###LANG_FEFORM_XL###</option>
-          <option value="4">###LANG_FEFORM_XXL###</option>
-          <option value="5">###LANG_FEFORM_XXL2###</option>
-        </select>
-        <br />
         
         <label for="mhbranchenbuch_cat" class="required">###LANG_FEFORM_CATEGORY###</label>
         ###SELECT_CATEGORIES###
@@ -508,6 +517,14 @@
         
         <label for="firma" class="required">###LANG_FEFORM_COMPANY###</label>
         <input type="text" id="firma" name="tx_mhbranchenbuch_postVar[firma]" size="50" value="###COMPANY###" />
+        <br />
+        
+        <label for="forename">###LANG_FEFORM_FORENAME###</label>
+        <input type="text" id="forename" name="tx_mhbranchenbuch_postVar[forename]" size="50" value="###FORENAME###" />
+        <br />
+        
+        <label for="lastname">###LANG_FEFORM_LASTNAME###</label>
+        <input type="text" id="lastname" name="tx_mhbranchenbuch_postVar[lastname]" size="50" value="###LASTNAME###" />
         <br />
         
         <label for="anschrift">###LANG_FEFORM_ADDRESS###</label>
@@ -535,45 +552,7 @@
         <br />
       </fieldset>
       
-      <!-- UPLOAD -->
-      <div id="tx_mhbranchenbuch_uploadFieldset" class="hidden">
-        <br />
-        <fieldset class="tx_mhbranchenbuch_newEntry">
-          <legend for="newEntry">###LANG_FEFORM_UPLOAD_LEGEND###</legend>
-          <label for="upload">###LANG_FEFORM_UPLOAD_CHOOSE###</label>
-          <input type="file" id="upload" size="30" name="tx_mhbranchenbuch" accept="*.jpg,*.gif,*.jpeg" />
-          <span>###LANG_FEFORM_UPLOAD_SIZE###</span>
-          <br />
-        </fieldset>
-      </div>
-      
-      <!-- KEYWORDS -->
-      <div id="tx_mhbranchenbuch_keywordsFieldset" class="hidden">
-        <br />
-        <fieldset class="tx_mhbranchenbuch_newEntry">
-          <legend for="newEntry">###LANG_FEFORM_KEYWORDS_LEGEND###</legend>
-          <span>###LANG_FEFORM_KEYWORDS_COUNT###</span>
-          <textarea onkeyup="tx_mhbranchenbuch_checkKeywords(this.value);" cols="58" rows="5" id="keywords" name="tx_mhbranchenbuch_postVar[keywords]" tabindex="10" /></textarea>
-          <span>###LANG_FEFORM_KEYWORDS_DESC###</span>
-          <br />
-        </fieldset>
-      </div>
-
-      <!-- DETAILED & JOB OFFER -->
-      <div id="tx_mhbranchenbuch_detailedFieldset" class="hidden">
-        <br />
-        <fieldset class="tx_mhbranchenbuch_newEntry">
-          <legend for="newEntry">###LANG_FEFORM_DETAILED_LEGEND###</legend>
-          <textarea cols="58" rows="5" name="tx_mhbranchenbuch_postVar[details]"></textarea>
-          <span>###LANG_FEFORM_DETAILED_DESC###</span>
-          <br />
-          
-          <label for="jobCheckbox">###LANG_FEFORM_JOB###</label>
-          <input type="checkbox" id="jobCheckbox" name="tx_mhbranchenbuch_postVar[job]" value="1" />
-          <span>###LANG_FEFORM_JOB_DESC###</span>
-          <br />
-        </fieldset>
-      </div>
+      ###CUSTOM_FIELDS###
 
       <!-- FINISH STEPS -->
       <br />
@@ -590,7 +569,55 @@
     </form> 
     
   </div>
-<!-- ###FE_SIGNUP_STEP4### end -->
+<!-- ###FE_SIGNUP_FIELDS### end -->
+
+
+
+<!-- ###FEFORM_FIELD_UPLOAD### begin -->
+  <div id="tx_mhbranchenbuch_uploadFieldset">
+    <br />
+    <fieldset class="tx_mhbranchenbuch_newEntry">
+      <legend for="newEntry">###LANG_FEFORM_UPLOAD_LEGEND###</legend>
+      ###UPLOAD_FIELDS###
+      <span>###LANG_FEFORM_UPLOAD_SIZE###</span>
+      <br />
+    </fieldset>
+  </div>
+<!-- ###FEFORM_FIELD_UPLOAD### end -->     
+
+
+
+<!-- ###FEFORM_FIELD_KEYWORDS### begin -->
+<div id="tx_mhbranchenbuch_keywordsFieldset">
+  <br />
+  <fieldset class="tx_mhbranchenbuch_newEntry">
+    <legend for="newEntry">###LANG_FEFORM_KEYWORDS_LEGEND###</legend>
+    <span>###LANG_FEFORM_KEYWORDS_COUNT###</span>
+    <textarea onkeyup="tx_mhbranchenbuch_checkKeywords(this.value);" cols="58" rows="5" id="keywords" name="tx_mhbranchenbuch_postVar[keywords]" tabindex="10" /></textarea>
+    <span>###LANG_FEFORM_KEYWORDS_DESC###</span>
+    <br />
+  </fieldset>
+</div>
+<!-- ###FEFORM_FIELD_KEYWORDS### end -->
+
+
+
+<!-- ###FEFORM_FIELD_DETAIL### begin -->
+<div id="tx_mhbranchenbuch_detailedFieldset">
+  <br />
+  <fieldset class="tx_mhbranchenbuch_newEntry">
+    <legend for="newEntry">###LANG_FEFORM_DETAILED_LEGEND###</legend>
+    <textarea cols="58" rows="5" name="tx_mhbranchenbuch_postVar[details]"></textarea>
+    <span>###LANG_FEFORM_DETAILED_DESC###</span>
+    <br />
+    
+    <label for="jobCheckbox">###LANG_FEFORM_JOB###</label>
+    <input type="checkbox" id="jobCheckbox" name="tx_mhbranchenbuch_postVar[job]" value="1" />
+    <span>###LANG_FEFORM_JOB_DESC###</span>
+    <br />
+  </fieldset>
+</div>
+<!-- ###FEFORM_FIELD_DETAIL### end -->
 
 
 
@@ -646,11 +673,13 @@
 <!-- ###FE_EDIT_FORM### begin -->
 <div class="tx_mh_branchenbuch-feform">
 
-  <form name="tx_mhbranchenbuch_feForm" id="tx_mhbranchenbuch_feForm" method="post" action="" enctype="multipart/form-data">
+  <form name="tx_mhbranchenbuch_feForm" id="tx_mhbranchenbuch_feForm" method="post" action="" enctype="multipart/form-data" onsubmit="tx_mhbranchenbuch_submitCat();">
     <input type="hidden" name="formid" value="1" />
     <input type="hidden" name="uid" value="###db_uid###" />
-    <input type="hidden" id="mhbranchenbuch_typ" name="mhbranchenbuch_typ" value="###db_typ###" />
-    
+    <input type="hidden" id="tx_mhbranchenbuch_typeCount" name="mhbranchenbuch_typ" value="###db_typ###" />
+    <input type="hidden" name="tx_mhbranchenbuch_postVar[kategorie]" id="tx_mhbranchenbuch_category" value="">
+      
+      
     <!-- FEDERAL STATE, ADMINISTRATIVE DISTRICT, CITY -->
     <div id="tx_mhbranchenbuch_federalFieldset">
       <fieldset class="tx_mhbranchenbuch_newEntry">
@@ -673,16 +702,41 @@
     
     <br />
     
+    <fieldset class="tx_mhbranchenbuch_newEntry">
+      <legend for="newEntry">###LANG_FEFORM_TYPE###</legend>
+      <label for="mhbranchenbuch_typ" class="required">###LANG_FEFORM_ENTRY###</label>
+      <select id="mhbranchenbuch_typ" name="tx_mhbranchenbuch_postVar[typ]" onChange="MM_jumpMenu('parent',this,0)">
+        <option value="" disabled="disabled" selected="selected">###LANG_CHOOSE###</option>
+        <option value="###URI###7" ###SELECTED_XS###>###LANG_FEFORM_XS###</option>
+        <option value="###URI###0" ###SELECTED_S###>###LANG_FEFORM_S###</option>
+        <option value="###URI###1" ###SELECTED_M###>###LANG_FEFORM_M###</option>
+        <option value="###URI###2" ###SELECTED_L###>###LANG_FEFORM_L###</option>
+        <option value="###URI###3" ###SELECTED_XL###>###LANG_FEFORM_XL###</option>
+        <option value="###URI###4" ###SELECTED_XXL###>###LANG_FEFORM_XXL###</option>
+        <option value="###URI###5" ###SELECTED_XXL2###>###LANG_FEFORM_XXL2###</option>
+      </select>
+    </fieldset>
+    
+    <br />
+    
     <!-- GENERAL -->
     <fieldset class="tx_mhbranchenbuch_newEntry">
       <legend for="newEntry">###LANG_FEEDITFORM_GENERAL###</legend>
+      
+      <label for="cat">###LANG_FEEDITFORM_CATEGORY###</label>
+      ###SELECT_CATEGORIES###
+      <br />
       
       <label for="firma" class="required">###LANG_FEEDITFORM_COMPANY###</label>
       <input type="text" id="firma" name="tx_mhbranchenbuch_postVar[firma]" size="50" value="###db_firma###" />
       <br />
       
-      <label for="cat">###LANG_FEEDITFORM_CATEGORY###</label>
-      ###SELECT_CATEGORIES###
+      <label for="forename">###LANG_FEEDITFORM_FORENAME###</label>
+      <input type="text" id="forename" name="tx_mhbranchenbuch_postVar[forename]" size="50" value="###db_forename###" />
+      <br />
+      
+      <label for="lastname">###LANG_FEEDITFORM_LASTNAME###</label>
+      <input type="text" id="lastname" name="tx_mhbranchenbuch_postVar[lastname]" size="50" value="###db_lastname###" />
       <br />
       
       <label for="tel">###LANG_FEEDITFORM_ADDRESS###</label>
@@ -709,56 +763,8 @@
       <input type="text" id="email" size="50" name="tx_mhbranchenbuch_postVar[email]" value="###db_email###" />
       <br />
     </fieldset>
-    <br />
     
-    <!-- UPLOAD -->
-    <div id="tx_mhbranchenbuch_uploadFieldset">
-      
-      <fieldset class="tx_mhbranchenbuch_newEntry">
-        <legend for="newEntry">###LANG_FEEDITFORM_UPLOAD_LEGEND###</legend>
-        
-        <label for="current">###LANG_FEEDITFORM_CURRENT_UPLOAD###</label>
-        ###CURRENT_IMAGE###
-        <br />
-        
-        <label for="delCurrent">###LANG_FEEDITFORM_DELPIC###</label>
-        <input type="checkbox" value="1" name="delPic" id="delCurrent" />
-        <br />
-        
-        <label for="upload">###LANG_FEEDITFORM_UPLOAD_CHOOSE###</label>
-        <input type="file" id="upload" size="30" name="tx_mhbranchenbuch" accept="*.jpg,*.gif,*.jpeg" />
-        <span>###LANG_FEEDITFORM_UPLOAD_SIZE###</span>
-        <br />
-      </fieldset>
-    </div>
-    
-    <!-- KEYWORDS -->
-    <div id="tx_mhbranchenbuch_keywordsFieldset">
-      <br />
-      <fieldset class="tx_mhbranchenbuch_newEntry">
-        <legend for="newEntry">###LANG_FEEDITFORM_KEYWORDS_LEGEND###</legend>
-        <span>###LANG_FEEDITFORM_KEYWORDS_COUNT###</span>
-        <textarea onkeyup="tx_mhbranchenbuch_checkKeywords(this.value);" cols="58" rows="5" id="keywords" name="tx_mhbranchenbuch_postVar[keywords]" tabindex="10" />###db_keywords###</textarea>
-        <span>###LANG_FEEDITFORM_KEYWORDS_DESC###</span>
-        <br />
-      </fieldset>
-    </div>
-    
-    <!-- DETAILED & JOB OFFER -->
-    <div id="tx_mhbranchenbuch_detailedFieldset">
-      <br />
-      <fieldset class="tx_mhbranchenbuch_newEntry">
-        <legend for="newEntry">###LANG_FEEDITFORM_DETAILED_LEGEND###</legend>
-        <textarea cols="58" rows="5" name="tx_mhbranchenbuch_postVar[details]">###db_detail###</textarea>
-        <span>###LANG_FEEDITFORM_DETAILED_DESC###</span>
-        <br />
-        
-        <label for="jobCheckbox">###LANG_FEEDITFORM_JOB###</label>
-        <input ###CHECKJOB### type="checkbox" id="jobCheckbox" name="tx_mhbranchenbuch_postVar[job]" value="1" />
-        <span>###LANG_FEEDITFORM_JOB_DESC###</span>
-        <br />
-      </fieldset>
-    </div>
+    ###CUSTOM_FIELDS###
     
     <!-- FINISH STEPS -->
     <p><input type="submit" value="###LANG_FEEDITFORM_SUBMIT###" /></p>
@@ -767,6 +773,58 @@
   
 </div>
 <!-- ###FE_EDIT_FORM### end -->
+
+
+
+<!-- ###FE_EDIT_FIELD_UPLOAD### begin -->
+<br />
+<fieldset class="tx_mhbranchenbuch_newEntry">
+  <legend for="newEntry">###LANG_FEEDITFORM_UPLOAD_LEGEND###</legend>
+  
+  <label for="current">###LANG_FEEDITFORM_CURRENT_UPLOAD###</label>
+  ###CURRENT_IMAGE###
+  <br />
+  
+  <label for="delCurrent">###LANG_FEEDITFORM_DELPIC###</label>
+  <input type="checkbox" value="1" name="delPic" id="delCurrent" />
+  <br />
+  
+  <label for="upload">###LANG_FEEDITFORM_UPLOAD_CHOOSE###</label>
+  <input type="file" id="upload" size="30" name="tx_mhbranchenbuch" accept="*.jpg,*.gif,*.jpeg" />
+  <span>###LANG_FEEDITFORM_UPLOAD_SIZE###</span>
+  <br />
+</fieldset>
+<!-- ###FE_EDIT_FIELD_UPLOAD### end -->
+
+
+
+<!-- ###FE_EDIT_FIELD_KEYWORDS### begin -->
+<br />
+<fieldset class="tx_mhbranchenbuch_newEntry">
+  <legend for="newEntry">###LANG_FEEDITFORM_KEYWORDS_LEGEND###</legend>
+  <span>###LANG_FEEDITFORM_KEYWORDS_COUNT###</span>
+  <textarea onkeyup="tx_mhbranchenbuch_checkKeywords(this.value);" cols="58" rows="5" id="keywords" name="tx_mhbranchenbuch_postVar[keywords]" tabindex="10" />###db_keywords###</textarea>
+  <span>###LANG_FEEDITFORM_KEYWORDS_DESC###</span>
+  <br />
+</fieldset>
+<!-- ###FE_EDIT_FIELD_KEYWORDS### end -->
+
+
+
+<!-- ###FE_EDIT_FIELD_DETAIL### begin -->
+<br />
+<fieldset class="tx_mhbranchenbuch_newEntry">
+  <legend for="newEntry">###LANG_FEEDITFORM_DETAILED_LEGEND###</legend>
+  <textarea cols="58" rows="5" name="tx_mhbranchenbuch_postVar[details]">###db_detail###</textarea>
+  <span>###LANG_FEEDITFORM_DETAILED_DESC###</span>
+  <br />
+  
+  <label for="jobCheckbox">###LANG_FEEDITFORM_JOB###</label>
+  <input ###CHECKJOB### type="checkbox" id="jobCheckbox" name="tx_mhbranchenbuch_postVar[job]" value="1" />
+  <span>###LANG_FEEDITFORM_JOB_DESC###</span>
+  <br />
+</fieldset>
+<!-- ###FE_EDIT_FIELD_DETAIL### end -->
 
 
 
@@ -841,29 +899,22 @@
 
 
 <!-- ###OVERVIEW_CATEGORIES### begin -->
+  <ul class="tx_mh_branchenbuch-category">
   <!-- ###ITEMS### -->
-    <div class="tx_mh_branchenbuch-category">
-      <h1>###NAME### (###COUNT###)</h1>
-      ###SUBCATEGORY###
-      <br style="clear:both;" />
-      <div class="tx_mh_branchenbuch-categoryImage">###IMAGE###</div>
-      <p class="tx_mh_branchenbuch-categoryDesc">###DESCRIPTION###</p>
-    </div>
-    <br style="clear:both;" />
+    <li>###NAME### (###COUNT###) ###SUBCATEGORY###</li>
   <!-- ###ITEMS### -->
+  </ul>
 <!-- ###OVERVIEW_CATEGORIES### end -->
 
 
 
 <!-- ###SUBCATEGORIES### begin -->
-  <div class="tx_mh_branchenbuch-subcategories">
-    <ul>
-      <!-- ###ITEMS### -->
-      <li>###NAME### (###COUNT###)</li>
-      <!-- ###ITEMS### -->
-    </ul>
-  </div>
-  <br />
+  <ul class="tx_mh_branchenbuch-subcategory">
+    <!-- ###ITEMS### -->
+    <li>###NAME### (###COUNT###)</li>
+    <!-- ###ITEMS### -->
+  </ul>
+  <br style="clear:left;" />
 <!-- ###SUBCATEGORIES### end -->
 
 

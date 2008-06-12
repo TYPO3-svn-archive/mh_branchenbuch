@@ -100,7 +100,7 @@ class tx_mhbranchenbuch_realurl {
   }
 }
 
-if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/mh_branchenbuch/class.tx_mhbranchenbuch_realurl.php'])	{
-	include_once($TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/mh_branchenbuch/class.tx_mhbranchenbuch_realurl.php']);
+if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/mh_branchenbuch/lib/class.tx_mhbranchenbuch_realurl.php'])	{
+	include_once($TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/mh_branchenbuch/lib/class.tx_mhbranchenbuch_realurl.php']);
 }
 ?>

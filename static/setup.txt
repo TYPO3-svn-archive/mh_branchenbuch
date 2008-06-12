@@ -35,6 +35,9 @@ plugin.tx_mhbranchenbuch_pi1 {
   search_showXS             = {$plugin.tx_mhbranchenbuch_pi1.search_showXS}
   search_tables             = {$plugin.tx_mhbranchenbuch_pi1.search_tables}
   
+  minLengthKeyword1         = {$plugin.tx_mhbranchenbuch_pi1.minLengthKeyword1}
+  minLengthKeyword2         = {$plugin.tx_mhbranchenbuch_pi1.minLengthKeyword2}
+  
   ### Settings for the FE-Form - View
   
   feForm_required           = {$plugin.tx_mhbranchenbuch_pi1.feForm_required}
@@ -57,7 +60,17 @@ plugin.tx_mhbranchenbuch_pi1 {
   feForm_keywords_xl        = {$plugin.tx_mhbranchenbuch_pi1.feForm_keywords_xl}
   feForm_keywords_xxl       = {$plugin.tx_mhbranchenbuch_pi1.feForm_keywords_xxl}
   feForm_keywords_xxl2      = {$plugin.tx_mhbranchenbuch_pi1.feForm_keywords_xxl2}
-      
+  
+  feForm_categories_xs      = {$plugin.tx_mhbranchenbuch_pi1.feForm_categories_xs}
+  feForm_categories_s       = {$plugin.tx_mhbranchenbuch_pi1.feForm_categories_s}
+  feForm_categories_m       = {$plugin.tx_mhbranchenbuch_pi1.feForm_categories_m}
+  feForm_categories_l       = {$plugin.tx_mhbranchenbuch_pi1.feForm_categories_l}
+  feForm_categories_xl      = {$plugin.tx_mhbranchenbuch_pi1.feForm_categories_xl}
+  feForm_categories_xxl     = {$plugin.tx_mhbranchenbuch_pi1.feForm_categories_xxl}
+  feForm_categories_xxl2    = {$plugin.tx_mhbranchenbuch_pi1.feForm_categories_xxl2}
+  
+  feForm_uploadfields       = {$plugin.tx_mhbranchenbuch_pi1.feForm_uploadfields}
+  
   ### Settings for the TagCloud
 
   countEntrys               = {$plugin.tx_mhbranchenbuch_pi1.countEntrys}
@@ -74,7 +87,6 @@ plugin.tx_mhbranchenbuch_pi1 {
   ### Settings for the overview-view
   
   overviewPathSeperator     = {$plugin.tx_mhbranchenbuch_pi1.overviewPathSeperator}
-  overviewPathStart         = {$plugin.tx_mhbranchenbuch_pi1.overviewPathStart}
   overviewMode              = {$plugin.tx_mhbranchenbuch_pi1.overviewMode}
   overviewID                = {$plugin.tx_mhbranchenbuch_pi1.overviewID}
   overviewSort              = {$plugin.tx_mhbranchenbuch_pi1.overviewSort}
@@ -90,6 +102,7 @@ plugin.tx_mhbranchenbuch_pi1 {
   map_zoom3                 = {$plugin.tx_mhbranchenbuch_pi1.map_zoom3}
   map_zoom4                 = {$plugin.tx_mhbranchenbuch_pi1.map_zoom4}
   map_showImage             = {$plugin.tx_mhbranchenbuch_pi1.map_showImage}
+  limitLatestOverview       = {$plugin.tx_mhbranchenbuch_pi1.limitLatestOverview}
   
   ### LATEST-View
   
@@ -107,6 +120,10 @@ plugin.tx_mhbranchenbuch_pi1 {
   
   letterAll                 = {$plugin.tx_mhbranchenbuch_pi1.letterAll}
   
+  ### LIST-View
+  
+  list_sortBy               = {$plugin.tx_mhbranchenbuch_pi1.list_sortBy}
+  
   ######################
   # WRAPS              #
   ######################
@@ -120,30 +137,35 @@ plugin.tx_mhbranchenbuch_pi1 {
   category_stdWrap.wrap     = |
   
   tel_stdWrap.required      = 1
-  tel_stdWrap.wrap          = Telephone:&nbsp;|
+  tel_stdWrap.dataWrap      = {LLL:EXT:mh_branchenbuch/pi1/locallang.xml:telephone}|
   
   fax_stdWrap.required      = 1
-  fax_stdWrap.wrap          = Fax:&nbsp;|
+  fax_stdWrap.dataWrap      = {LLL:EXT:mh_branchenbuch/pi1/locallang.xml:fax}|
   
   mobile_stdWrap.required   = 1
-  mobile_stdWrap.wrap       = Mobilephone:&nbsp;|
+  mobile_stdWrap.dataWrap   = {LLL:EXT:mh_branchenbuch/pi1/locallang.xml:mobile}|
   
   address_stdWrap.wrap      = |
   
-  email_stdWrap             = Mail
-  email_stdWrap.wrap        = |
+  email_stdWrap             =
+  email_stdWrap.dataWrap    = {LLL:EXT:mh_branchenbuch/pi1/locallang.xml:mail}
   
-  www_stdWrap               = WWW
+  www_stdWrap               =
+  www_stdWrap.dataWrap      = {LLL:EXT:mh_branchenbuch/pi1/locallang.xml:www}
 
-  more_stdWrap              = Read more
-  more_stdWrap.wrap         = |
- 
-  movie_stdWrap             = Movie
+  more_stdWrap              =
+  more_stdWrap.dataWrap     = {LLL:EXT:mh_branchenbuch/pi1/locallang.xml:more}
   
-  listEntries_edit          = edit
-  listEntries_del           = delete
+  movie_stdWrap             =
+  movie_stdWrap.dataWrap    = {LLL:EXT:mh_branchenbuch/pi1/locallang.xml:movie}
   
-  letter.wrap               =
+  job_stdWrap               =
+  job_stdWrap.dataWrap      = {LLL:EXT:mh_branchenbuch/pi1/locallang.xml:job}
+  
+  vcard_stdWrap             =
+  vcard_stdWrap.dataWrap    = {LLL:EXT:mh_branchenbuch/pi1/locallang.xml:vcard}
+  
+  letter_stdWrap.wrap       = |
   
   ######################
   # PAGEBROWSER        #
