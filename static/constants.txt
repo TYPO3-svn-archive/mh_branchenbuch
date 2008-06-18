@@ -23,6 +23,12 @@ plugin.tx_mhbranchenbuch_pi1 {
   #cat=Yellow Page (mh_branchenbuch) - General//; type=string; label=Sort LIST-VIEW by...:Choose here "firma" to sort the LIST-View by the name of the companies (ASC/DESC). Example: firma ASC. Other possible fields are: crdate (by date), firma (company), typ (type), sorting (manual sorting in backend) and much other, look at the database! 
   list_sortBy               = firma ASC
   
+  #cat=Yellow Page (mh_branchenbuch) - General/enable; type=boolean; label=Dont link Root-Node of a Subtree:This is for the treeview (Categories). If you dont want that the main categories should be available to choice when you have subcategories in it then select this.
+  dontLinkMainNode          = 0
+  
+  #cat=Yellow Page (mh_branchenbuch) - General//; type=options[captcha,sr_freecap]; label=Captcha-Extension:Which captcha extension do you want to use? sr_freecap or captcha
+  captcha                    = captcha
+  
   #cat=Yellow Page (mh_branchenbuch) - Default entries/file; type=file[html,htm,tmpl,txt]; label=Placeholder-Image:Placeholder-Image for Entries without uploaded image
   noImage                   = EXT:mh_branchenbuch/res/noImage.gif
   

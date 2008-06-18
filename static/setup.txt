@@ -12,6 +12,8 @@ plugin.tx_mhbranchenbuch_pi1 {
   
   maxEntriesPerUser         = {$plugin.tx_mhbranchenbuch_pi1.maxEntriesPerUser}
   
+  captcha                   = {$plugin.tx_mhbranchenbuch_pi1.captcha}
+  
   ######################
   # MODULE SETTINGS    #
   ######################
@@ -70,6 +72,8 @@ plugin.tx_mhbranchenbuch_pi1 {
   feForm_categories_xxl2    = {$plugin.tx_mhbranchenbuch_pi1.feForm_categories_xxl2}
   
   feForm_uploadfields       = {$plugin.tx_mhbranchenbuch_pi1.feForm_uploadfields}
+  
+  dontLinkMainNode          = {$plugin.tx_mhbranchenbuch_pi1.dontLinkMainNode}
   
   ### Settings for the TagCloud
 

@@ -276,12 +276,15 @@ class tx_mhbranchenbuch_pi1 extends tslib_pibase {
     $res = $GLOBALS['TYPO3_DB']->sql(TYPO3_db,"
         SELECT
           f.*,
-          k.name AS kname,
+          k.name AS category,
           k.image AS catImage,
-          k.uid AS catId
+          k.uid AS catId,
+          o.zip AS zip,
+          o.name AS city
         FROM
           " . $this->dbTable1 . " f
-          RIGHT JOIN " . $this->dbTable2 . " k ON k.uid = f.kategorie
+          JOIN " . $this->dbTable2 . " k ON k.uid = f.kategorie
+          JOIN " . $this->dbTable5 . " o ON o.uid = f.ort
         WHERE
           f.deleted = 0
           AND
@@ -344,7 +347,7 @@ class tx_mhbranchenbuch_pi1 extends tslib_pibase {
       $res = $GLOBALS['TYPO3_DB']->sql(TYPO3_db,"
         SELECT
           f.*,
-          k.name AS kname
+          k.name AS category
         FROM
           " . $this->dbTable1 . " f
           JOIN " . $this->dbTable2 . " k ON k.uid = f.kategorie
@@ -433,11 +436,13 @@ class tx_mhbranchenbuch_pi1 extends tslib_pibase {
     // Search match in the city database
     $getCity      = $GLOBALS['TYPO3_DB']->sql(TYPO3_db,"
       SELECT
-        `uid`, `name`
+        `uid`, `name`, `zip`
       FROM
         `" . $this->dbTable5 . "`
       WHERE
         `name` LIKE '%" . $keyword . "%'
+        OR
+        `zip` LIKE '" . $keyword . "%'
     ");
     
     if($GLOBALS['TYPO3_DB']->sql_num_rows($getCity)) {
@@ -503,11 +508,12 @@ class tx_mhbranchenbuch_pi1 extends tslib_pibase {
     $res = $GLOBALS['TYPO3_DB']->sql(TYPO3_db,"
       SELECT
         f.*,
-        k.name AS kname,
+        k.name AS category,
         k.image AS catImage,
         k.uid AS catId
       FROM
         " . $this->dbTable1 . " f
+        LEFT JOIN " . $this->dbTable5 . " o ON o.uid = f.ort
         LEFT JOIN " . $this->dbTable2 . " k ON k.uid = f.kategorie
       WHERE
         f.deleted = 0
@@ -831,7 +837,7 @@ class tx_mhbranchenbuch_pi1 extends tslib_pibase {
       $res2 = $GLOBALS['TYPO3_DB']->sql(TYPO3_db,"
         SELECT
           f.*,
-          k.name AS kname
+          k.name AS category
         FROM
           " . $this->dbTable1 . " f
           LEFT JOIN " . $this->dbTable2 . " k ON k.uid = f.kategorie
@@ -897,7 +903,7 @@ class tx_mhbranchenbuch_pi1 extends tslib_pibase {
         
         // The marker
         $markerArray['###DETAIL###']   = $this->pi_RTEcssText($row['detail']);
-        $markerArray['###CATEGORY###'] = $this->cObj->stdWrap($row['kname'],$this->conf['category_stdWrap.']);  
+        $markerArray['###CATEGORY###'] = $this->cObj->stdWrap($row['category'],$this->conf['category_stdWrap.']);  
       	$markerArray['###ADDRESS###']  = $this->cObj->stdWrap(nl2br($row['adresse']),$this->conf['address_stdWrap.']);
       	$markerArray['###PHONE###']    = $this->cObj->stdWrap($row['telefon'],$this->conf['tel_stdWrap.']);
       	$markerArray['###FAX###']      = $this->cObj->stdWrap($row['fax'],$this->conf['fax_stdWrap.']);
@@ -1116,11 +1122,14 @@ class tx_mhbranchenbuch_pi1 extends tslib_pibase {
       $res    = $GLOBALS['TYPO3_DB']->sql(TYPO3_db,"
         SELECT
           f.*,
-          k.name AS kname,
+          k.name AS category,
           k.image AS catImage,
-          k.uid AS catId
+          k.uid AS catId,
+          o.zip AS zip,
+          o.name AS city
         FROM
           " . $this->dbTable1 . " f
+          LEFT JOIN " . $this->dbTable5 . " o ON o.uid = f.ort
           LEFT JOIN " . $this->dbTable2 . " k ON k.uid = f.kategorie
         WHERE
           f.uid = " . $uid . "
@@ -1144,10 +1153,15 @@ class tx_mhbranchenbuch_pi1 extends tslib_pibase {
       $res    = $GLOBALS['TYPO3_DB']->sql(TYPO3_db,"
         SELECT
           f.*,
-          k.name AS kname
+          k.name AS category,
+          k.image AS catImage,
+          k.uid AS catId,
+          o.zip AS zip,
+          o.name AS city
         FROM
           " . $this->dbTable1 . " f
-          LEFT JOIN " . $this->dbTable2 . " k ON k.uid = f.kategorie
+          LEFT JOIN `" . $this->dbTable5 . "` o ON o.uid = f.ort
+          LEFT JOIN `" . $this->dbTable2 . "` k ON k.uid = f.kategorie
         WHERE
           f.uid = " . $uid . "
         ORDER BY
@@ -1182,12 +1196,11 @@ class tx_mhbranchenbuch_pi1 extends tslib_pibase {
       $res    = $GLOBALS['TYPO3_DB']->sql(TYPO3_db,"
         SELECT
           f.*,
-          k.name AS kname,
-          o.name AS city
+          o.name AS city,
+          o.zip AS zip
         FROM
-          " . $this->dbTable1 . " f
-          LEFT JOIN " . $this->dbTable2 . " k ON k.uid = f.kategorie 
-          LEFT JOIN " . $this->dbTable5 . " o ON o.uid = f.ort
+          `" . $this->dbTable1 . "` f
+          LEFT JOIN `" . $this->dbTable5 . "` o ON o.uid = f.ort
         WHERE
           f.uid = " . $this->piVars['vcard'] . "
         LIMIT 1
@@ -1211,7 +1224,12 @@ class tx_mhbranchenbuch_pi1 extends tslib_pibase {
   * @return	the form
   */
   function displayContactForm($pid) {
-       
+    
+    if (t3lib_extMgm::isLoaded('sr_freecap') && $this->captcha == 'sr_freecap') {
+      require_once(t3lib_extMgm::extPath('sr_freecap').'pi2/class.tx_srfreecap_pi2.php');
+      $this->freeCap = t3lib_div::makeInstance('tx_srfreecap_pi2');
+    }
+        
     $piVar_email  = $this->piVars['email'];
     $piVar_formId = t3lib_div::_GP('formid');
     $piVar_spam   = t3lib_div::_GP('antispam');
@@ -1262,7 +1280,8 @@ class tx_mhbranchenbuch_pi1 extends tslib_pibase {
         $tempVar .= $var;
       }
       
-      if (t3lib_extMgm::isLoaded('captcha')) {
+      // Captcha protection
+      if (t3lib_extMgm::isLoaded('captcha') && $this->captcha == 'captcha') {
       
         session_start();
         $captchaStr = $_SESSION['tx_captcha_string'];
@@ -1271,14 +1290,14 @@ class tx_mhbranchenbuch_pi1 extends tslib_pibase {
           $valid = TRUE;
         }
         
-        // Debug
-        #echo 'CaptchaStr: '. $captchaStr;
-        #echo '<br />PiVar: ' . t3lib_div::_GP('captcha_response');
-        
-      } elseif($piVar_spam == '2') {
+      } elseif (t3lib_extMgm::isLoaded('sr_freecap') && $this->captcha == 'sr_freecap') {
       
-        $valid = TRUE;
+        if($this->freeCap->checkWord(t3lib_div::_GP('captcha_response'))) {
+          $valid = TRUE;
+        }
         
+      } elseif ($piVar_spam == '2') {
+        $valid = TRUE; 
       }
         
       if(strlen($tempVar) > 0 && $valid == TRUE) {
@@ -1325,12 +1344,19 @@ class tx_mhbranchenbuch_pi1 extends tslib_pibase {
       $row = @$GLOBALS['TYPO3_DB']->sql_fetch_assoc($res);
       
       $markerArray['###MAIL_TO###'] = $row['firma'];
-      
-      if (t3lib_extMgm::isLoaded('captcha')) {
-        $markerArray['###ANTISPAM###'] = '<img src="'.t3lib_extMgm::siteRelPath('captcha').'captcha/captcha.php" alt="" /> <input size="30" type="text" name="captcha_response" id="captcha_response" value="' . $_SESSION['tx_captcha_string'] . '" />';
+
+      if (t3lib_extMgm::isLoaded('captcha') && $this->captcha == 'captcha') {
+        $markerArray['###CAPTCHA###']         = '<img src="'.t3lib_extMgm::siteRelPath('captcha').'captcha/captcha.php" alt="" /> <input size="15" class="captcha_string" type="text" name="captcha_response" id="captcha_response" value="' . $_SESSION['tx_captcha_string'] . '" />';
+        $markerArray['###CAPTCHA_RELOAD###']  = '';
+      } elseif (t3lib_extMgm::isLoaded('sr_freecap') && $this->captcha == 'sr_freecap') { 
+        $freeCapArray = $this->freeCap->makeCaptcha();
+        $markerArray['###CAPTCHA###']         = $freeCapArray['###SR_FREECAP_IMAGE###'] . ' <input size="15" class="captcha_string" type="text" name="captcha_response" id="captcha_response" />';
+        $markerArray['###CAPTCHA_RELOAD###']  = $freeCapArray['###SR_FREECAP_CANT_READ###'];        
       } else {
-        $markerArray['###ANTISPAM###'] = '<input size="3" type="text" name="antispam" />';
+        $markerArray['###CAPTCHA_RELOAD###']  = '';
+        $markerArray['###CAPTCHA###']         = '<input size="3" type="text" name="antispam" />';
       }
+      
     }
     else 
     {
@@ -1790,7 +1816,7 @@ class tx_mhbranchenbuch_pi1 extends tslib_pibase {
               $markerArray['###OID###']  = $oid;
               $markerArray['###TYPE###'] = $type;
               
-              $treeview->init($this->dbTable2, 'root_uid', 'Ein-/Ausklappen', array('uid','name'), array('JS_Func' => 'tx_mhbranchenbuch_TreeviewSelCat', 'JS_Event' => 'href', 'JS_Input' => 'uid,name', 'id' => 'tempCats'));
+              $treeview->init($this->dbTable2, 'root_uid', 'Ein-/Ausklappen', array('uid','name'), array('select_where' => 'AND pid = ' . $pid, 'JS_Func' => 'tx_mhbranchenbuch_TreeviewSelCat', 'JS_Event' => 'href', 'JS_Input' => 'uid,name', 'id' => 'tempCats', 'dontLinkMainNode' => $this->dontLinkMainNode));
               $catHTML  = '<dl class="tx_mhbranchenbuch_objects tx_mhbranchenbuch_objects_float"><dt>' .  $this->pi_getLL('feeditform_object1') . '</dt><dd>' . $treeview->getTree() . '</dd></dl>';
               $catHTML  .= '<dl class="tx_mhbranchenbuch_objects"><dt>' .  $this->pi_getLL('feeditform_object2') . '</dt><dd><select onchange="tx_mhbranchenbuch_delCat(this.selectedIndex,this.value);" id="selectedCats" size="5" multiple="multiple"></select></dd></dl>';
                   
@@ -2223,7 +2249,7 @@ class tx_mhbranchenbuch_pi1 extends tslib_pibase {
             
             $categories = explode(',',$row['kategorie']);
            
-            $treeview->init($this->dbTable2, 'root_uid', 'Ein-/Ausklappen', array('uid','name'), array('JS_Func' => 'tx_mhbranchenbuch_TreeviewSelCat', 'JS_Event' => 'href', 'JS_Input' => 'uid,name', 'active_id' => $categories));
+            $treeview->init($this->dbTable2, 'root_uid', 'Ein-/Ausklappen', array('uid','name'), array('select_where' => 'AND pid = ' . $pid, 'JS_Func' => 'tx_mhbranchenbuch_TreeviewSelCat', 'JS_Event' => 'href', 'JS_Input' => 'uid,name', 'active_id' => $categories, 'dontLinkMainNode' => $this->dontLinkMainNode));
             $catHTML    = '<dl class="tx_mhbranchenbuch_objects tx_mhbranchenbuch_objects_float"><dt>' .  $this->pi_getLL('feeditform_object1') . '</dt><dd>' . $treeview->getTree() . '</dd></dl>';
             $catHTML    .= '<dl class="tx_mhbranchenbuch_objects"><dt>' .  $this->pi_getLL('feeditform_object2') . '</dt><dd><select onchange="tx_mhbranchenbuch_delCat(this.selectedIndex,this.value);" id="selectedCats" size="5" multiple="multiple">';
           
@@ -2808,7 +2834,7 @@ class tx_mhbranchenbuch_pi1 extends tslib_pibase {
       $res = $GLOBALS['TYPO3_DB']->sql(TYPO3_db,"
         SELECT
           f.*,
-          k.name AS kname
+          k.name AS category
         FROM
           " . $this->dbTable1 . " f
           RIGHT JOIN " . $this->dbTable2 . " k ON k.uid = f.kategorie
@@ -2855,7 +2881,7 @@ class tx_mhbranchenbuch_pi1 extends tslib_pibase {
       $getLast = $GLOBALS['TYPO3_DB']->sql(TYPO3_db,"
         SELECT
           f.*,
-          k.name AS kname
+          k.name AS category
         FROM
           " . $this->dbTable1 . " f
           LEFT JOIN " . $this->dbTable2 . " k ON k.uid = f.kategorie
@@ -2910,7 +2936,7 @@ class tx_mhbranchenbuch_pi1 extends tslib_pibase {
         l.uid AS lid, 
         b.name AS bname, 
         b.uid AS bid, 
-        k.name AS kname';
+        k.name AS category';
         
       $q2 = 
         $this->dbTable3. ' b
@@ -2993,7 +3019,7 @@ class tx_mhbranchenbuch_pi1 extends tslib_pibase {
       $b = $this->pi_linkTP($row['bname'],$urlConf_b,1,$this->single_pid);
       $l = $this->pi_linkTP($row['lname'],$urlConf_l,1,$this->single_pid);
       $o = $this->pi_linkTP($row['oname'],$urlConf_o,1,$this->single_pid);
-      $k = $row['kname'];
+      $k = $row['category'];
       
       $sep = $this->overviewPathSeperator;
       
@@ -3606,19 +3632,20 @@ class tx_mhbranchenbuch_pi1 extends tslib_pibase {
                   
         // Ignore deleted and hidden entries
         if($row['deleted'] == '1' OR $row['hidden'] == '1') continue;
-        
-        $vCard->data['first_name']   = $row['forename'];
-        $vCard->data['last_name']    = $row['lastname'];
-        $vCard->data['company']      = $row['firma']; 
-        $vCard->data['work_address'] = $row['adresse'];
-        $vCard->data['work_city']    = $row['city'];
-        $vCard->data['office_tel']   = $row['telefon'];
-        $vCard->data['cell_tel']     = $row['handy'];
-        $vCard->data['fax_tel']      = $row['fax']; 
-        $vCard->data['email1']       = $row['email'];
-        $vCard->data['url']          = $row['link'];
-        $vCard->data['note']       = $row['detail'];
-        $vCard->filename             = $this->vCard_filename ? $this->vCard_filename : $row['firma'];
+        $vCard->data['work_po_box']       = "";
+        $vCard->data['first_name']        = $row['forename'];
+        $vCard->data['last_name']         = $row['lastname'];
+        $vCard->data['company']           = $row['firma']; 
+        $vCard->data['work_address']      = $row['adresse'];
+        $vCard->data['work_city']         = $row['city'];
+        $vCard->data['work_postal_code']  = $row['zip'];
+        $vCard->data['office_tel']        = $row['telefon'];
+        $vCard->data['cell_tel']          = $row['handy'];
+        $vCard->data['fax_tel']           = $row['fax']; 
+        $vCard->data['email1']            = $row['email'];
+        $vCard->data['url']               = $row['link'];
+        $vCard->data['note']              = $row['detail'];
+        $vCard->filename                  = $this->vCard_filename ? $this->vCard_filename : $row['firma'];
         return $vCard->download();
       }
     }

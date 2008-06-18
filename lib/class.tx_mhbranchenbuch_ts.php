@@ -110,6 +110,8 @@ class tx_mhbranchenbuch_ts extends tslib_pibase {
       'list_sortBy',
       'minLengthKeyword1',
       'minLengthKeyword2',
+      'dontLinkMainNode',
+      'captcha',
     );
   }
 }

@@ -13,6 +13,7 @@
 			<label index="tx_mhbranchenbuch_ort">City (Branchenbuch / Yellow Pages)</label>
 			<label index="tx_mhbranchenbuch_ort.bundesland">Federal State</label>
 			<label index="tx_mhbranchenbuch_ort.name">City</label>
+			<label index="tx_mhbranchenbuch_ort.zip">Zip code</label>
 			<label index="tx_mhbranchenbuch_firmen">Companies (Branchenbuch / Yellow Pages)</label>
 			<label index="tx_mhbranchenbuch_firmen.kategorie">Category</label>
 			<label index="tx_mhbranchenbuch_firmen.firma">Company</label>
@@ -81,6 +82,7 @@
 			<label index="tx_mhbranchenbuch_ort">Ort (Branchenbuch)</label>
 			<label index="tx_mhbranchenbuch_ort.bundesland">Bundesland</label>
 			<label index="tx_mhbranchenbuch_ort.name">Ort</label>
+			<label index="tx_mhbranchenbuch_ort.zip">Postleitzahl</label>
 			<label index="tx_mhbranchenbuch_firmen">Firmen (Branchenbuch)</label>
 			<label index="tx_mhbranchenbuch_firmen.kategorie">Kategorie</label>
 			<label index="tx_mhbranchenbuch_firmen.firma">Firma</label>
