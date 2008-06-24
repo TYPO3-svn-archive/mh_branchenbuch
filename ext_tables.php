@@ -28,7 +28,7 @@ $TCA["tx_mhbranchenbuch_firmen"] = array (
 		'iconfile'          => t3lib_extMgm::extRelPath($_EXTKEY).'icon_tx_mhbranchenbuch_firmen.gif',
 	),
 	"feInterface" => array (
-		"fe_admin_fieldList" => "hidden, starttime, endtime, kategorie, bundesland, landkreis, ort, firma, typ, adresse, telefon, fax, handy, link, video, email, custom1, custom2, custom3, bild, keywords, detail, hit_count, job, cruser_id",
+		"fe_admin_fieldList" => "hidden, starttime, endtime, kategorie, bundesland, landkreis, ort, firma, typ, adresse, zip, city, telefon, fax, handy, link, video, email, custom1, custom2, custom3, bild, keywords, detail, hit_count, job, cruser_id",
 	)
 );
 

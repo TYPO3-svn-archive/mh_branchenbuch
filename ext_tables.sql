@@ -18,6 +18,8 @@ CREATE TABLE tx_mhbranchenbuch_firmen (
   lastname tinytext,
   typ int(11) default '0',
   adresse text,
+  zip tinytext,
+  city tinytext,
   telefon tinytext,
   fax tinytext,
   link tinytext,

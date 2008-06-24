@@ -206,8 +206,8 @@ class tx_mhbranchenbuch_pi1 extends tslib_pibase {
       
       foreach($catId AS $value) {
         if($i>0) { $query.= ' OR '; $c_query.= ' OR '; $i=0; }
-        $query    .= 'FIND_IN_SET(' . $value . ',f.kategorie)';
-        $c_query  .= 'FIND_IN_SET(' . $value . ',kategorie)';
+        $query    .= 'FIND_IN_SET(' . intval($value) . ',f.kategorie)';
+        $c_query  .= 'FIND_IN_SET(' . intval($value) . ',kategorie)';
         $i++;
       }
     }
@@ -219,8 +219,8 @@ class tx_mhbranchenbuch_pi1 extends tslib_pibase {
       
       foreach($listFederal AS $federal) {
         if($i2>0) { $query.= ' OR '; $c_query.= ' OR '; $i2=0; }
-        $query    .= 'FIND_IN_SET(' . $federal . ',f.bundesland)';
-        $c_query  .= 'FIND_IN_SET(' . $federal . ',bundesland)';
+        $query    .= 'FIND_IN_SET(' . intval($federal) . ',f.bundesland)';
+        $c_query  .= 'FIND_IN_SET(' . intval($federal) . ',bundesland)';
         $i2++;
       }
     }
@@ -232,8 +232,8 @@ class tx_mhbranchenbuch_pi1 extends tslib_pibase {
       
       foreach($listAdminis AS $adminis) {
         if($i3>0) { $query.= ' OR '; $c_query.= ' OR '; $i3=0; }
-        $query    .= 'FIND_IN_SET(' . $adminis . ',f.landkreis)';
-        $c_query  .= 'FIND_IN_SET(' . $adminis . ',landkreis)';
+        $query    .= 'FIND_IN_SET(' . intval($adminis) . ',f.landkreis)';
+        $c_query  .= 'FIND_IN_SET(' . intval($adminis) . ',landkreis)';
         $i3++;
       }
     }
@@ -245,8 +245,8 @@ class tx_mhbranchenbuch_pi1 extends tslib_pibase {
       
       foreach($listCity AS $city) {
         if($i4>0) { $query.= ' OR '; $c_query.= ' OR '; $i4=0; }
-        $query    .= 'FIND_IN_SET(' . $city . ',f.ort)';
-        $c_query  .= 'FIND_IN_SET(' . $city . ',ort)';
+        $query    .= 'FIND_IN_SET(' . intval($city) . ',f.ort)';
+        $c_query  .= 'FIND_IN_SET(' . intval($city) . ',ort)';
         $i4++;
       }
     }
@@ -257,7 +257,7 @@ class tx_mhbranchenbuch_pi1 extends tslib_pibase {
     $res_c = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
       'uid', 
       $this->dbTable1,
-      '`pid` IN(' . $pid . ') ' . $c_query . ' ' . $enableFields
+      '`pid` IN(' . intval($pid) . ') ' . $c_query . ' ' . $enableFields
     );
     
     $count = $GLOBALS['TYPO3_DB']->sql_num_rows($res_c);
@@ -279,8 +279,8 @@ class tx_mhbranchenbuch_pi1 extends tslib_pibase {
           k.name AS category,
           k.image AS catImage,
           k.uid AS catId,
-          o.zip AS zip,
-          o.name AS city
+          o.zip AS o_zip,
+          o.name AS o_city
         FROM
           " . $this->dbTable1 . " f
           JOIN " . $this->dbTable2 . " k ON k.uid = f.kategorie
@@ -290,10 +290,10 @@ class tx_mhbranchenbuch_pi1 extends tslib_pibase {
           AND
           f.hidden  = 0
           AND
-          f.pid IN (" . $pid . ")
+          f.pid IN (" . intval($pid) . ")
           " . $query . "
         ORDER BY
-          f.$sortBy
+          f." . $sortBy . "
         LIMIT " . $limit . "
       ");
     
@@ -352,8 +352,8 @@ class tx_mhbranchenbuch_pi1 extends tslib_pibase {
           " . $this->dbTable1 . " f
           JOIN " . $this->dbTable2 . " k ON k.uid = f.kategorie
         WHERE
-          f.pid IN ($pid)
-          $query
+          f.pid IN (" . intval($pid) . ")
+          " . $query . "
         ORDER BY
           f.firma ASC
       ");
@@ -404,7 +404,7 @@ class tx_mhbranchenbuch_pi1 extends tslib_pibase {
       }
       foreach($sTable AS $search_table) {
         if($c<($sTableCount*$cPVar)) {
-          $query .= "f.$search_table LIKE '%$searchString%' OR ";
+          $query .= "f." . $search_table . " LIKE " . $GLOBALS['TYPO3_DB']->fullQuoteStr('%'.$searchString.'%',$this->dbTable1) . " OR ";
           $c++; 
         }
       }
@@ -440,10 +440,10 @@ class tx_mhbranchenbuch_pi1 extends tslib_pibase {
       FROM
         `" . $this->dbTable5 . "`
       WHERE
-        `name` LIKE '%" . $keyword . "%'
-        OR
-        `zip` LIKE '" . $keyword . "%'
-    ");
+        `name` LIKE " . $GLOBALS['TYPO3_DB']->fullQuoteStr('%'.$keyword.'%',$this->dbTable5) . "
+      OR
+        `zip` LIKE " . $GLOBALS['TYPO3_DB']->fullQuoteStr($keyword.'%',$this->dbTable5)
+    );
     
     if($GLOBALS['TYPO3_DB']->sql_num_rows($getCity)) {
       $inCity = array(); #init
@@ -459,8 +459,8 @@ class tx_mhbranchenbuch_pi1 extends tslib_pibase {
       FROM
         `" . $this->dbTable4 . "`
       WHERE
-        `name` LIKE '%" . $keyword . "%'
-    ");
+        `name` LIKE " . $GLOBALS['TYPO3_DB']->fullQuoteStr('%'.$keyword.'%',$this->dbTable4)
+    );
     
     if($GLOBALS['TYPO3_DB']->sql_num_rows($getAdminsitrativeDistrict)) {
       $inAdminDistrict = array(); #init
@@ -498,7 +498,7 @@ class tx_mhbranchenbuch_pi1 extends tslib_pibase {
       $query  = 'AND ';
       foreach($catId AS $value) {
         if($i>0) { $query.= ' OR '; $i=0; }
-        $query    .= 'FIND_IN_SET(' . $value . ',f.kategorie)';
+        $query    .= 'FIND_IN_SET(' . intval($value) . ',f.kategorie)';
         $i++;
       }
     } else {
@@ -520,7 +520,7 @@ class tx_mhbranchenbuch_pi1 extends tslib_pibase {
         AND
         f.hidden  = 0
         AND
-        f.pid IN (" . $pid . ")
+        f.pid IN (" . intval($pid) . ")
         " . $query . "
       ORDER BY
         f.crdate DESC
@@ -551,13 +551,13 @@ class tx_mhbranchenbuch_pi1 extends tslib_pibase {
     
     $search = ''; #init
     if($kategorie) {
-      $search = ' AND ort = ' . $ort . ' AND landkreis = ' . $landkreis  . ' AND bundesland = ' . $bundesland;
+      $search = ' AND ort = ' . intval($ort) . ' AND landkreis = ' . intval($landkreis)  . ' AND bundesland = ' . intval($bundesland);
     } elseif ($ort) {
-      $search = ' AND ort = ' . $ort . ' AND landkreis = ' . $landkreis  . ' AND bundesland = ' . $bundesland;
+      $search = ' AND ort = ' . intval($ort) . ' AND landkreis = ' . intval($landkreis)  . ' AND bundesland = ' . intval($bundesland);
     } elseif ($landkreis) {
-      $search = ' AND landkreis = ' . $landkreis  . ' AND bundesland = ' . $bundesland;  	
+      $search = ' AND landkreis = ' . intval($landkreis)  . ' AND bundesland = ' . intval($bundesland);  	
     } elseif($bundesland) {
-      $search = ' AND bundesland = ' . $bundesland;
+      $search = ' AND bundesland = ' . intval($bundesland);
     }
     
     $template = $this->cObj->getSubpart($this->template,"###TAGCLOUD###");
@@ -572,14 +572,12 @@ class tx_mhbranchenbuch_pi1 extends tslib_pibase {
       LEFT JOIN 
         " . $this->dbTable2 . " k ON FIND_IN_SET(k.uid, f.kategorie)
       WHERE 
-        f.pid IN (" . $pid . ")
+        f.pid IN (" . intval($pid) . ")
         " . $search . "
       AND
         f.hidden = 0
       AND
         f.deleted = 0
-      AND
-        f.pid IN (" . $pid . ")
       GROUP BY 
         k.uid 
       ORDER BY 
@@ -691,7 +689,7 @@ class tx_mhbranchenbuch_pi1 extends tslib_pibase {
         AND
         bild != ''
         AND
-        pid IN (" . $pid . ")
+        pid IN (" . intval($pid) . ")
         " . $query . "
       ORDER BY
         RAND()
@@ -758,7 +756,7 @@ class tx_mhbranchenbuch_pi1 extends tslib_pibase {
       $query  = 'AND ';
       foreach($catId AS $value) {
         if($i>0) { $query.= ' OR '; $i=0; }
-        $query    .= 'FIND_IN_SET(' . $value . ',kategorie)';
+        $query    .= 'FIND_IN_SET(' . intval($value) . ',kategorie)';
         $i++;
       }
     } else {
@@ -790,11 +788,11 @@ class tx_mhbranchenbuch_pi1 extends tslib_pibase {
         AND
           hidden = 0
         AND
-          pid IN (" . $pid . ")
+          pid IN (" . intval($pid) . ")
         AND
           substring(firma,1,1) = '" . $letter . "'
-        $query
-      ");
+        " . $query
+      );
 
       if(@$GLOBALS['TYPO3_DB']->sql_num_rows($res)) {
         $cssStyle = ($letter == $postVarLetter) ? 'mhbranchenbuch_letter_act' : 'mhbranchenbuch_letter';
@@ -810,7 +808,7 @@ class tx_mhbranchenbuch_pi1 extends tslib_pibase {
     
     if(in_array($postVarLetter,$alphabetic) OR $postVarLetter == 'all') {
       
-      $subStr = ($postVarLetter == 'all') ? '' : 'AND substring(f.firma,1,1) = "' . $postVarLetter . '"';
+      $subStr = ($postVarLetter == 'all') ? '' : 'AND substring(f.firma,1,1) = ' . $GLOBALS['TYPO3_DB']->fullQuoteStr($postVarLetter,$this->dbTable1);
       
       /* PAGEBROWSER INIT */
       $enableFields = $this->cObj->enableFields($this->dbTable1);
@@ -818,7 +816,7 @@ class tx_mhbranchenbuch_pi1 extends tslib_pibase {
       $res_c = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
         'uid', 
         $this->dbTable1,
-        '`pid` IN(' . $pid . ') ' . $query . ' AND substring(firma,1,1) = "' . $postVarLetter . '" ' . $enableFields
+        '`pid` IN(' . intval($pid) . ') ' . $query . ' AND substring(firma,1,1) = ' . $GLOBALS['TYPO3_DB']->fullQuoteStr($postVarLetter,$this->dbTable1) . ' ' . $enableFields
       );
       
       $count = $GLOBALS['TYPO3_DB']->sql_num_rows($res_c);
@@ -846,7 +844,7 @@ class tx_mhbranchenbuch_pi1 extends tslib_pibase {
         AND
           f.hidden  = 0
         AND
-          f.pid IN (" . $pid . ")
+          f.pid IN (" . intval($pid) . ")
           $subStr
           $query
         ORDER BY
@@ -902,17 +900,19 @@ class tx_mhbranchenbuch_pi1 extends tslib_pibase {
         $markerArray['###LANG_ENTRY_DETAIL###'] = $this->pi_getLL('entry_detail');
         
         // The marker
-        $markerArray['###DETAIL###']   = $this->pi_RTEcssText($row['detail']);
-        $markerArray['###CATEGORY###'] = $this->cObj->stdWrap($row['category'],$this->conf['category_stdWrap.']);  
-      	$markerArray['###ADDRESS###']  = $this->cObj->stdWrap(nl2br($row['adresse']),$this->conf['address_stdWrap.']);
-      	$markerArray['###PHONE###']    = $this->cObj->stdWrap($row['telefon'],$this->conf['tel_stdWrap.']);
-      	$markerArray['###FAX###']      = $this->cObj->stdWrap($row['fax'],$this->conf['fax_stdWrap.']);
-      	$markerArray['###MOBILE###']   = $this->cObj->stdWrap($row['handy'],$this->conf['mobile_stdWrap.']);
-      	$markerArray['###JOB###']      = ($row['job'] == 1) ? $this->pi_linkTP($this->cObj->stdWrap($this->conf['job_stdWrap'],$this->conf['job_stdWrap.']), array($this->prefixId . '[detail]' => $row['uid']),1,$this->single_pid) : '';
-      	$markerArray['###VIDEO###']    = strlen($row['video'])>0 ? $this->pi_linkTP($this->cObj->stdWrap($this->conf['video_stdWrap'],$this->conf['video_stdWrap.']),array($this->prefixId . '[video]' => $row['uid']),1,$this->single_pid) : '';
-      	$markerArray['###MORE###']     = strlen($row['detail'])>0 ? $this->pi_linkTP($this->cObj->stdWrap($this->conf['more_stdWrap'],$this->conf['more_stdWrap.']),array($this->prefixId . '[detail]' => $row['uid']),1,$this->single_pid) : '';
-        $markerArray['###FORENAME###'] = $row['forename'];
-        $markerArray['###LASTNAME###'] = $row['lastname'];
+        $markerArray['###DETAIL###']    = $this->pi_RTEcssText($row['detail']);
+        $markerArray['###CATEGORY###']  = $this->cObj->stdWrap($row['category'],$this->conf['category_stdWrap.']);  
+      	$markerArray['###ADDRESS###']   = $this->cObj->stdWrap(nl2br($row['adresse']),$this->conf['address_stdWrap.']);
+      	$markerArray['###PHONE###']     = $this->cObj->stdWrap($row['telefon'],$this->conf['tel_stdWrap.']);
+      	$markerArray['###FAX###']       = $this->cObj->stdWrap($row['fax'],$this->conf['fax_stdWrap.']);
+      	$markerArray['###MOBILE###']    = $this->cObj->stdWrap($row['handy'],$this->conf['mobile_stdWrap.']);
+      	$markerArray['###JOB###']       = ($row['job'] == 1) ? $this->pi_linkTP($this->cObj->stdWrap($this->conf['job_stdWrap'],$this->conf['job_stdWrap.']), array($this->prefixId . '[detail]' => $row['uid']),1,$this->single_pid) : '';
+      	$markerArray['###VIDEO###']     = strlen($row['video'])>0 ? $this->pi_linkTP($this->cObj->stdWrap($this->conf['video_stdWrap'],$this->conf['video_stdWrap.']),array($this->prefixId . '[video]' => $row['uid']),1,$this->single_pid) : '';
+      	$markerArray['###MORE###']      = strlen($row['detail'])>0 ? $this->pi_linkTP($this->cObj->stdWrap($this->conf['more_stdWrap'],$this->conf['more_stdWrap.']),array($this->prefixId . '[detail]' => $row['uid']),1,$this->single_pid) : '';
+        $markerArray['###FORENAME###']  = $row['forename'];
+        $markerArray['###LASTNAME###']  = $row['lastname'];
+        $markerArray['###ZIP###']       = $row['zip'] != '' ? $row['zip'] : $row['o_zip'];
+        $markerArray['###CITY###']      = $row['city'] != '' ? $row['city'] : $row['o_city'];
         
         $markerArray['###VCARD###']    = $this->pi_linkTP($this->cObj->stdWrap($this->conf['vcard_stdWrap'],$this->conf['vcard_stdWrap.']),array($this->prefixId.'[vcard]'=> $row['uid']),'',$this->single_pid);
         
@@ -1079,7 +1079,7 @@ class tx_mhbranchenbuch_pi1 extends tslib_pibase {
           AND
             deleted = 0
           AND
-            FIND_IN_SET(" . $row['uid'] . ", kategorie)
+            FIND_IN_SET(" . intval($row['uid']) . ", kategorie)
         ");
         
         $count = ($lConf['catMenuCount'] == 1) ? ' (' . $GLOBALS['TYPO3_DB']->sql_num_rows($getCount) . ')' : '';
@@ -1125,14 +1125,14 @@ class tx_mhbranchenbuch_pi1 extends tslib_pibase {
           k.name AS category,
           k.image AS catImage,
           k.uid AS catId,
-          o.zip AS zip,
-          o.name AS city
+          o.zip AS o_zip,
+          o.name AS o_city
         FROM
           " . $this->dbTable1 . " f
           LEFT JOIN " . $this->dbTable5 . " o ON o.uid = f.ort
           LEFT JOIN " . $this->dbTable2 . " k ON k.uid = f.kategorie
         WHERE
-          f.uid = " . $uid . "
+          f.uid = " . intval($uid) . "
         ORDER BY
           f.crdate DESC
           LIMIT 1");
@@ -1156,14 +1156,14 @@ class tx_mhbranchenbuch_pi1 extends tslib_pibase {
           k.name AS category,
           k.image AS catImage,
           k.uid AS catId,
-          o.zip AS zip,
-          o.name AS city
+          o.zip AS o_zip,
+          o.name AS o_city
         FROM
           " . $this->dbTable1 . " f
           LEFT JOIN `" . $this->dbTable5 . "` o ON o.uid = f.ort
           LEFT JOIN `" . $this->dbTable2 . "` k ON k.uid = f.kategorie
         WHERE
-          f.uid = " . $uid . "
+          f.uid = " . intval($uid) . "
         ORDER BY
           f.crdate DESC
         LIMIT 1
@@ -1196,13 +1196,13 @@ class tx_mhbranchenbuch_pi1 extends tslib_pibase {
       $res    = $GLOBALS['TYPO3_DB']->sql(TYPO3_db,"
         SELECT
           f.*,
-          o.name AS city,
-          o.zip AS zip
+          o.name AS o_city,
+          o.zip AS o_zip
         FROM
           `" . $this->dbTable1 . "` f
           LEFT JOIN `" . $this->dbTable5 . "` o ON o.uid = f.ort
         WHERE
-          f.uid = " . $this->piVars['vcard'] . "
+          f.uid = " . intval($this->piVars['vcard']) . "
         LIMIT 1
       ");
       
@@ -1253,7 +1253,7 @@ class tx_mhbranchenbuch_pi1 extends tslib_pibase {
     
       $res      = $GLOBALS['TYPO3_DB']->sql(TYPO3_db,"
         SELECT 
-          email
+          `email`
         FROM 
           " . $this->dbTable1 . "
         WHERE 
@@ -1261,7 +1261,7 @@ class tx_mhbranchenbuch_pi1 extends tslib_pibase {
           AND 
           hidden  = 0
           AND 
-          uid = " . $piVar_email . "
+          uid = " . intval($piVar_email) . "
         LIMIT 1
       ");
        
@@ -1322,7 +1322,7 @@ class tx_mhbranchenbuch_pi1 extends tslib_pibase {
       }
       
     }
-    elseif(isset($piVar_email)) 
+    elseif(isset($piVar_email))
     {
       // the mail-form
       $template = $this->cObj->getSubpart($this->template,"###MAIL###");
@@ -1337,7 +1337,7 @@ class tx_mhbranchenbuch_pi1 extends tslib_pibase {
           AND 
           `hidden`  = 0
           AND 
-          `uid`     = " . $piVar_email . "
+          `uid`     = " . intval($piVar_email) . "
         LIMIT 1
       ");
       
@@ -1470,13 +1470,7 @@ class tx_mhbranchenbuch_pi1 extends tslib_pibase {
     $markerArray['###STAT_CLICKS_TODAY###']     = isset($count_clicks->anzahl) ? $count_clicks->anzahl : '0';
     $markerArray['###STAT_CLICKS_ALL###']       = isset($count_clicks_all->anzahl) ? $count_clicks_all->anzahl : '0';
     $markerArray['###STAT_CLICKS_YESTERDAY###'] = isset($count_clicks_yesterday->anzahl) ? $count_clicks_yesterday->anzahl : '0';
-    
-    // The company directory have <b>###STAT_ALL###</b> entries. 
-    // <b>###STAT_HIDDEN###</b> entries are not public yet and <b>###STAT_DELETED###</b> entries are deleted.
-    // <br />We have <b>###STAT_CAT###</b> categories.<br />
-    // Overall our visitor have clicked <b>###STAT_CLICKS_ALL###</b> times on a logo from a company, 
-    // <b>###STAT_CLICKS_TODAY###</b> today and <b>###STAT_CLICKS_YESTERDAY###</b> yesterday.
-    
+
     $markerArray['###LANG_STATISTIC###'] = $this->sprintf2(
       $this->pi_getLL('statistic'), 
       array(
@@ -1517,7 +1511,8 @@ class tx_mhbranchenbuch_pi1 extends tslib_pibase {
       'feform_address', 'feform_tel', 'feform_fax', 'feform_mobile', 'feform_www', 'feform_email', 'feform_upload_legend',
       'feform_upload_choose', 'feform_keywords_legend', 'feform_keywords_desc', 'feform_detailed_legend', 'feform_detailed_desc',
       'feform_job', 'feform_job_desc', 'feform_finish_legend', 'feform_terms', 'feform_terms_desc', 'feform_submit', 
-      'feform_success_header', 'feform_success_text', 'feform_type', 'feform_forename','feform_lastname'
+      'feform_success_header', 'feform_success_text', 'feform_type', 'feform_forename','feform_lastname',
+      'feform_custom1', 'feform_custom2', 'feform_custom3', 'feform_city', 'feform_zip'
     );
     
     foreach ($arrayAll as $marker) {
@@ -1608,6 +1603,8 @@ class tx_mhbranchenbuch_pi1 extends tslib_pibase {
             'lastname'    => $postVar['lastname'],
             'firma'       => $postVar['firma'],
             'adresse'     => $postVar['anschrift'],
+            'zip'         => intval($postVar['zip']),
+            'city'        => $postVar['city'],
             'telefon'     => $postVar['telefon'],
             'fax'         => $postVar['fax'],
             'link'        => $postVar['www'],
@@ -1615,9 +1612,9 @@ class tx_mhbranchenbuch_pi1 extends tslib_pibase {
             'keywords'    => $postVar['keywords'],
             'handy'       => $postVar['handy'],
             'typ'         => $postVar['typ'],
-            'bundesland'  => $postVar['bundesland'],
-            'landkreis'   => $postVar['landkreis'],
-            'ort'         => $postVar['ort'],
+            'bundesland'  => intval($postVar['bundesland']),
+            'landkreis'   => intval($postVar['landkreis']),
+            'ort'         => intval($postVar['ort']),
             'job'         => $postVar['job'],
             'detail'      => $postVar['details'],
             'custom1'     => $postVar['custom1'],
@@ -1625,12 +1622,9 @@ class tx_mhbranchenbuch_pi1 extends tslib_pibase {
             'custom3'     => $postVar['custom3'],
             'bild'        => $uploadName
            );
-         
-          
-          $query = $GLOBALS['TYPO3_DB']->INSERTquery($this->dbTable1, $insertArray);
-          
+                
           // If entry is successfull in the db, give a "success"-template back
-          if($GLOBALS['TYPO3_DB']->sql(TYPO3_db, $query)) {
+          if($GLOBALS['TYPO3_DB']->exec_INSERTquery($this->dbTable1, $insertArray)) {
             $template   = $this->cObj->getSubpart($this->template,"###FE_FORM_SUCCESS###");
             
              // Some language
@@ -1679,7 +1673,7 @@ class tx_mhbranchenbuch_pi1 extends tslib_pibase {
             'value'     => $this->pi_getPageLink($this->id,'',array($this->prefixId . '[bid]' => $bid, $this->prefixId . '[lid]' => '')),
             #'value'     => 'index.php?id=' . $this->id . '&amp;' . $this->prefixId . '[bid]='  . $bid . '&amp;' . $this->prefixId . '[lid]=',
             'addSelect' => 'onChange="MM_jumpMenu(\'parent\',this,0)"',
-            'where'     => ' AND bundesland = ' . $bid,
+            'where'     => ' AND bundesland = ' . intval($bid),
             #'noCache'   => 1,
           );
           $markerArray['###ITEMS###'] = $this->makeDropdownSelect($lid, $this->dbTable4, 'step2', $conf2);
@@ -1693,7 +1687,7 @@ class tx_mhbranchenbuch_pi1 extends tslib_pibase {
             'value'     => $this->pi_getPageLink($this->id,'',array($this->prefixId . '[bid]' => $bid, $this->prefixId . '[lid]' => $lid, $this->prefixId . '[oid]' => '')),
             #'value'     => 'index.php?id=' . $this->id . '&amp;' . $this->prefixId . '[bid]='  . $bid . '&amp;' . $this->prefixId . '[lid]=' . $lid . '&amp;' . $this->prefixId . '[oid]=',
             'addSelect' => 'onChange="MM_jumpMenu(\'parent\',this,0)"',
-            'where'     => ' AND landkreis = ' . $lid,
+            'where'     => ' AND landkreis = ' . intval($lid),
             #'noCache'   => 1,
             'hidden'    => 1,
           );
@@ -1716,14 +1710,14 @@ class tx_mhbranchenbuch_pi1 extends tslib_pibase {
             
             if(t3lib_div::_GP('name_new') && $this->feForm_createCity == 1) {
               $insertArray = array(
-                'name'      => mysql_real_escape_string(t3lib_div::_GP('name_new')),
-                'landkreis' => $lid,
-                'pid'       => $pid,
+                'name'      => t3lib_div::_GP('name_new'),
+                'landkreis' => intval($lid),
+                'pid'       => intval($pid),
                 'crdate'    => time(),
                 'tstamp'    => time(),
                 'hidden'    => 1,
               );
-              if($GLOBALS['TYPO3_DB']->sql(TYPO3_db,$GLOBALS['TYPO3_DB']->INSERTquery($this->dbTable5, $insertArray))) {
+              if($GLOBALS['TYPO3_DB']->exec_INSERTquery($this->dbTable5, $insertArray)) {
                 // sends a report to a admin
                 if($this->admin != '') {
                   
@@ -1736,7 +1730,7 @@ class tx_mhbranchenbuch_pi1 extends tslib_pibase {
                   mail($this->admin, $this->pi_getLL('feform_mailsubject_city'), $cityMailBody, "From: ".$this->mail_from);
                 }
                 #header('LOCATION: ' . t3lib_div::getIndpEnv('TYPO3_SITE_URL') . $this->pi_getPageLink($this->id,'',array($this->prefixId . '[bid]' => $bid, $this->prefixId . '[lid]' => $lid, $this->prefixId . '[oid]' => $GLOBALS['TYPO3_DB']->sql_insert_id())) . '&no_cache=1');
-                header('LOCATION: index.php?id=' . $this->id . '&' . $this->prefixId . '[bid]='  . $bid . '&' . $this->prefixId . '[lid]=' . $lid . '&' . $this->prefixId . '[oid]=' . $GLOBALS['TYPO3_DB']->sql_insert_id() . '&no_cache=1');
+                header('LOCATION: index.php?id=' . $this->id . '&' . $this->prefixId . '[bid]='  . intval($bid) . '&' . $this->prefixId . '[lid]=' . intval($lid) . '&' . $this->prefixId . '[oid]=' . $GLOBALS['TYPO3_DB']->sql_insert_id() . '&no_cache=1');
               }
             }
           
@@ -1744,7 +1738,7 @@ class tx_mhbranchenbuch_pi1 extends tslib_pibase {
             
             $main_template   = $this->cObj->getSubpart($this->template,"###FE_SIGNUP_STEP4###");
 
-            $markerArray['###URI###'] = 'index.php?id=' . $this->id . '&amp;' . $this->prefixId . '[bid]='  . $bid . '&amp;' . $this->prefixId . '[lid]=' . $lid . '&amp;' . $this->prefixId . '[oid]=' . $oid . '&amp;' . $this->prefixId . '[type]=';
+            $markerArray['###URI###'] = 'index.php?id=' . $this->id . '&amp;' . $this->prefixId . '[bid]='  . intval($bid) . '&amp;' . $this->prefixId . '[lid]=' . intval($lid) . '&amp;' . $this->prefixId . '[oid]=' . intval($oid) . '&amp;' . $this->prefixId . '[type]=';
             $markerArray['###ROOTLINE###']            = $this->getOViewRootline($bid,$lid,$oid);
             
             $markerArray['###SELECTED_XS###']         = $type == '7' ? 'selected="selected"' : FALSE;
@@ -1796,7 +1790,9 @@ class tx_mhbranchenbuch_pi1 extends tslib_pibase {
                 $markerArray['###FAX###']       = $GLOBALS['TSFE']->fe_user->user['fax'];
                 $markerArray['###WWW###']       = $GLOBALS['TSFE']->fe_user->user['www'];
                 $markerArray['###COMPANY###']   = $GLOBALS['TSFE']->fe_user->user['company'];
-                $markerArray['###ADDRESS###']   = $GLOBALS['TSFE']->fe_user->user['address']."\n".$GLOBALS['TSFE']->fe_user->user['zip']." " . $GLOBALS['TSFE']->fe_user->user['city'];
+                $markerArray['###STREET###']    = $GLOBALS['TSFE']->fe_user->user['address'];
+                $markerArray['###ZIP###']       = $GLOBALS['TSFE']->fe_user->user['zip'];
+                $markerArray['###CITY###']      = $GLOBALS['TSFE']->fe_user->user['city'];
                 $markerArray['###FORENAME###']  = $GLOBALS['TSFE']->fe_user->user['first_name'];
                 $markerArray['###LASTNAME###']  = $GLOBALS['TSFE']->fe_user->user['last_name'];
               } else {
@@ -1806,17 +1802,19 @@ class tx_mhbranchenbuch_pi1 extends tslib_pibase {
                 $markerArray['###FAX###']       = '';
                 $markerArray['###WWW###']       = '';
                 $markerArray['###COMPANY###']   = '';
-                $markerArray['###ADDRESS###']   = '';
+                $markerArray['###STREET###']    = '';
+                $markerArray['###ZIP###']       = '';
+                $markerArray['###CITY###']      = '';
                 $markerArray['###FORENAME###']  = '';
                 $markerArray['###LASTNAME###']  = '';
               }
               
-              $markerArray['###BID###']  = $bid;
-              $markerArray['###LID###']  = $lid;
-              $markerArray['###OID###']  = $oid;
-              $markerArray['###TYPE###'] = $type;
+              $markerArray['###BID###']  = intval($bid);
+              $markerArray['###LID###']  = intval($lid);
+              $markerArray['###OID###']  = intval($oid);
+              $markerArray['###TYPE###'] = intval($type);
               
-              $treeview->init($this->dbTable2, 'root_uid', 'Ein-/Ausklappen', array('uid','name'), array('select_where' => 'AND pid = ' . $pid, 'JS_Func' => 'tx_mhbranchenbuch_TreeviewSelCat', 'JS_Event' => 'href', 'JS_Input' => 'uid,name', 'id' => 'tempCats', 'dontLinkMainNode' => $this->dontLinkMainNode));
+              $treeview->init($this->dbTable2, 'root_uid', 'Ein-/Ausklappen', array('uid','name'), array('select_where' => 'AND pid = ' . intval($pid), 'JS_Func' => 'tx_mhbranchenbuch_TreeviewSelCat', 'JS_Event' => 'href', 'JS_Input' => 'uid,name', 'id' => 'tempCats', 'dontLinkMainNode' => $this->dontLinkMainNode));
               $catHTML  = '<dl class="tx_mhbranchenbuch_objects tx_mhbranchenbuch_objects_float"><dt>' .  $this->pi_getLL('feeditform_object1') . '</dt><dd>' . $treeview->getTree() . '</dd></dl>';
               $catHTML  .= '<dl class="tx_mhbranchenbuch_objects"><dt>' .  $this->pi_getLL('feeditform_object2') . '</dt><dd><select onchange="tx_mhbranchenbuch_delCat(this.selectedIndex,this.value);" id="selectedCats" size="5" multiple="multiple"></select></dd></dl>';
                   
@@ -1943,9 +1941,9 @@ class tx_mhbranchenbuch_pi1 extends tslib_pibase {
         FROM  
           `" .$this->dbTable1 . "`
         WHERE
-          `cruser_id` = " . $userId . "
+          `cruser_id` = " . intval($userId) . "
           AND
-          `pid` IN (" . $pid . ")
+          `pid` IN (" . intval($pid) . ")
         ORDER BY 
           `" . $order . "` " . $orderTyp . "
       ");
@@ -1961,7 +1959,7 @@ class tx_mhbranchenbuch_pi1 extends tslib_pibase {
             FROM 
               `" . $this->dbTable6 . "`
             WHERE
-              `fid` = " . $row['uid'] . "
+              `fid` = " . intval($row['uid']) . "
             AND
               `hidden` = 0
             AND 
@@ -1977,7 +1975,7 @@ class tx_mhbranchenbuch_pi1 extends tslib_pibase {
             FROM 
               " . $this->dbTable6 . "
             WHERE
-              fid = " . $row['uid'] . "
+              fid = " . intval($row['uid']) . "
             AND
               hidden = 0
             AND 
@@ -1991,7 +1989,7 @@ class tx_mhbranchenbuch_pi1 extends tslib_pibase {
             FROM 
               " . $this->dbTable6 . "
             WHERE
-              fid = " . $row['uid'] . "
+              fid = " . intval($row['uid']) . "
             AND
               hidden = 0
             AND 
@@ -2074,7 +2072,7 @@ class tx_mhbranchenbuch_pi1 extends tslib_pibase {
       'feeditform_detailed_desc', 'feeditform_job', 'feeditform_job_desc', 'feeditform_upload_legend', 
       'feeditform_current_upload', 'feeditform_delPic', 'feeditform_forename', 'feeditform_lastname',
       'feform_xs', 'feform_s', 'feform_m', 'feform_l', 'feform_xl', 'feform_xxl', 'feform_xxl2', 
-      'choose', 'feform_entry', 'feform_type'
+      'choose', 'feform_entry', 'feform_type', 'feform_custom1', 'feform_custom2', 'feform_custom3', 'feeditform_city', 'feeditform_zip'
     );
     
     foreach($arrayAll AS $marker) {
@@ -2125,6 +2123,8 @@ class tx_mhbranchenbuch_pi1 extends tslib_pibase {
             'forename'    => $postVar['forename'],
             'lastname'    => $postVar['lastname'],
             'adresse'     => $postVar['anschrift'],
+            'zip'         => intval($postVar['zip']),
+            'city'        => $postVar['city'],
             'telefon'     => $postVar['telefon'],
             'fax'         => $postVar['fax'],
             'link'        => $postVar['www'],
@@ -2177,11 +2177,8 @@ class tx_mhbranchenbuch_pi1 extends tslib_pibase {
             $updateArray['bild'] = $uploadName;
           }
           
-          // insert new data
-          $query = $GLOBALS['TYPO3_DB']->UPDATEquery($this->dbTable1, 'uid=' . intval($UID), $updateArray);
-          
           // if successfull give a status report back
-          if($GLOBALS['TYPO3_DB']->sql(TYPO3_db, $query)) {
+          if($GLOBALS['TYPO3_DB']->exec_UPDATEquery($this->dbTable1, 'uid=' . intval($UID), $updateArray)) {
             $template   = $this->cObj->getSubpart($this->template,"###FE_FORM_SUCCESS_EDIT###");
             
             $markerArray['###BACK###'] = $this->pi_linkTP($this->pi_getLL('back'),array($this->prefixId.'[edit]'=> $UID),0, $this->single_pid);
@@ -2201,23 +2198,23 @@ class tx_mhbranchenbuch_pi1 extends tslib_pibase {
           $updateLocation = FALSE;
           
           if($bid) {
-            $updateLocation = $GLOBALS['TYPO3_DB']->UPDATEquery($this->dbTable1, 'uid=' . intval($UID), array('bundesland' => $bid));
+            $updateLocation = $GLOBALS['TYPO3_DB']->UPDATEquery($this->dbTable1, 'uid=' . intval($UID), array('bundesland' => intval($bid)));
           } elseif($lid) {
-            $updateLocation = $GLOBALS['TYPO3_DB']->UPDATEquery($this->dbTable1, 'uid=' . intval($UID), array('landkreis' => $lid));
+            $updateLocation = $GLOBALS['TYPO3_DB']->UPDATEquery($this->dbTable1, 'uid=' . intval($UID), array('landkreis' => intval($lid)));
           } elseif($oid) {
-            $updateLocation = $GLOBALS['TYPO3_DB']->UPDATEquery($this->dbTable1, 'uid=' . intval($UID), array('ort' => $oid));
+            $updateLocation = $GLOBALS['TYPO3_DB']->UPDATEquery($this->dbTable1, 'uid=' . intval($UID), array('ort' => intval($oid)));
           }
           
           // Update Entry-Type ...
           $type = $this->piVars['type'];
           
           if($type) {
-            $updateLocation = $GLOBALS['TYPO3_DB']->UPDATEquery($this->dbTable1, 'uid=' . intval($UID), array('typ' => $type));
+            $updateLocation = $GLOBALS['TYPO3_DB']->UPDATEquery($this->dbTable1, 'uid=' . intval($UID), array('typ' => intval($type)));
           }
           
           if($updateLocation) {
             $GLOBALS['TYPO3_DB']->sql(TYPO3_db, $updateLocation);
-            header("LOCATION: index.php?id=" . $this->id . "&" . $this->prefixId . "[edit]=" . $UID . "&no_cache=1");
+            header("LOCATION: index.php?id=" . $this->id . "&" . $this->prefixId . "[edit]=" . intval($UID) . "&no_cache=1");
           }
           
           
@@ -2397,8 +2394,7 @@ class tx_mhbranchenbuch_pi1 extends tslib_pibase {
       "); 
       
       if($GLOBALS['TYPO3_DB']->sql_num_rows($permissionCheck)) {
-        $query = $GLOBALS['TYPO3_DB']->UPDATEquery($this->dbTable1, 'uid=' . $uid, array('hidden' => 1));
-        if($GLOBALS['TYPO3_DB']->sql(TYPO3_db, $query)) {
+        if($GLOBALS['TYPO3_DB']->exec_UPDATEquery($this->dbTable1, 'uid=' . intval($uid), array('hidden' => 1))) {
           $template = $this->cObj->getSubpart($this->template,"###FE_DELETE_OK###");
           // Some language
           $markerArray['###LANG_FEFORM_DELETE_HEADER###'] = $this->pi_getLL('feform_delete_header');
@@ -2672,7 +2668,7 @@ class tx_mhbranchenbuch_pi1 extends tslib_pibase {
         $rows .= $this->cObj->substituteMarkerArrayCached($sspart, $markerArray);
       }
       
-      $row_bid = mysql_fetch_array($GLOBALS['TYPO3_DB']->sql(TYPO3_db,"SELECT map_lat, map_lng FROM $this->dbTable3 WHERE uid = " . intval($bid)));
+      $row_bid = mysql_fetch_array($GLOBALS['TYPO3_DB']->sql(TYPO3_db,"SELECT `map_lat`, `map_lng`` FROM `" . $this->dbTable3 . "` WHERE `uid` = " . intval($bid)));
       
       if($row_bid['map_lat'] != '' && $row_bid['map_lng'] != '') {
         $markerArray['###MAP###'] = $this->initMap($row_bid['map_lat'],$row_bid['map_lng'],FALSE,$bid);
@@ -2766,7 +2762,7 @@ class tx_mhbranchenbuch_pi1 extends tslib_pibase {
       $rows = $this->cObj->substituteMarkerArrayCached($sspart, $markerArray);
     }
     
-    $row_lid = mysql_fetch_array($GLOBALS['TYPO3_DB']->sql(TYPO3_db,"SELECT detail, map_lat, map_lng FROM $this->dbTable4 WHERE uid = " . intval($lid)));
+    $row_lid = mysql_fetch_array($GLOBALS['TYPO3_DB']->sql(TYPO3_db,"SELECT `detail`, `map_lat`, `map_lng` FROM `" . $this->dbTable4 . "` WHERE `uid` = " . intval($lid)));
     $markerArray['###DETAIL###']    = strlen($row_lid['detail']) > 0 ? $this->pi_RTEcssText($row_lid['detail']) : $this->pi_getLL('error_display_adInfo');
     
     if($row_lid['map_lat'] != '' && $row_lid['map_lng'] != '') {
@@ -2814,7 +2810,7 @@ class tx_mhbranchenbuch_pi1 extends tslib_pibase {
       $res_c = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
         'uid', 
         $this->dbTable1,
-        '`pid` IN(' . $pid . ') AND `kategorie`=' . $kid . ' AND `bundesland`=' . $bid . ' AND `landkreis`=' . $lid . ' AND `ort`=' . $oid  . ' ' . $enableFields
+        '`pid` IN(' . intval($pid) . ') AND `kategorie`=' . intval($kid) . ' AND `bundesland`=' . intval($bid) . ' AND `landkreis`=' . intval($lid) . ' AND `ort`=' . intval($oid)  . ' ' . $enableFields
       );
       
       $count = $GLOBALS['TYPO3_DB']->sql_num_rows($res_c);
@@ -2834,10 +2830,13 @@ class tx_mhbranchenbuch_pi1 extends tslib_pibase {
       $res = $GLOBALS['TYPO3_DB']->sql(TYPO3_db,"
         SELECT
           f.*,
-          k.name AS category
+          k.name AS category,
+          o.zip AS o_zip,
+          o.name AS o_city
         FROM
           " . $this->dbTable1 . " f
-          RIGHT JOIN " . $this->dbTable2 . " k ON k.uid = f.kategorie
+          JOIN " . $this->dbTable2 . " k ON k.uid = f.kategorie
+          JOIN " . $this->dbTable5 . " o ON f.ort = o.uid
         WHERE
           f.bundesland = " . intval($bid) . "
           AND
@@ -2845,13 +2844,13 @@ class tx_mhbranchenbuch_pi1 extends tslib_pibase {
           AND
           f.ort = " . intval($oid) . "
           AND
-          FIND_IN_SET(" . $kid . ",f.kategorie)
+          FIND_IN_SET(" . intval($kid) . ",f.kategorie)
           AND
           f.deleted = 0
           AND
           f.hidden  = 0
           AND
-          f.pid IN (" . $pid . ")
+          f.pid IN (" . intval($pid) . ")
         ORDER BY
           " . $orderBy . "
         LIMIT " . $limit
@@ -2869,7 +2868,7 @@ class tx_mhbranchenbuch_pi1 extends tslib_pibase {
       $markerArray['###CATEGORIES###'] = $this->getCategories($pid,$bid,$lid,$oid,$catId,'0');
       
       // Map
-      $row_oid = mysql_fetch_array($GLOBALS['TYPO3_DB']->sql(TYPO3_db,"SELECT map_lat, map_lng FROM $this->dbTable5 WHERE uid = " . intval($oid)));
+      $row_oid = mysql_fetch_array($GLOBALS['TYPO3_DB']->sql(TYPO3_db,"SELECT `map_lat`, `map_lng` FROM `" . $this->dbTable5 . "` WHERE `uid` = " . intval($oid)));
       
       if($row_oid['map_lat'] != '' && $row_oid['map_lng'] != '') {
         $markerArray['###MAP###'] = $this->initMap($row_oid['map_lat'],$row_oid['map_lng'],FALSE,FALSE,$oid);
@@ -2896,7 +2895,7 @@ class tx_mhbranchenbuch_pi1 extends tslib_pibase {
           AND
           f.hidden  = 0
           AND
-          f.pid IN (" . $pid . ")
+          f.pid IN (" . intval($pid) . ")
           " . $x_query . "
         ORDER BY
           f.crdate DESC
@@ -2905,7 +2904,7 @@ class tx_mhbranchenbuch_pi1 extends tslib_pibase {
       $markerArray['###LATEST###']    = $this->getItem($getLast,TRUE);
       $markerArray['###ROOTLINE###']  = $this->getOViewRootline($bid,$lid,$oid,$kid);
       
-      $row_lid = mysql_fetch_array($GLOBALS['TYPO3_DB']->sql(TYPO3_db,"SELECT detail FROM $this->dbTable5 WHERE uid = " . intval($oid)));
+      $row_lid = mysql_fetch_array($GLOBALS['TYPO3_DB']->sql(TYPO3_db,"SELECT `detail` FROM " . $this->dbTable5 . " WHERE uid = " . intval($oid)));
       $markerArray['###DETAIL###']    = strlen($row_lid['detail']) > 0 ? $this->pi_RTEcssText($row_lid['detail']) : $this->pi_getLL('error_display_ad2Info');
       
       return $this->cObj->substituteMarkerArrayCached($template, $markerArray, $SubpartArray);
@@ -3079,10 +3078,10 @@ class tx_mhbranchenbuch_pi1 extends tslib_pibase {
     
     if($GLOBALS['TYPO3_DB']->sql_num_rows($res)) {
       
-      $checkTable = $GLOBALS['TYPO3_DB']->sql(TYPO3_db,"SELECT * FROM $this->dbTable6 WHERE ip = '$IP' AND fid = $id AND logdate = CURDATE()");
+      $checkTable = $GLOBALS['TYPO3_DB']->sql(TYPO3_db,"SELECT * FROM " . $this->dbTable6 . " WHERE ip = '$IP' AND fid = " . intval($id) . " AND logdate = CURDATE()");
       if(!$GLOBALS['TYPO3_DB']->sql_num_rows($checkTable)) {
-        $GLOBALS['TYPO3_DB']->sql(TYPO3_db,"INSERT INTO $this->dbTable6 SET logdate = NOW(), tstamp =  " . time() . ", fid = " . intval($id) . ", ip = '$IP'");
-        $GLOBALS['TYPO3_DB']->sql(TYPO3_db,"UPDATE $this->dbTable1 SET hit_count = hit_count+1 WHERE uid = " . intval($id));
+        $GLOBALS['TYPO3_DB']->sql(TYPO3_db,"INSERT INTO " . $this->dbTable6 . " SET logdate = NOW(), tstamp =  " . time() . ", fid = " . intval($id) . ", ip = '$IP'");
+        $GLOBALS['TYPO3_DB']->sql(TYPO3_db,"UPDATE " . $this->dbTable1 . " SET hit_count = hit_count+1 WHERE uid = " . intval($id));
       }
        
       $row = mysql_fetch_array($res);
@@ -3187,28 +3186,28 @@ class tx_mhbranchenbuch_pi1 extends tslib_pibase {
     $wrappedSubpartArray  = array(); #init
     
     $WHERE_CLAUSE = ''; #init
-    if($bid) { $WHERE_CLAUSE .= 'bundesland = ' . intval($bid); $zoom = $this->map_zoom1; }
-    if($lid) { $WHERE_CLAUSE .= ' landkreis = ' . intval($lid); $zoom = $this->map_zoom2; }
-    if($oid) { $WHERE_CLAUSE .= ' ort = ' . intval($oid); $zoom = $this->map_zoom3; }
-    if($uid) { $WHERE_CLAUSE .= ' uid = ' . intval($uid); $zoom = $this->map_zoom4; }
+    if($bid) { $WHERE_CLAUSE .= '`bundesland` = ' . intval($bid); $zoom = $this->map_zoom1; }
+    if($lid) { $WHERE_CLAUSE .= ' `landkreis` = ' . intval($lid); $zoom = $this->map_zoom2; }
+    if($oid) { $WHERE_CLAUSE .= ' `ort` = ' . intval($oid); $zoom = $this->map_zoom3; }
+    if($uid) { $WHERE_CLAUSE .= ' `uid` = ' . intval($uid); $zoom = $this->map_zoom4; }
     
     if($api) {
       
       $sql = $GLOBALS['TYPO3_DB']->sql(TYPO3_db,"
         SELECT 
-        uid, firma, map_lat, map_lng, adresse, link, telefon, fax, detail, bild
+          `uid`, `firma`, `map_lat`, `map_lng`, `adresse`, `link`, `telefon`, `fax`, `detail`, `bild`
         FROM  
-          " . $this->dbTable1 . "
+          `" . $this->dbTable1 . "`
         WHERE 
-          $WHERE_CLAUSE
+          " . $WHERE_CLAUSE . "
         AND
-          map_lat != ''
+          `map_lat` != ''
         AND
-          map_lng != ''
+          `map_lng` != ''
         AND
-          deleted = 0
+          `deleted` = 0
         AND 
-          hidden = 0
+          `hidden` = 0
       ");
       
       $marker = ''; #init
@@ -3294,7 +3293,7 @@ class tx_mhbranchenbuch_pi1 extends tslib_pibase {
       $res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
         'uid', 
         $this->dbTable1,
-        '`cruser_id` = ' . $uid . ' ' . $this->cObj->enableFields($this->dbTable1)
+        '`cruser_id` = ' . intval($uid) . ' ' . $this->cObj->enableFields($this->dbTable1)
       );
       $count = $GLOBALS['TYPO3_DB']->sql_num_rows($res) ? $GLOBALS['TYPO3_DB']->sql_num_rows($res) : '0';
       return $count;
@@ -3416,7 +3415,7 @@ class tx_mhbranchenbuch_pi1 extends tslib_pibase {
       $GLOBALS['TYPO3_DB']->exec_SELECTquery(
         'name', 
         $this->dbTable3, 
-        'uid = ' . $row['bundesland'], 
+        'uid = ' . intval($row['bundesland']), 
         '', 
         '', 
         '1'
@@ -3427,7 +3426,7 @@ class tx_mhbranchenbuch_pi1 extends tslib_pibase {
       $GLOBALS['TYPO3_DB']->exec_SELECTquery(
         'name', 
         $this->dbTable4, 
-        'uid = ' . $row['landkreis'], 
+        'uid = ' . intval($row['landkreis']), 
         '', 
         '', 
         '1'
@@ -3438,7 +3437,7 @@ class tx_mhbranchenbuch_pi1 extends tslib_pibase {
       $GLOBALS['TYPO3_DB']->exec_SELECTquery(
         'name', 
         $this->dbTable5, 
-        'uid = ' . $row['ort'], 
+        'uid = ' . intval($row['ort']), 
         '', 
         '', 
         '1'
@@ -3499,8 +3498,8 @@ class tx_mhbranchenbuch_pi1 extends tslib_pibase {
       $x_query  = 'AND (';
       foreach($catID AS $value) {
         if($i>0) { $query .= ' OR '; $x_query .= ' OR '; $i=0; }
-        $query      .= 'FIND_IN_SET(' . $value . ',uid)';
-        $x_query    .= 'FIND_IN_SET(' . $value . ',f.kategorie)';
+        $query      .= 'FIND_IN_SET(' . intval($value) . ',uid)';
+        $x_query    .= 'FIND_IN_SET(' . intval($value) . ',f.kategorie)';
         $i++;
       }
       $x_query .= ')';
@@ -3509,7 +3508,7 @@ class tx_mhbranchenbuch_pi1 extends tslib_pibase {
       $x_query  = FALSE;
     }
     
-    $query .= $query ? ' AND `root_uid` = ' . $root_uid : 'AND `root_uid` = ' . $root_uid;
+    $query .= $query ? ' AND `root_uid` = ' . intval($root_uid) : 'AND `root_uid` = ' . intval($root_uid);
     
     $getCats = $GLOBALS['TYPO3_DB']->sql(TYPO3_db,"
       SELECT
@@ -3538,7 +3537,7 @@ class tx_mhbranchenbuch_pi1 extends tslib_pibase {
           FROM
             `" . $this->dbTable1 . "`
           WHERE
-              FIND_IN_SET(" . $row['uid'] . ", kategorie)
+              FIND_IN_SET(" . intval($row['uid']) . ", kategorie)
             AND
               `ort` = " . intval($oid) . "
             AND
@@ -3546,7 +3545,7 @@ class tx_mhbranchenbuch_pi1 extends tslib_pibase {
             AND
               `deleted` = 0
             AND
-              `pid` IN (" . $pid . ")
+              `pid` IN (" . intval($pid) . ")
         ");
         
         $count = $GLOBALS['TYPO3_DB']->sql_num_rows($getCount);
@@ -3592,7 +3591,7 @@ class tx_mhbranchenbuch_pi1 extends tslib_pibase {
           FROM
             `" . $this->dbTable2 . "`
           WHERE
-            `root_uid` = " . $row['uid']
+            `root_uid` = " . intval($row['uid'])
         );
 
         if($GLOBALS['TYPO3_DB']->sql_num_rows($subCategories) > 0) {
@@ -3637,8 +3636,8 @@ class tx_mhbranchenbuch_pi1 extends tslib_pibase {
         $vCard->data['last_name']         = $row['lastname'];
         $vCard->data['company']           = $row['firma']; 
         $vCard->data['work_address']      = $row['adresse'];
-        $vCard->data['work_city']         = $row['city'];
-        $vCard->data['work_postal_code']  = $row['zip'];
+        $vCard->data['work_city']         = $row['city'] != '' ? $row['city'] : $row['o_city'];
+        $vCard->data['work_postal_code']  = $row['zip'] != '' ? $row['zip'] : $row['o_zip'];
         $vCard->data['office_tel']        = $row['telefon'];
         $vCard->data['cell_tel']          = $row['handy'];
         $vCard->data['fax_tel']           = $row['fax']; 
