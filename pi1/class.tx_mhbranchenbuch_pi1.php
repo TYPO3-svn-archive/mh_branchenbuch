@@ -1508,7 +1508,7 @@ class tx_mhbranchenbuch_pi1 extends tslib_pibase {
       'step3_2_city_submit', 'step4_header', 'feform_important', 'feform_entry',
       'feform_xs', 'feform_s', 'feform_m', 'feform_l', 'feform_xl', 'feform_xxl', 'feform_xxl2',
       'feform_category', 'feform_categorywish', 'feform_categorywish_desc', 'feform_general', 'feform_company',
-      'feform_address', 'feform_tel', 'feform_fax', 'feform_mobile', 'feform_www', 'feform_email', 'feform_upload_legend',
+      'feform_street', 'feform_tel', 'feform_fax', 'feform_mobile', 'feform_www', 'feform_email', 'feform_upload_legend',
       'feform_upload_choose', 'feform_keywords_legend', 'feform_keywords_desc', 'feform_detailed_legend', 'feform_detailed_desc',
       'feform_job', 'feform_job_desc', 'feform_finish_legend', 'feform_terms', 'feform_terms_desc', 'feform_submit', 
       'feform_success_header', 'feform_success_text', 'feform_type', 'feform_forename','feform_lastname',
@@ -2065,7 +2065,7 @@ class tx_mhbranchenbuch_pi1 extends tslib_pibase {
     $arrayAll = array(
       'feform_edit_header','feform_edit_text','feeditform_legend', 'feeditform_location',
       'feeditform_federalstate','feeditform_admindistrict', 'feeditform_city', 'feeditform_category',
-      'feeditform_keywords', 'feeditform_company', 'feeditform_address', 'feeditform_tel', 'feeditform_fax',
+      'feeditform_keywords', 'feeditform_company', 'feeditform_street', 'feeditform_tel', 'feeditform_fax',
       'feeditform_mobile', 'feeditform_email', 'feeditform_www', 'feeditform_cancel', 'feeditform_submit', 
       'feeditform_job_desc', 'feeditform_general', 'feeditform_upload_choose', 'feeditform_upload_size',
       'feeditform_keywords_legend', 'feeditform_keywords_desc', 'feeditform_keywords_count', 'feeditform_detailed_legend',
@@ -2662,13 +2662,13 @@ class tx_mhbranchenbuch_pi1 extends tslib_pibase {
 
         $name = $row['name'];
         
-        $markerArray['###COUNT###'] = mysql_numrows($res_c);
+        $markerArray['###COUNT###'] = $GLOBALS['TYPO3_DB']->sql_num_rows($res_c);
         $markerArray['###NAME###']  = $this->pi_linkTP($name,array($this->prefixId . '[bid]' => $bid,$this->prefixId . '[lid]' => $row['uid']),1,$single_pid);
     
         $rows .= $this->cObj->substituteMarkerArrayCached($sspart, $markerArray);
       }
       
-      $row_bid = mysql_fetch_array($GLOBALS['TYPO3_DB']->sql(TYPO3_db,"SELECT `map_lat`, `map_lng`` FROM `" . $this->dbTable3 . "` WHERE `uid` = " . intval($bid)));
+      $row_bid = mysql_fetch_array($GLOBALS['TYPO3_DB']->sql(TYPO3_db,"SELECT `map_lat`, `map_lng` FROM `" . $this->dbTable3 . "` WHERE `uid` = " . intval($bid)));
       
       if($row_bid['map_lat'] != '' && $row_bid['map_lng'] != '') {
         $markerArray['###MAP###'] = $this->initMap($row_bid['map_lat'],$row_bid['map_lng'],FALSE,$bid);
@@ -3451,7 +3451,8 @@ class tx_mhbranchenbuch_pi1 extends tslib_pibase {
     $mailBody .= $this->pi_getLL('mailbody_city') . " " . $city['name'] . "\n\n";
     $mailBody .= $this->pi_getLL('mailbody_category') . " " . $categories . "\n\n";
     $mailBody .= $this->pi_getLL('mailbody_company') . " " . $row['firma'] . "\n";
-    $mailBody .= $this->pi_getLL('mailbody_address') . "\n" . $row['adresse'] . "\n\n";
+    $mailBody .= $this->pi_getLL('mailbody_street') . " " . $row['adresse'] . "\n";
+    $mailBody .= $this->pi_getLL('mailbody_zip') . " " . $this->pi_getLL('mailbody_city') . "\n" . $row['zip'] . " " . $row['city'] . "\n\n";
     $mailBody .= $this->pi_getLL('mailbody_tel') . " " . $row['telefon'] . "\n";
     $mailBody .= $this->pi_getLL('mailbody_fax') . " " . $row['fax'] . "\n";
     $mailBody .= $this->pi_getLL('mailbody_mobile') . " " . $row['handy'] . "\n\n";

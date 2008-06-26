@@ -169,7 +169,9 @@
   	  <label index="sortby_desc">DESC</label>
   	  <label index="mailbody_company">Company:</label>
   	  <label index="mailbody_category">Category:</label>
-  	  <label index="mailbody_address">Address:</label>
+  	  <label index="mailbody_street">Street:</label>
+  	  <label index="mailbody_zip">Zip Code /</label>
+  	  <label index="mailbody_city">City:</label>
   	  <label index="mailbody_tel">Telephone:</label>
   	  <label index="mailbody_fax">Fax:</label>
   	  <label index="mailbody_mobile">Mobilephone:</label>
@@ -356,7 +358,9 @@
   	  <label index="sortby_desc">DESC</label>
   	  <label index="mailbody_company">Firma:</label>
   	  <label index="mailbody_category">Kategorie:</label>
-  	  <label index="mailbody_address">Adresse:</label>
+  	  <label index="mailbody_street">Straße:</label>
+  	  <label index="mailbody_zip">PLZ /</label>
+  	  <label index="mailbody_city">Ort:</label>
   	  <label index="mailbody_tel">Telefon:</label>
   	  <label index="mailbody_fax">Fax:</label>
   	  <label index="mailbody_mobile">Handy:</label>
