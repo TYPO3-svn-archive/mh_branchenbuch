@@ -1116,9 +1116,6 @@ class tx_mhbranchenbuch_pi1 extends tslib_pibase {
     elseif(isset($this->piVars['display'])) 
     {
       // get a single entry
-      
-      $uid    = $this->piVars['display'];
-      
       $res    = $GLOBALS['TYPO3_DB']->sql(TYPO3_db,"
         SELECT
           f.*,
@@ -1132,13 +1129,13 @@ class tx_mhbranchenbuch_pi1 extends tslib_pibase {
           LEFT JOIN " . $this->dbTable5 . " o ON o.uid = f.ort
           LEFT JOIN " . $this->dbTable2 . " k ON k.uid = f.kategorie
         WHERE
-          f.uid = " . intval($uid) . "
+          f.uid = " . intval($this->piVars['display']) . "
         ORDER BY
           f.crdate DESC
-          LIMIT 1");
-        
-      return $this->getItem($res, TRUE);
+          LIMIT 1
+      ");
       
+      return $this->getItem($res, TRUE);
     } 
     elseif(isset($this->piVars['edit'])) 
     {
@@ -1147,9 +1144,7 @@ class tx_mhbranchenbuch_pi1 extends tslib_pibase {
     }
     elseif(isset($this->piVars['detail'])) 
     {
-      // get the detail-view of a entry
-      $uid    = $this->piVars['detail'];
-      
+      // get the detail-view of a entry  
       $res    = $GLOBALS['TYPO3_DB']->sql(TYPO3_db,"
         SELECT
           f.*,
@@ -1163,7 +1158,7 @@ class tx_mhbranchenbuch_pi1 extends tslib_pibase {
           LEFT JOIN `" . $this->dbTable5 . "` o ON o.uid = f.ort
           LEFT JOIN `" . $this->dbTable2 . "` k ON k.uid = f.kategorie
         WHERE
-          f.uid = " . intval($uid) . "
+          f.uid = " . intval($this->piVars['detail']) . "
         ORDER BY
           f.crdate DESC
         LIMIT 1
@@ -1224,12 +1219,12 @@ class tx_mhbranchenbuch_pi1 extends tslib_pibase {
   * @return	the form
   */
   function displayContactForm($pid) {
-    
+
     if (t3lib_extMgm::isLoaded('sr_freecap') && $this->captcha == 'sr_freecap') {
       require_once(t3lib_extMgm::extPath('sr_freecap').'pi2/class.tx_srfreecap_pi2.php');
       $this->freeCap = t3lib_div::makeInstance('tx_srfreecap_pi2');
     }
-        
+
     $piVar_email  = $this->piVars['email'];
     $piVar_formId = t3lib_div::_GP('formid');
     $piVar_spam   = t3lib_div::_GP('antispam');
@@ -3452,7 +3447,7 @@ class tx_mhbranchenbuch_pi1 extends tslib_pibase {
     $mailBody .= $this->pi_getLL('mailbody_category') . " " . $categories . "\n\n";
     $mailBody .= $this->pi_getLL('mailbody_company') . " " . $row['firma'] . "\n";
     $mailBody .= $this->pi_getLL('mailbody_street') . " " . $row['adresse'] . "\n";
-    $mailBody .= $this->pi_getLL('mailbody_zip') . " " . $this->pi_getLL('mailbody_city') . "\n" . $row['zip'] . " " . $row['city'] . "\n\n";
+    $mailBody .= $this->pi_getLL('mailbody_zip') . " " . $this->pi_getLL('mailbody_city') . " " . $row['zip'] . " " . $row['city'] . "\n\n";
     $mailBody .= $this->pi_getLL('mailbody_tel') . " " . $row['telefon'] . "\n";
     $mailBody .= $this->pi_getLL('mailbody_fax') . " " . $row['fax'] . "\n";
     $mailBody .= $this->pi_getLL('mailbody_mobile') . " " . $row['handy'] . "\n\n";

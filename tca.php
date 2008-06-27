@@ -6,7 +6,7 @@ $TCA["tx_mhbranchenbuch_firmen"]["ctrl"]["requestUpdate"] = 'bundesland,landkrei
 $TCA["tx_mhbranchenbuch_firmen"] = array (
 	"ctrl" => $TCA["tx_mhbranchenbuch_firmen"]["ctrl"],
 	"interface" => array (
-		"showRecordFieldList" => "hidden,starttime,endtime,cruser_id,kategorie,bundesland,landkreis,ort,firma,forename,lastname,typ,adresse,city,zip,telefon,fax,handy,link,video,email,custom1,custom2,custom3,bild,keywords,detail,map_lat,map_lng,hit_count,job"
+		"showRecordFieldList" => "hidden,starttime,endtime,cruser_id,kategorie,bundesland,landkreis,ort,firma,forename,lastname,typ,adresse,zip,city,telefon,fax,handy,link,video,email,custom1,custom2,custom3,bild,keywords,detail,map_lat,map_lng,hit_count,job"
 	),
 	"feInterface" => $TCA["tx_mhbranchenbuch_firmen"]["feInterface"],
 	"columns" => array (
@@ -76,7 +76,7 @@ $TCA["tx_mhbranchenbuch_firmen"] = array (
 				'minitems' => 0,
 				'maxitems' => 100,
 				'foreign_table' => 'tx_mhbranchenbuch_kategorien',
-				'foreign_table_where' => 'AND tx_mhbranchenbuch_kategorien.pid=###STORAGE_PID### ORDER BY tx_mhbranchenbuch_kategorien.name',
+				'foreign_table_where' => 'AND tx_mhbranchenbuch_kategorien.pid=###CURRENT_PID### ORDER BY tx_mhbranchenbuch_kategorien.name',
 				'wizards' => Array(
 					'_PADDING' => 2,
 					'_VERTICAL' => 1,
@@ -113,7 +113,7 @@ $TCA["tx_mhbranchenbuch_firmen"] = array (
             Array("",0),
         ),
 				"foreign_table" => "tx_mhbranchenbuch_bundesland",	
-				"foreign_table_where" => "AND tx_mhbranchenbuch_bundesland.pid=###STORAGE_PID### ORDER BY tx_mhbranchenbuch_bundesland.name",	
+				"foreign_table_where" => "AND tx_mhbranchenbuch_bundesland.pid=###CURRENT_PID### ORDER BY tx_mhbranchenbuch_bundesland.name",	
 				"size" => 1,	
 				"minitems" => 0,
 				"maxitems" => 1,
@@ -128,7 +128,7 @@ $TCA["tx_mhbranchenbuch_firmen"] = array (
             Array("",0),
         ),
 				"foreign_table" => "tx_mhbranchenbuch_landkreis",	
-				"foreign_table_where" => "AND tx_mhbranchenbuch_landkreis.pid=###STORAGE_PID### AND tx_mhbranchenbuch_landkreis.bundesland=###REC_FIELD_bundesland### ORDER BY tx_mhbranchenbuch_landkreis.name",	
+				"foreign_table_where" => "AND tx_mhbranchenbuch_landkreis.pid=###CURRENT_PID### AND tx_mhbranchenbuch_landkreis.bundesland=###REC_FIELD_bundesland### ORDER BY tx_mhbranchenbuch_landkreis.name",	
 				"size" => 1,	
 				"minitems" => 0,
 				"maxitems" => 1,
@@ -143,7 +143,7 @@ $TCA["tx_mhbranchenbuch_firmen"] = array (
             Array("",0),
         ),
 				"foreign_table" => "tx_mhbranchenbuch_ort",	
-				"foreign_table_where" => "AND tx_mhbranchenbuch_ort.pid=###STORAGE_PID### AND tx_mhbranchenbuch_ort.landkreis=###REC_FIELD_landkreis### ORDER BY tx_mhbranchenbuch_ort.name",	
+				"foreign_table_where" => "AND tx_mhbranchenbuch_ort.pid=###CURRENT_PID### AND tx_mhbranchenbuch_ort.landkreis=###REC_FIELD_landkreis### ORDER BY tx_mhbranchenbuch_ort.name",	
 				"size" => 1,	
 				"minitems" => 0,
 				"maxitems" => 1,
@@ -201,18 +201,18 @@ $TCA["tx_mhbranchenbuch_firmen"] = array (
 				"cols" => "30",	
 				"rows" => "5",
 			)
-		),
-		"city" => Array (
+		),		
+    "zip" => Array (		
 			"exclude" => 0,		
-			"label" => "LLL:EXT:mh_branchenbuch/locallang_db.xml:tx_mhbranchenbuch_ort.name",		
+			"label" => "LLL:EXT:mh_branchenbuch/locallang_db.xml:tx_mhbranchenbuch_ort.zip",		
 			"config" => Array (
 				"type" => "input",	
 				"size" => "30",
 			)
 		),
-		"zip" => Array (		
+		"city" => Array (
 			"exclude" => 0,		
-			"label" => "LLL:EXT:mh_branchenbuch/locallang_db.xml:tx_mhbranchenbuch_ort.zip",		
+			"label" => "LLL:EXT:mh_branchenbuch/locallang_db.xml:tx_mhbranchenbuch_ort.name",		
 			"config" => Array (
 				"type" => "input",	
 				"size" => "30",
@@ -367,7 +367,7 @@ $TCA["tx_mhbranchenbuch_firmen"] = array (
 		),
 	),
 	"types" => array (
-		"0" => array("showitem" => "hidden;;1;;1-1-1, cruser_id, kategorie;;;;3-3-3, bundesland, landkreis, ort, firma, forename, lastname, typ, adresse, city, zip, telefon, fax, handy, link, video, email, custom1, custom2, custom3, bild, keywords, detail;;;richtext[cut|copy|paste|formatblock|textcolor|bold|italic|underline|left|center|right|orderedlist|unorderedlist|outdent|indent|link|table|image|line|chMode]:rte_transform[mode=ts_css|imgpath=uploads/mh_branchenbuch/rte/], map_lat, map_lng, hit_count, job")
+		"0" => array("showitem" => "hidden;;1;;1-1-1, cruser_id, kategorie;;;;3-3-3, bundesland, landkreis, ort, firma, forename, lastname, typ, adresse, zip, city, telefon, fax, handy, link, video, email, custom1, custom2, custom3, bild, keywords, detail;;;richtext[cut|copy|paste|formatblock|textcolor|bold|italic|underline|left|center|right|orderedlist|unorderedlist|outdent|indent|link|table|image|line|chMode]:rte_transform[mode=ts_css|imgpath=uploads/mh_branchenbuch/rte/], map_lat, map_lng, hit_count, job")
 	),
 	"palettes" => array (
 		"1" => array("showitem" => "starttime, endtime")
@@ -610,7 +610,7 @@ $TCA["tx_mhbranchenbuch_landkreis"] = array (
 			"config" => Array (
 				"type" => "select",	
 				"foreign_table" => "tx_mhbranchenbuch_bundesland",	
-				"foreign_table_where" => "AND tx_mhbranchenbuch_bundesland.pid=###STORAGE_PID### ORDER BY tx_mhbranchenbuch_bundesland.name",	
+				"foreign_table_where" => "AND tx_mhbranchenbuch_bundesland.pid=###CURRENT_PID### ORDER BY tx_mhbranchenbuch_bundesland.name",	
 				"size" => 1,	
 				"minitems" => 0,
 				"maxitems" => 1,
@@ -690,7 +690,7 @@ $TCA["tx_mhbranchenbuch_ort"] = array (
 			"config" => Array (
 				"type" => "select",	
 				"foreign_table" => "tx_mhbranchenbuch_landkreis",	
-				"foreign_table_where" => "AND tx_mhbranchenbuch_landkreis.pid=###STORAGE_PID### ORDER BY tx_mhbranchenbuch_landkreis.name",	
+				"foreign_table_where" => "AND tx_mhbranchenbuch_landkreis.pid=###CURRENT_PID### ORDER BY tx_mhbranchenbuch_landkreis.name",	
 				"size" => 1,	
 				"minitems" => 0,
 				"maxitems" => 1,
