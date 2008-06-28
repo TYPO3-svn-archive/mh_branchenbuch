@@ -483,12 +483,14 @@
 
 <!-- ###FE_SIGNUP_STEP3_2### begin -->
   <br />
+  <form name="tx_mhbranchenbuch_newCity" method="post" action="">
   <fieldset class="tx_mhbranchenbuch_newEntry">
     <legend for="city_new">###LANG_STEP3_2_LEGEND###</legend>
     <label id="name_new">###LANG_STEP3_2_CITY###</label>
     <input type="text" name="name_new" id="name_new" /><input type="submit" value="###LANG_STEP3_2_CITY_SUBMIT###" />
     <br />
   </fieldset>
+  </form>
 <!-- ###FE_SIGNUP_STEP3_2### end -->
 
 
@@ -559,7 +561,7 @@
         <input type="text" id="lastname" name="tx_mhbranchenbuch_postVar[lastname]" size="50" value="###LASTNAME###" />
         <br />
         
-        <label for="street">###LANG_FEFORM_ADDRESS###</label>
+        <label for="street">###LANG_FEFORM_STREET###</label>
         <input id="street" name="tx_mhbranchenbuch_postVar[anschrift]" size="50" value="###STREET###" />
         <br />
         
@@ -951,10 +953,9 @@
 <!-- ###SUBCATEGORIES### begin -->
   <ul class="tx_mh_branchenbuch-subcategory">
     <!-- ###ITEMS### -->
-    <li>###NAME### (###COUNT###)</li>
+    <li>###NAME### (###COUNT###) ###SUBCATEGORY###</li>
     <!-- ###ITEMS### -->
   </ul>
-  <br style="clear:left;" />
 <!-- ###SUBCATEGORIES### end -->
 
 
