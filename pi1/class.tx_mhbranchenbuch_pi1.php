@@ -161,7 +161,7 @@ class tx_mhbranchenbuch_pi1 extends tslib_pibase {
         break;
         case 'ROTATION':
           $GLOBALS["TSFE"]->set_no_cache();
-          $content .= $this->displayRotation($pid);
+          $content .= $this->displayRotation($pid,$catId,$listFederal,$listAdminis,$listCity);
         break;
         case 'ALPHABETICAL-MENU':
           $content .= $this->displayMenu($pid,$catId);
@@ -373,10 +373,10 @@ class tx_mhbranchenbuch_pi1 extends tslib_pibase {
       $markerArray['###SEARCHRESULT###']  = $this->pi_getLL('search_not_found');
     }
     
-    $markerArray['###VALUE_SEARCH###']    = t3lib_div::_GP('keyword');
-    $markerArray['###VALUE_SEARCH2###']   = t3lib_div::_GP('keyword2');
+    $markerArray['###VALUE_SEARCH###']    = $keyword1;
+    $markerArray['###VALUE_SEARCH2###']   = $keyword2;
     $markerArray['###ACTION_URI###']      = $this->pi_getPageLink($this->search_pid,'',array('no_cache' => 1));
-        
+    
     return $this->cObj->substituteMarkerArrayCached($template,$markerArray,array(),$wrappedSubpartArray);
   }
   
@@ -657,7 +657,7 @@ class tx_mhbranchenbuch_pi1 extends tslib_pibase {
   *  
   * @return	The content that is displayed on the website
   */
-  function displayRotation($pid) {
+  function displayRotation($pid,$catId = FALSE,$listFederal = FALSE,$listAdminis = FALSE,$listCity = FALSE) {
     
     $content              = ''; #init
     
@@ -666,8 +666,60 @@ class tx_mhbranchenbuch_pi1 extends tslib_pibase {
     
     $template = $this->cObj->getSubpart($this->template,"###ROTATION###");
     
+    if(strlen($catId) > 0)        { $catId        = explode(',',$catId); }
+    if(strlen($listFederal) > 0)  { $listFederal  = explode(',',$listFederal); }
+    if(strlen($listAdminis) > 0)  { $listAdminis  = explode(',',$listAdminis); }
+    if(strlen($listCity) > 0)     { $listCity     = explode(',',$listCity); }
+    
     $excludeList  = explode(',', $this->rotationExclude);
     $query        = ''; #init
+    $i            = 0; #init
+    $i2           = 0; #init
+    $i3           = 0; #init
+    $i4           = 0; #init
+    
+    if($catId) {
+      $query    .= 'AND ';
+      
+      foreach($catId AS $value) {
+        if($i>0) { $query.= ' OR '; $c_query.= ' OR '; $i=0; }
+        $query    .= 'FIND_IN_SET(' . intval($value) . ',kategorie)';
+        $i++;
+      }
+    }
+    
+    // Add Federal States to query ...
+    if($listFederal) {
+      $query    .= 'AND ';
+      
+      foreach($listFederal AS $federal) {
+        if($i2>0) { $query.= ' OR '; $c_query.= ' OR '; $i2=0; }
+        $query    .= 'FIND_IN_SET(' . intval($federal) . ',bundesland)';
+        $i2++;
+      }
+    }
+    
+    // Add Administrative Districts to query ...
+    if($listAdminis) {
+      $query    .= 'AND ';
+      
+      foreach($listAdminis AS $adminis) {
+        if($i3>0) { $query.= ' OR '; $c_query.= ' OR '; $i3=0; }
+        $query    .= 'FIND_IN_SET(' . intval($adminis) . ',landkreis)';
+        $i3++;
+      }
+    }
+    
+    // Add Cities to query ...
+    if($listCity) {
+      $query    .= 'AND ';
+      
+      foreach($listCity AS $city) {
+        if($i4>0) { $query.= ' OR '; $c_query.= ' OR '; $i4=0; }
+        $query    .= 'FIND_IN_SET(' . intval($city) . ',ort)';
+        $i4++;
+      }
+    }
     
     if($this->rotationExclude != "" && is_array($excludeList)) {
       foreach($excludeList AS $excludeId) {
@@ -3652,4 +3704,4 @@ class tx_mhbranchenbuch_pi1 extends tslib_pibase {
 if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/mh_branchenbuch/pi1/class.tx_mhbranchenbuch_pi1.php'])	{
   include_once($TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/mh_branchenbuch/pi1/class.tx_mhbranchenbuch_pi1.php']);
 }
-?>
+?>

@@ -1,5 +1,3 @@
-
-
 plugin.tx_mhbranchenbuch_pi1.CSS_editor = Plugin: "tx_mhbranchenbuch_pi1"
 plugin.tx_mhbranchenbuch_pi1.CSS_editor.selector = .tx-mhbranchenbuch-pi1
 plugin.tx_mhbranchenbuch_pi1.CSS_editor.exampleWrap = <HR><strong>Plugin: "tx_mhbranchenbuch_pi1"</strong><HR><div class="tx-mhbranchenbuch-pi1"> | </div>

@@ -119,4 +119,4 @@ class tx_mhbranchenbuch_ts extends tslib_pibase {
 if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/mh_branchenbuch/lib/class.tx_mhbranchenbuch_ts.php'])	{
 	include_once($TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/mh_branchenbuch/lib/class.tx_mhbranchenbuch_ts.php']);
 }
-?>
+?>

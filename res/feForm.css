@@ -1,4 +1,4 @@
-fieldset.tx_mhbranchenbuch_newEntry { padding:5px; font-size:0.8em; border:1px solid #ddd; width:500px; }
+fieldset.tx_mhbranchenbuch_newEntry { padding:5px; font-size:1em; border:1px solid #ddd; width:500px; }
 
 fieldset.tx_mhbranchenbuch_newEntry input,
 fieldset.tx_mhbranchenbuch_newEntry select,
@@ -20,7 +20,7 @@ fieldset.tx_mhbranchenbuch_newEntry label.required  {
 
 fieldset.tx_mhbranchenbuch_newEntry span  { 
   font-size:0.8em;
-  color:#ccc;
+  color:#666;
   width:150px; 
 }
 
@@ -35,4 +35,4 @@ fieldset.tx_mhbranchenbuch_newEntry span  {
 .tx_mhbranchenbuch_newCity  { background-color:#ffb03b; }
 
 .tx_mhbranchenbuch_objects_float  { float:left; }
-.tx_mhbranchenbuch_objects dt { padding:5px; font-size:0.8em; font-weight:bold; }
+.tx_mhbranchenbuch_objects dt { padding:5px; font-size:1em; font-weight:bold; }

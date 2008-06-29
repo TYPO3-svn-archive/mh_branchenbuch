@@ -179,4 +179,4 @@ class tx_mhbranchenbuch_overview extends tx_mydashboard_template implements tx_m
 if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/mh_branchenbuch/widgets/class.tx_mhbranchenbuch_overview.php']) {
     include_once($TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/mh_branchenbuch/widgets/class.tx_mhbranchenbuch_overview.php']);
 }
-?>
+?>

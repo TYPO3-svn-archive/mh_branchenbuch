@@ -160,4 +160,4 @@ class tx_mhbranchenbuch_vcard {
     return true;
   }
 }
-?>
+?>
