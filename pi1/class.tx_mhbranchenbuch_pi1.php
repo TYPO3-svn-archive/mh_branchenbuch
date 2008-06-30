@@ -3527,7 +3527,7 @@ class tx_mhbranchenbuch_pi1 extends tslib_pibase {
   * @return	list of categories and subcategories
   */
   function getCategories($pid,$bid,$lid,$oid,$catID = FALSE,$root_uid = '0') {
-  
+
     $tplmarker  = $root_uid == '0' ? 'OVERVIEW_CATEGORIES' : 'SUBCATEGORIES';
     $template   = $this->cObj->getSubpart($this->template,"###$tplmarker###");
     $subpart    = $this->cObj->getSubpart($template,'###ITEMS###');
@@ -3578,25 +3578,8 @@ class tx_mhbranchenbuch_pi1 extends tslib_pibase {
     if($GLOBALS['TYPO3_DB']->sql_num_rows($getCats)) {
       $rows = ''; #init
       while($row = mysql_fetch_assoc($getCats)) {
-  
-        $getCount = $GLOBALS['TYPO3_DB']->sql(TYPO3_db,"
-          SELECT
-            *
-          FROM
-            `" . $this->dbTable1 . "`
-          WHERE
-              FIND_IN_SET(" . intval($row['uid']) . ", kategorie)
-            AND
-              `ort` = " . intval($oid) . "
-            AND
-              `hidden` = 0
-            AND
-              `deleted` = 0
-            AND
-              `pid` IN (" . intval($pid) . ")
-        ");
-        
-        $count = $GLOBALS['TYPO3_DB']->sql_num_rows($getCount);
+
+        $count = $this->getCategoriesCount($pid,$row['uid'],$oid);
         
         if($this->show_empty_cats == 0 && $count <= 0) {
           continue;
@@ -3643,10 +3626,6 @@ class tx_mhbranchenbuch_pi1 extends tslib_pibase {
         );
 
         if($GLOBALS['TYPO3_DB']->sql_num_rows($subCategories) > 0) {
-          if($catCount) {
-            // ToDo: count all entries of the cat (FIND_IN_SET(k.uid, f.kategorie)), see tagcloud
-            $count += $GLOBALS['TYPO3_DB']->sql_num_rows($subCategories);
-          }
           $markerArray['###SUBCATEGORY###'] = $this->getCategories($pid,$bid,$lid,$oid,'',$row['uid']);
         } else {
           $markerArray['###SUBCATEGORY###'] = FALSE;
@@ -3662,6 +3641,34 @@ class tx_mhbranchenbuch_pi1 extends tslib_pibase {
   
   
   
+  // ToDo: Funktioniert nur bis Level 2 
+  function getCategoriesCount($pid,$uid,$oid,$sum = 0) {
+   
+    $getCount = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
+      '*',
+      $this->dbTable1,
+      '`pid` IN (' . intval($pid) . ') AND FIND_IN_SET(' . intval($uid) . ',kategorie) AND `ort` = ' . intval($oid) . ' ' .  $this->cObj->enableFields($this->dbTable1)
+    );
+
+    $sum = $sum == 0 ? $GLOBALS['TYPO3_DB']->sql_num_rows($getCount) : ($sum+$GLOBALS['TYPO3_DB']->sql_num_rows($getCount)) ;
+
+    $checkParent = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
+      'uid',
+      $this->dbTable2,
+      '`root_uid` = ' . $uid . ' ' .  $this->cObj->enableFields($this->dbTable2)
+    );
+    
+    if($GLOBALS['TYPO3_DB']->sql_num_rows($checkParent) > 0) {
+      while($row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($checkParent)) {
+        $sum = $this->getCategoriesCount($pid,$row['uid'],$oid,$sum);
+      }
+    }
+    
+    return $sum;
+  } // End method: getCategoriesCount();
+  
+  
+    
   /**
   * getVCard
   * 
@@ -3676,7 +3683,6 @@ class tx_mhbranchenbuch_pi1 extends tslib_pibase {
 
     if($GLOBALS['TYPO3_DB']->sql_num_rows($res)) {
       while($row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) {
-                  
         // Ignore deleted and hidden entries
         if($row['deleted'] == '1' OR $row['hidden'] == '1') continue;
         $vCard->data['work_po_box']       = "";
@@ -3704,4 +3710,4 @@ class tx_mhbranchenbuch_pi1 extends tslib_pibase {
 if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/mh_branchenbuch/pi1/class.tx_mhbranchenbuch_pi1.php'])	{
   include_once($TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/mh_branchenbuch/pi1/class.tx_mhbranchenbuch_pi1.php']);
 }
-?>
+?>

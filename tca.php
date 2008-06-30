@@ -413,7 +413,7 @@ $TCA["tx_mhbranchenbuch_kategorien"] = array (
 				"eval" => "required",
 			)
 		),
-		"root_uid" => Array (		
+		"root_uid" => Array (	
 			"exclude" => 1,		
 			"label" => "LLL:EXT:mh_branchenbuch/locallang_db.xml:tx_mhbranchenbuch_kategorien.root_uid",		
       'config' => Array (
@@ -423,11 +423,10 @@ $TCA["tx_mhbranchenbuch_kategorien"] = array (
 				'treeView' => 1,
 				'treeName' => 'txchtreeviewexample',
         'treeMaxDepth' => 999,
-				'size' => 1,
-				'autoSizeMax' => 100,
+				'size' => 10,
 				'selectedListStyle' => 'width:150px',
 				'minitems' => 0,
-				'maxitems' => 1,
+				'maxitems' => 2,
 				'foreign_table' => 'tx_mhbranchenbuch_kategorien',
 				'wizards' => Array(
 					'_PADDING' => 2,

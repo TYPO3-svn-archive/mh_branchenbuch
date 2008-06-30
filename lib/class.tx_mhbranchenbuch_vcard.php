@@ -83,7 +83,6 @@ class tx_mhbranchenbuch_vcard {
       $this->card = "BEGIN:VCARD\r\n";
     $this->card .= "VERSION:3.0\r\n";
     $this->card .= "CLASS:".$this->class."\r\n";
-    $this->card .= "PRODID:-//class_vcard from TroyWolf.com//NONSGML Version 1//EN\r\n";
     $this->card .= "REV:".$this->revision_date."\r\n";
       $this->card .= "FN:".$this->data['display_name']."\r\n";
     $this->card .= "N:"
@@ -156,8 +155,11 @@ class tx_mhbranchenbuch_vcard {
       header("Content-type: text/directory");
       header("Content-Disposition: attachment; filename=".$this->filename.".vcf");
       header("Pragma: public");
-      echo $this->card;
+      ob_clean();
+      flush();
+      echo $this->card; 
+      exit;
     return true;
   }
 }
-?>
+?>

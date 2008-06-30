@@ -46,7 +46,7 @@ class tx_mhbranchenbuch_tceFunc_selectTreeView extends t3lib_treeview {
 	 */
 	function wrapTitle($title,$v)	{
     if($v['title'] == '') {
-      $title = htmlentities($v['name']);
+      $title = $v['name'];
     }
     
 		$hrefTitle = $v['description'];
@@ -531,4 +531,4 @@ class tx_mhbranchenbuch_treeview {
 
 }
 
-?>
+?>
