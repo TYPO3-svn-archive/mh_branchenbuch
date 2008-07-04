@@ -37,6 +37,7 @@ plugin.tx_mhbranchenbuch_pi1 {
   
   #cat=Yellow Page (mh_branchenbuch) - Default entries//; type=int+; label=Image maximum height:Maximum height for uploaded images
   imgMaxHeight              = 150
+  
   #cat=Yellow Page (mh_branchenbuch) - Default entries//; type=int+; label=Image maximum width:Maximum width for uploaded images
   imgMaxWidth               = 150
   
@@ -59,7 +60,10 @@ plugin.tx_mhbranchenbuch_pi1 {
   linkTarget                = _blank
   
   #cat=Yellow Page (mh_branchenbuch) - Default entries/enable; type=boolean; label=Direct redirect:Set this to redirect direct to a Company-Website if someone clicks on the Image. Uncheck this to set a Pre-Page bevor.
-  directRedirect = 1
+  directRedirect            = 1
+  
+  #cat=Yellow Page (mh_branchenbuch) - Default entries//; type=int+; label=Render Mode for Images:This is the render mode for images of all entries. If it set to 1 and no details about the company are available, then the image have a link to the website from the company. Otherwise it will redirect to the detail-view of this entry. On render mode 2 the image open in a pop-up. Supports imagelightbox2 and pmkslimbox.
+  imageRenderMode           = 1
   
   #cat=Yellow Page (mh_branchenbuch) - Search-View/enable; type=boolean; label=Show XS-Entries in the searchresults?:Here you can set if the smallest entries (XS) will be displayed in the searchresults
   search_showXS             = 1

@@ -31,7 +31,8 @@ plugin.tx_mhbranchenbuch_pi1 {
   linkType                  = {$plugin.tx_mhbranchenbuch_pi1.linkType}
   linkTarget                = {$plugin.tx_mhbranchenbuch_pi1.linkTarget}
   directRedirect            = {$plugin.tx_mhbranchenbuch_pi1.directRedirect}
-
+  imageRenderMode           = {$plugin.tx_mhbranchenbuch_pi1.imageRenderMode}
+  
   ### Settings for the search-view
   
   search_showXS             = {$plugin.tx_mhbranchenbuch_pi1.search_showXS}

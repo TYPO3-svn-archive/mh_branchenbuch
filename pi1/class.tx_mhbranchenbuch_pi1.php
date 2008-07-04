@@ -1023,13 +1023,38 @@ class tx_mhbranchenbuch_pi1 extends tslib_pibase {
         $imgTSConfig['titleText']     = $row['firma'];
         $imgTSConfig['params']        = $this->imageParams;
         
-        if(strlen($row['detail'])>0) {
-          $markerArray['###IMAGE###'] = $this->pi_linkTP($this->cObj->IMAGE($imgTSConfig),array($this->prefixId.'[detail]'=> $row['uid']),1,$this->single_pid);
+        //ToDo: Fixme
+        if($this->imageRenderMode == 2) {
+          // check if lightbox ext. is installed and init
+          if (t3lib_extMgm::isLoaded('kj_imagelightbox2')) {
+            $imgTSConfig['imageLightbox2'] = 1;
+            #$imgTSConfig['imageLightbox2.']['caption'] = '';
+          // Or pmkslimbox ...
+          } elseif(t3lib_extMgm::isLoaded('pmkslimbox')) {
+            $imgTSConfig['imageLinkWrap'] = 1;
+            $imgTSConfig['imageLinkWrap.']['enable'] = 1;
+            #$imgTSConfig['imageLinkWrap.']['typolink.']['title']      = '';
+            $imgTSConfig['imageLinkWrap.']['typolink.']['parameter']  = $file;
+            $imgTSConfig['imageLinkWrap.']['typolink.']['ATagParams'] = 'rel="lightbox"';
+          } else {
+            $imgTSConfig['imageLinkWrap'] = 1;
+            $imgTSConfig['imageLinkWrap.']['enable'] = 1;
+            $imgTSConfig['imageLinkWrap.']['wrap'] = '<a href="javascript:close();">|</a>';
+            $imgTSConfig['imageLinkWrap.']['JSwindow'] = 1;
+            $imgTSConfig['imageLinkWrap.']['JSwindow.']['newWindow'] = 1;
+            $imgTSConfig['imageLinkWrap.']['JSwindow.']['expand'] = '0,0';
+            #$imgTSConfig['imageLinkWrap.']["imageLinkWrap."]["height"]=400;
+          }
+          $markerArray['###IMAGE###'] = $this->cObj->IMAGE($imgTSConfig);
         } else {
-          if(isset($row['link'])) {
-            $markerArray['###IMAGE###'] = $this->cObj->getTypoLink($this->cObj->IMAGE($imgTSConfig),$row['link'],'', $this->conf['linkTarget']);
-          } else {  
-            $markerArray['###IMAGE###'] = $this->cObj->IMAGE($imgTSConfig);
+          if(strlen($row['detail'])>0) {
+            $markerArray['###IMAGE###'] = $this->pi_linkTP($this->cObj->IMAGE($imgTSConfig),array($this->prefixId.'[detail]'=> $row['uid']),1,$this->single_pid);
+          } else {
+            if(isset($row['link'])) {
+              $markerArray['###IMAGE###'] = $this->cObj->getTypoLink($this->cObj->IMAGE($imgTSConfig),$row['link'],'', $this->conf['linkTarget']);
+            } else {  
+              $markerArray['###IMAGE###'] = $this->cObj->IMAGE($imgTSConfig);
+            }
           }
         }
       	
@@ -1861,7 +1886,7 @@ class tx_mhbranchenbuch_pi1 extends tslib_pibase {
               $markerArray['###OID###']  = intval($oid);
               $markerArray['###TYPE###'] = intval($type);
               
-              $treeview->init($this->dbTable2, 'root_uid', 'Ein-/Ausklappen', array('uid','name'), array('select_where' => 'AND pid = ' . intval($pid), 'JS_Func' => 'tx_mhbranchenbuch_TreeviewSelCat', 'JS_Event' => 'href', 'JS_Input' => 'uid,name', 'id' => 'tempCats', 'dontLinkMainNode' => $this->dontLinkMainNode));
+              $treeview->init($this->dbTable2, 'root_uid', 'Ein-/Ausklappen', array('uid','name'), array('orderBy' => 'name ASC', 'select_where' => 'AND pid = ' . intval($pid), 'JS_Func' => 'tx_mhbranchenbuch_TreeviewSelCat', 'JS_Event' => 'href', 'JS_Input' => 'uid,name', 'id' => 'tempCats', 'dontLinkMainNode' => $this->dontLinkMainNode));
               $catHTML  = '<dl class="tx_mhbranchenbuch_objects tx_mhbranchenbuch_objects_float"><dt>' .  $this->pi_getLL('feeditform_object1') . '</dt><dd>' . $treeview->getTree() . '</dd></dl>';
               $catHTML  .= '<dl class="tx_mhbranchenbuch_objects"><dt>' .  $this->pi_getLL('feeditform_object2') . '</dt><dd><select onchange="tx_mhbranchenbuch_delCat(this.selectedIndex,this.value);" id="selectedCats" size="5" multiple="multiple"></select></dd></dl>';
                   
@@ -2293,7 +2318,7 @@ class tx_mhbranchenbuch_pi1 extends tslib_pibase {
             
             $categories = explode(',',$row['kategorie']);
            
-            $treeview->init($this->dbTable2, 'root_uid', 'Ein-/Ausklappen', array('uid','name'), array('select_where' => 'AND pid = ' . $pid, 'JS_Func' => 'tx_mhbranchenbuch_TreeviewSelCat', 'JS_Event' => 'href', 'JS_Input' => 'uid,name', 'active_id' => $categories, 'dontLinkMainNode' => $this->dontLinkMainNode));
+            $treeview->init($this->dbTable2, 'root_uid', 'Ein-/Ausklappen', array('uid','name'), array('orderBy' => 'name ASC', 'select_where' => 'AND pid = ' . $pid, 'JS_Func' => 'tx_mhbranchenbuch_TreeviewSelCat', 'JS_Event' => 'href', 'JS_Input' => 'uid,name', 'active_id' => $categories, 'dontLinkMainNode' => $this->dontLinkMainNode));
             $catHTML    = '<dl class="tx_mhbranchenbuch_objects tx_mhbranchenbuch_objects_float"><dt>' .  $this->pi_getLL('feeditform_object1') . '</dt><dd>' . $treeview->getTree() . '</dd></dl>';
             $catHTML    .= '<dl class="tx_mhbranchenbuch_objects"><dt>' .  $this->pi_getLL('feeditform_object2') . '</dt><dd><select onchange="tx_mhbranchenbuch_delCat(this.selectedIndex,this.value);" id="selectedCats" size="5" multiple="multiple">';
           
@@ -3641,7 +3666,7 @@ class tx_mhbranchenbuch_pi1 extends tslib_pibase {
   
   
   
-  // ToDo: Funktioniert nur bis Level 2 
+  // Helper-Function
   function getCategoriesCount($pid,$uid,$oid,$sum = 0) {
    
     $getCount = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
@@ -3710,4 +3735,3 @@ class tx_mhbranchenbuch_pi1 extends tslib_pibase {
 if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/mh_branchenbuch/pi1/class.tx_mhbranchenbuch_pi1.php'])	{
   include_once($TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/mh_branchenbuch/pi1/class.tx_mhbranchenbuch_pi1.php']);
 }
-?>
