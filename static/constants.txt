@@ -197,8 +197,11 @@ plugin.tx_mhbranchenbuch_pi1 {
   #cat=Yellow Page (mh_branchenbuch) - Overview//f; type=string; label=Sort by...:Choose here "name" to sort the categories in the overview by his name (ASC/DESC) or choose "sorting" to sort the cateogires by the list-view in the backend, where you can sort the categories with the sort-arrows
   cat_sortBy                  = name
   
-  #cat=Yellow Page (mh_branchenbuch) - Overview/enable; type=boolean; label=Show empty Cats?:Uncheck this if you dont want that categories displayed which have no entries
+  #cat=Yellow Page (mh_branchenbuch) - Overview/enable; type=boolean; label=Show empty categories?:Uncheck this if you dont want that categories displayed which have no entries
   show_empty_cats             = 1
+  
+  #cat=Yellow Page (mh_branchenbuch) - Overview/enable; type=boolean; label=Show empty cities?:Uncheck this if you dont want that cities displayed which have no entries
+  show_empty_cities           = 1
   
   #cat=Yellow Page (mh_branchenbuch) - Overview/enable; type=boolean; label=Sum of entries behind a Category?:Uncheck this if you dont want that the sum of entries should be displayed behind a category
   show_cat_count              = 1

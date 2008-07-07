@@ -1783,6 +1783,7 @@ class tx_mhbranchenbuch_pi1 extends tslib_pibase {
             if(t3lib_div::_GP('name_new') && $this->feForm_createCity == 1) {
               $insertArray = array(
                 'name'      => t3lib_div::_GP('name_new'),
+                'zip'       => intval(t3lib_div::_GP('zip_new')),
                 'landkreis' => intval($lid),
                 'pid'       => intval($pid),
                 'crdate'    => time(),
@@ -1795,7 +1796,7 @@ class tx_mhbranchenbuch_pi1 extends tslib_pibase {
                   
                   $cityMailBody = $this->sprintf2($this->pi_getLL('feform_mailbody_city'),
                     array(
-                    'city' => t3lib_div::_GP('name_new')
+                    'city' => intval(t3lib_div::_GP('zip_new')) . ' ' . t3lib_div::_GP('name_new')
                     )
                   );
                   
@@ -2590,7 +2591,7 @@ class tx_mhbranchenbuch_pi1 extends tslib_pibase {
     $content = FALSE;
     $content = isset($bundesland) ? $this->getLID($bundesland) : $content;
     $content = isset($landkreis) ? $this->getOID($landkreis,$bundesland) : $content;
-    $content = isset($ort) ? $this->displayOverview($pid,$ort,$landkreis,$bundesland,$kategorie,$catId) : $content;
+    $content = isset($ort) ? $this->displayOverview($pid,$bundesland,$landkreis,$ort,$kategorie,$catId) : $content;
 
     if($this->overviewMode == 1 && $bundesland <= 0 && $landkreis <= 0 && $ort <= 0) {
       $content = $this->getBID();
@@ -2821,6 +2822,10 @@ class tx_mhbranchenbuch_pi1 extends tslib_pibase {
             hidden = 0
         ");
         
+        if($this->show_empty_cities == 0 && mysql_numrows($res_c) <= 0) {
+          continue;
+        }
+        
         $name    = $row['name'];
         
         $markerArray['###COUNT###'] = mysql_numrows($res_c);
@@ -2862,7 +2867,7 @@ class tx_mhbranchenbuch_pi1 extends tslib_pibase {
   *    
   * @return	a overview of the categories (and the number on entries in it) and the last x entries
   */
-  function displayOverview($pid,$oid,$lid,$bid,$kid = FALSE,$catId = FALSE) {
+  function displayOverview($pid,$bid,$lid,$oid,$kid = FALSE,$catId = FALSE) {
     $markerArray   = array();
     $SubpartArray  = array();
     
@@ -3258,40 +3263,54 @@ class tx_mhbranchenbuch_pi1 extends tslib_pibase {
     $wrappedSubpartArray  = array(); #init
     
     $WHERE_CLAUSE = ''; #init
-    if($bid) { $WHERE_CLAUSE .= '`bundesland` = ' . intval($bid); $zoom = $this->map_zoom1; }
-    if($lid) { $WHERE_CLAUSE .= ' `landkreis` = ' . intval($lid); $zoom = $this->map_zoom2; }
-    if($oid) { $WHERE_CLAUSE .= ' `ort` = ' . intval($oid); $zoom = $this->map_zoom3; }
-    if($uid) { $WHERE_CLAUSE .= ' `uid` = ' . intval($uid); $zoom = $this->map_zoom4; }
+    if($bid) { $WHERE_CLAUSE .= 'f.`bundesland` = ' . intval($bid); $zoom = $this->map_zoom1; }
+    if($lid) { $WHERE_CLAUSE .= ' f.`landkreis` = ' . intval($lid); $zoom = $this->map_zoom2; }
+    if($oid) { $WHERE_CLAUSE .= ' f.`ort` = ' . intval($oid); $zoom = $this->map_zoom3; }
+    if($uid) { $WHERE_CLAUSE .= ' f.`uid` = ' . intval($uid); $zoom = $this->map_zoom4; }
     
     if($api) {
-      
+               
       $sql = $GLOBALS['TYPO3_DB']->sql(TYPO3_db,"
         SELECT 
-          `uid`, `firma`, `map_lat`, `map_lng`, `adresse`, `link`, `telefon`, `fax`, `detail`, `bild`
+          f.*,
+          o.zip AS o_zip,
+          o.name AS o_city
         FROM  
-          `" . $this->dbTable1 . "`
+          `" . $this->dbTable1 . "` f
+          LEFT JOIN " . $this->dbTable5 . " o ON o.uid = f.ort
+          LEFT JOIN " . $this->dbTable2 . " k ON k.uid = f.kategorie
         WHERE 
           " . $WHERE_CLAUSE . "
         AND
-          `map_lat` != ''
+          f.`map_lat` != ''
         AND
-          `map_lng` != ''
+          f.`map_lng` != ''
         AND
-          `deleted` = 0
+          f.`deleted` = 0
         AND 
-          `hidden` = 0
+          f.`hidden` = 0
       ");
       
       $marker = ''; #init
       if($GLOBALS['TYPO3_DB']->sql_num_rows($sql)) {
         while($row = mysql_fetch_array($sql)) {
           $marker_content = $this->cObj->getTypoLink($row['firma'],$row['link'],'', $this->conf['linkTarget']);
+          
+          if($row['forename'] != "" && $row['lastname'] != "") {
+            $marker_content .= '<br />' . $row['forename'] . ' ' . $row['lastname'];
+          }
 
           $adresse = $row['adresse'];
-          $adresse = preg_replace("/\r\n|\n|\r/", "<br>", $adresse);
-          $marker_content .= "<br />" . $adresse;
-          $marker_content .= "<br /><br />" .$this->cObj->stdWrap($row['telefon'],$this->conf['tel_stdWrap.']);
-        	$marker_content .= "<br />" .$this->cObj->stdWrap($row['fax'],$this->conf['fax_stdWrap.']);
+          $adresse = preg_replace('/\r\n|\n|\r/', '<br />', $adresse);
+          
+          $marker_content .= '<br />' . $adresse;
+          
+          $zip  = $row['zip'] != '' ? $row['zip'] : $row['o_zip'];
+          $city = $row['city'] != '' ? $row['city'] : $row['o_city'];
+          $marker_content .= '<br />' . $zip . ' ' . $city;
+          
+          $marker_content .= '<br /><br />' .$this->cObj->stdWrap($row['telefon'],$this->conf['tel_stdWrap.']);
+        	$marker_content .= '<br />' .$this->cObj->stdWrap($row['fax'],$this->conf['fax_stdWrap.']);
         	
         	if($this->map_showImage == 1) {
           	$file                         = ($row['bild'] == false) ? $this->conf['noImage'] : 'uploads/tx_mhbranchenbuch/'. $row['bild'];
@@ -3304,12 +3323,12 @@ class tx_mhbranchenbuch_pi1 extends tslib_pibase {
             $imgTSConfig['params']        = $this->imageParams;
             
             if(strlen($row['detail'])>0) {
-              $marker_content .= "<br /><br />" .$this->pi_linkTP($this->cObj->IMAGE($imgTSConfig),array($this->prefixId.'[detail]'=> $row['uid']),1,$this->single_pid);
+              $marker_content .= '<br /><br />' .$this->pi_linkTP($this->cObj->IMAGE($imgTSConfig),array($this->prefixId.'[detail]'=> $row['uid']),1,$this->single_pid);
             } else {
               if(isset($row['link'])) {
-                $marker_content .= "<br /><br />" .$this->cObj->getTypoLink($this->cObj->IMAGE($imgTSConfig),$row['link'],'', $this->conf['linkTarget']);
+                $marker_content .= '<br /><br />' .$this->cObj->getTypoLink($this->cObj->IMAGE($imgTSConfig),$row['link'],'', $this->conf['linkTarget']);
               } else {  
-                $marker_content .= "<br /><br />" .$this->cObj->IMAGE($imgTSConfig);
+                $marker_content .= '<br /><br />' .$this->cObj->IMAGE($imgTSConfig);
               }
             }
           }

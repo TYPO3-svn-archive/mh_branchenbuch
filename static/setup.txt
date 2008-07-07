@@ -97,6 +97,7 @@ plugin.tx_mhbranchenbuch_pi1 {
   overviewSort              = {$plugin.tx_mhbranchenbuch_pi1.overviewSort}
   cat_sortBy                = {$plugin.tx_mhbranchenbuch_pi1.cat_sortBy}
   show_empty_cats           = {$plugin.tx_mhbranchenbuch_pi1.show_empty_cats}
+  show_empty_cities         = {$plugin.tx_mhbranchenbuch_pi1.show_empty_cities}
   show_cat_count            = {$plugin.tx_mhbranchenbuch_pi1.show_cat_count}
   catImgMaxHeight           = {$plugin.tx_mhbranchenbuch_pi1.catImgMaxHeight}
   catImgMaxWidth            = {$plugin.tx_mhbranchenbuch_pi1.catImgMaxWidth}
@@ -142,13 +143,13 @@ plugin.tx_mhbranchenbuch_pi1 {
   category_stdWrap.wrap     = |
   
   tel_stdWrap.required      = 1
-  tel_stdWrap.dataWrap      = {LLL:EXT:mh_branchenbuch/pi1/locallang.xml:telephone}|
+  tel_stdWrap.dataWrap      = {LLL:EXT:mh_branchenbuch/pi1/locallang.xml:telephone}&nbsp;|
   
   fax_stdWrap.required      = 1
-  fax_stdWrap.dataWrap      = {LLL:EXT:mh_branchenbuch/pi1/locallang.xml:fax}|
+  fax_stdWrap.dataWrap      = {LLL:EXT:mh_branchenbuch/pi1/locallang.xml:fax}&nbsp;|
   
   mobile_stdWrap.required   = 1
-  mobile_stdWrap.dataWrap   = {LLL:EXT:mh_branchenbuch/pi1/locallang.xml:mobile}|
+  mobile_stdWrap.dataWrap   = {LLL:EXT:mh_branchenbuch/pi1/locallang.xml:mobile}&nbsp;|
   
   address_stdWrap.wrap      = |
   

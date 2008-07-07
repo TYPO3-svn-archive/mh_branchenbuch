@@ -28,7 +28,7 @@
 			<label index="step3_legend">Step 3 - City</label>
 			<label index="step3_2_legend">Step 3.2 - Add a new city</label>
 			<label index="step3_2_city">Name of the city:</label>
-			<label index="step3_2_city_submit">Submit new city</label>
+			<label index="step3_2_city_submit">Zip / City:</label>
 			<label index="step4_header">Schritt 4 - Your Entry</label>
 			<label index="feform_important">Important Settings</label>
 			<label index="feform_type">Type of entry</label>
@@ -216,7 +216,7 @@
 			<label index="step2_legend">Schritt 2 - Landkreis</label>
 			<label index="step3_legend">Schritt 3 - Stadt</label>
 			<label index="step3_2_legend">Schritt 3.2 - Neue Stadt hinzufügen</label>
-			<label index="step3_2_city">Name der Stadt:</label>
+			<label index="step3_2_city">PLZ / Ort:</label>
 			<label index="step3_2_city_submit">Neue Stadt hinzufügen</label>
 			<label index="step4_header">Schritt 4 - Ihr Eintrag</label>
 			<label index="feform_important">Wichtige Daten</label>
@@ -373,9 +373,9 @@
   	  <label index="mailbody_administrativedistrict">Landkreis:</label>
   	  <label index="mailbody_city">Stadt:</label>
   	  <label index="overviewPathStart">Startseite</label>
-  	  <label index="telephone">Telefon: </label>
-  	  <label index="fax">Fax: </label>
-  	  <label index="mobile">Handy: </label>
+  	  <label index="telephone">Telefon:</label>
+  	  <label index="fax">Fax:</label>
+  	  <label index="mobile">Handy:</label>
   	  <label index="mail">E-Mail</label>
   	  <label index="www">Homepage</label>
   	  <label index="movie">Video anschauen</label>

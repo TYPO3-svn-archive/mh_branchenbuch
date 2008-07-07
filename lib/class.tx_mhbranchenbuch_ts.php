@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2007 Martin Hesse <mail@martin-hesse.info>
+*  (c) 2007-2008 Martin Hesse <mail@martin-hesse.info>
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -96,6 +96,7 @@ class tx_mhbranchenbuch_ts extends tslib_pibase {
       'directRedirect',
       'show_empty_cats',
       'show_cat_count',
+      'show_empty_cities',
       'catImgMaxHeight',
       'catImgMaxWidth',
       'catImageParams',
