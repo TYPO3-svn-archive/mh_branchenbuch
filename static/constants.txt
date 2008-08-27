@@ -1,247 +1,256 @@
-plugin.tx_mhbranchenbuch_pi1 {
-  #cat=Yellow Page (mh_branchenbuch) - General//d; type=string; label=Mail of a administrator: This user will become notified if someone makes a new entry or modified his entry and different other notifactions. All notifications can enabled/disabled here!
-  admin =
-  
-  #cat=Yellow Page (mh_branchenbuch) - General/file/a; type=file[html,htm,tmpl,txt]; label=Template File: HTML-template file. The localisation find you under "typo3conf/ext/mh_branchenbuch/pi1/locallang.xml".
-  templateFile = EXT:mh_branchenbuch/res/template.html
-  
-  #cat=Yellow Page (mh_branchenbuch) - General//b; type=int+; label=Single-Pid: Page-Id where is the SINGLE-VIEW located.
-  single_pid = 
-  
-  #cat=Yellow Page (mh_branchenbuch) - General//c; type=int+; label=Search-Pid: Page-Id where is the SEARCH-VIEW located.
-  search_pid = 
-  
-  #cat=Yellow Page (mh_branchenbuch) - General//d; type=int+; label=LATEST entries:How much entries should be displayed in the LATEST-VIEW
-  limitLatest               = 5
-  
-  #cat=Yellow Page (mh_branchenbuch) - General//e; type=int+; label=Max entries per user:You can limit the number of entries that a user can do. Set this to 0 to set it to unlimited.
-  maxEntriesPerUser         = 0
-  
-  #cat=Yellow Page (mh_branchenbuch) - General//; type=string; label=Title of the last "letter":The last letter in the Alphabetic-Menu will show all entries
-  letterAll                 = All
-  
-  #cat=Yellow Page (mh_branchenbuch) - General//; type=string; label=Sort LIST-VIEW by...:Choose here "firma" to sort the LIST-View by the name of the companies (ASC/DESC). Example: firma ASC. Other possible fields are: crdate (by date), firma (company), typ (type), sorting (manual sorting in backend) and much other, look at the database! 
-  list_sortBy               = firma ASC
-  
-  #cat=Yellow Page (mh_branchenbuch) - General/enable; type=boolean; label=Dont link Root-Node of a Subtree:This is for the treeview (Categories). If you dont want that the main categories should be available to choice when you have subcategories in it then select this.
-  dontLinkMainNode          = 0
-  
-  #cat=Yellow Page (mh_branchenbuch) - General//; type=options[captcha,sr_freecap]; label=Captcha-Extension:Which captcha extension do you want to use? sr_freecap or captcha
-  captcha                    = captcha
-  
-  #cat=Yellow Page (mh_branchenbuch) - Default entries/file; type=file[html,htm,tmpl,txt]; label=Placeholder-Image:Placeholder-Image for Entries without uploaded image
-  noImage                   = EXT:mh_branchenbuch/res/noImage.gif
-  
-  #cat=Yellow Page (mh_branchenbuch) - Default entries/enable; type=boolean; label=Mail-Type:Check this to send mails over a form or uncheck this to send mails direct over your local mail-program
-  mailTyp                   = 1
-  
-  #cat=Yellow Page (mh_branchenbuch) - Default entries//; type=int+; label=Image maximum height:Maximum height for uploaded images
-  imgMaxHeight              = 150
-  
-  #cat=Yellow Page (mh_branchenbuch) - Default entries//; type=int+; label=Image maximum width:Maximum width for uploaded images
-  imgMaxWidth               = 150
-  
-  #cat=Yellow Page (mh_branchenbuch) - Default entries//; type=string; label=Mail-Header:Here you can set a Mail-Header, it will be displayed in the first line of the email
-  mail_header               =
-  
-  #cat=Yellow Page (mh_branchenbuch) - Default entries//; type=string; label=Mail-From: From who comes the mail?
-  mail_from                 = sender <sendermail>
-    
-  #cat=Yellow Page (mh_branchenbuch) - Default entries//; type=string; label=Image parameters:Additional image parameters, Example: style="border:1px solid black" or onclick="javascript:doThat();"
-  imageParams               = 
-   
-  #cat=Yellow Page (mh_branchenbuch) - Default entries/enable; type=boolean; label=Title-Link:Should the title in a entry be linked to the website or the detail-view?
-  linkTitle                 = 1
-  
-  #cat=Yellow Page (mh_branchenbuch) - Default entries//; type=string; label=Link-Type:Which type of entries should be linked? XS=7, S=0, M=1, L=2, XL*=3, XXL**=4, XXL***=5
-  linkType                  = 0,1,2,3,4,5,7
-  
-  #cat=Yellow Page (mh_branchenbuch) - Default entries//; type=string; label=Link-Target:Opens the link in the "link-field" of a entry in a new window (_blank) or in the same (_self)
-  linkTarget                = _blank
-  
-  #cat=Yellow Page (mh_branchenbuch) - Default entries/enable; type=boolean; label=Direct redirect:Set this to redirect direct to a Company-Website if someone clicks on the Image. Uncheck this to set a Pre-Page bevor.
-  directRedirect            = 1
-  
-  #cat=Yellow Page (mh_branchenbuch) - Default entries//; type=int+; label=Render Mode for Images:This is the render mode for images of all entries. If it set to 1 and no details about the company are available, then the image have a link to the website from the company. Otherwise it will redirect to the detail-view of this entry. On render mode 2 the image open in a pop-up. Supports imagelightbox2 and pmkslimbox.
-  imageRenderMode           = 1
-  
-  #cat=Yellow Page (mh_branchenbuch) - Search-View/enable; type=boolean; label=Show XS-Entries in the searchresults?:Here you can set if the smallest entries (XS) will be displayed in the searchresults
-  search_showXS             = 1
-
-  #cat=Yellow Page (mh_branchenbuch) - Search-View//; type=int+; label=Minimum number of characters for Keyword1:(Who/What)
-  minLengthKeyword1         = 3
-  
-  #cat=Yellow Page (mh_branchenbuch) - Search-View//; type=int+; label=Minimum number of characters for Keyword2:(Where)
-  minLengthKeyword2         = 3
-  
-  #cat=Yellow Page (mh_branchenbuch) - Search-View//; type=string; label=Search tables:Here are the database-tables that are will be searched for a keyword. Possible: keywords,adresse (address),firma (company), custom1, custom2, custom3
-  search_tables             = firma,keywords
-  
-  #cat=Yellow Page (mh_branchenbuch) - FE-Form//; type=string; label=Required fields:You can set here some fields that must fill up in the form to be valid. Example: you have a input field like this: "<input type="text" name="tx_mh_branchenbuch_postVar[company]" />". To make this inputfield as a "must have"-field, you just type the name between the [..] in the field below. Example: feForm_required = company,example2,example3 ...
-  feForm_required           = agbcheck,firma,typ
-  
-  #cat=Yellow Page (mh_branchenbuch) - FE-Form/enable; type=boolean; label=Notify on a new entry?:A email will be send to the administrator if a user makes a new entry
-  feForm_report             = 1
-
-  #cat=Yellow Page (mh_branchenbuch) - FE-Form//; type=int+; label=Image upload size:Maximum size of the uploaded image in kilobyte (kb)
-  feForm_maxsize            = 500
-   
-  #cat=Yellow Page (mh_branchenbuch) - FE-Form/enable; type=boolean; label=Can user create a new city?:This will be possible in the FE-Form at step 3
-  feForm_createCity         = 1
-  
-  #cat=Yellow Page (mh_branchenbuch) - FE-Form/enable; type=boolean; label=Can FE-User edit his own entries?
-  FEedit                    = 1
-
-  #cat=Yellow Page (mh_branchenbuch) - FE-Form/enable; type=boolean; label=Can FE-User delete his own entries?:Does not work yet!
-  FEdelete                  = 0
-  
-  #cat=Yellow Page (mh_branchenbuch) - FE-Form//a; type=string; label=Active fields XS-Entry:Set here the fields which be allowed to fill up in the FE-Form. Fields available: nothing, keywords, upload, detail. More information about that find you in the Manual!
-  feForm_fields_xs          = nothing
-  
-  #cat=Yellow Page (mh_branchenbuch) - FE-Form//b; type=string; label=Active fields S-Entry:Set here the fields which be allowed to fill up in the FE-Form. Fields available: nothing, keywords, upload, detail. More information about that find you in the Manual!
-  feForm_fields_s           = keywords
-  
-  #cat=Yellow Page (mh_branchenbuch) - FE-Form//c; type=string; label=Active fields M-Entry:Set here the fields which be allowed to fill up in the FE-Form. Fields available: nothing, keywords, upload, detail. More information about that find you in the Manual!
-  feForm_fields_m           = keywords,upload
-  
-  #cat=Yellow Page (mh_branchenbuch) - FE-Form//d; type=string; label=Active fields L-Entry:Set here the fields which be allowed to fill up in the FE-Form. Fields available: nothing, keywords, upload, detail. More information about that find you in the Manual!
-  feForm_fields_l           = keywords,upload,detail
-  
-  #cat=Yellow Page (mh_branchenbuch) - FE-Form//e; type=string; label=Active fields XL*-Entry:Set here the fields which be allowed to fill up in the FE-Form. Fields available: nothing, keywords, upload, detail. More information about that find you in the Manual!
-  feForm_fields_xl          = keywords,upload,detail
-  
-  #cat=Yellow Page (mh_branchenbuch) - FE-Form//f; type=string; label=Active fields XXL**-Entry:Set here the fields which be allowed to fill up in the FE-Form. Fields available: nothing, keywords, upload, detail. More information about that find you in the Manual!
-  feForm_fields_xxl         = keywords,upload,detail
-  
-  #cat=Yellow Page (mh_branchenbuch) - FE-Form//g; type=string; label=Active fields XXL***-Entry:Set here the fields which be allowed to fill up in the FE-Form. Fields available: nothing, keywords, upload, detail. More information about that find you in the Manual!
-  feForm_fields_xxl2        = keywords,upload,detail
-  
-  #cat=Yellow Page (mh_branchenbuch) - FE-Form//g; type=string; label=Active fields Advertise-Entry:Set here the fields which be allowed to fill up in the FE-Form. Fields available: nothing, keywords, upload, detail. More information about that find you in the Manual!
-  feForm_fields_advertise   = nothing
-  
-  #cat=Yellow Page (mh_branchenbuch) - FE-Form//h; type=int+; label=Keywords XS-Entry:Number of keywords that can user add
-  feForm_keywords_xs        = 0
-  
-  #cat=Yellow Page (mh_branchenbuch) - FE-Form//i; type=int+; label=Keywords S-Entry:Number of keywords that can user add
-  feForm_keywords_s         = 5
-  
-  #cat=Yellow Page (mh_branchenbuch) - FE-Form//j; type=int+; label=Keywords M-Entry:Number of keywords that can user add
-  feForm_keywords_m         = 10
-  
-  #cat=Yellow Page (mh_branchenbuch) - FE-Form//k; type=int+; label=Keywords L-Entry:Number of keywords that can user add
-  feForm_keywords_l         = 10
-  
-  #cat=Yellow Page (mh_branchenbuch) - FE-Form//l; type=int+; label=Keywords XL-Entry:Number of keywords that can user add
-  feForm_keywords_xl        = 15
-  
-  #cat=Yellow Page (mh_branchenbuch) - FE-Form//m; type=int+; label=Keywords XXL**-Entry:Number of keywords that can user add
-  feForm_keywords_xxl       = 20
-  
-  #cat=Yellow Page (mh_branchenbuch) - FE-Form//n; type=int+; label=Keywords XXL***-Entry:Number of keywords that can user add
-  feForm_keywords_xxl2      = 25
-  
-  #cat=Yellow Page (mh_branchenbuch) - FE-Form//o; type=int+; label=Number of upload fields:How much pictures can a user upload
-  feForm_uploadFields       = 1
-  
-  #cat=Yellow Page (mh_branchenbuch) - FE-Form//p; type=int+; label=Number of Categories (XS):Number of Categories that a user can choose
-  feForm_categories_xs      = 1
-  
-  #cat=Yellow Page (mh_branchenbuch) - FE-Form//q; type=int+; label=Number of Categories (S):Number of Categories that a user can choose
-  feForm_categories_s       = 2
-  
-  #cat=Yellow Page (mh_branchenbuch) - FE-Form//r; type=int+; label=Number of Categories (M):Number of Categories that a user can choose
-  feForm_categories_m       = 3
-  
-  #cat=Yellow Page (mh_branchenbuch) - FE-Form//s; type=int+; label=Number of Categories (L):Number of Categories that a user can choose
-  feForm_categories_l       = 4
-  
-  #cat=Yellow Page (mh_branchenbuch) - FE-Form//t; type=int+; label=Number of Categories (XL):Number of Categories that a user can choose
-  feForm_categories_xl      = 5
-  
-  #cat=Yellow Page (mh_branchenbuch) - FE-Form//u; type=int+; label=Number of Categories (XXL):Number of Categories that a user can choose
-  feForm_categories_xxl     = 8
-  
-  #cat=Yellow Page (mh_branchenbuch) - FE-Form//v; type=int+; label=Number of Categories (XXL2):Number of Categories that a user can choose
-  feForm_categories_xxl2    = 8
-   
-  #cat=Yellow Page (mh_branchenbuch) - Tagcloud/enable; type=boolean; label=Count entries?:Should behind of every cloud a counter be displayed which the count of the entries in it?
-  countEntrys               = 1
-   
-  #cat=Yellow Page (mh_branchenbuch) - Tagcloud//c; type=int+; label=Minium font size:Minimum font size of a cloud
-  minFontSize               = 10
-  
-  #cat=Yellow Page (mh_branchenbuch) - Tagcloud//b; type=int+; label=Maximum font size:Maximum font size of a cloud
-  maxFontSize               = 42
-  
-  #cat=Yellow Page (mh_branchenbuch) - Tagcloud//d; type=string; label=Colors of the clouds (random)
-  CloudColors               = red,green,blue,black,grey,purple,darkblue,orange,gold,mediumseagrenn,olive,midnightblue
-  
-  #cat=Yellow Page (mh_branchenbuch) - Tagcloud/enable; type=boolean; label=Clickable-Clouds:Create a link for every cloud to get a overview about all entries in it
-  TagCloudLink              = 1
-
-  #cat=Yellow Page (mh_branchenbuch) - Overview//e; type=string; label=Rootline seperator:This will inserted between 2 items on a rootline
-  overviewPathSeperator     = &nbsp;>&nbsp;
-    
-  #cat=Yellow Page (mh_branchenbuch) - Overview//a; type=int[1-4]; label=Overview-Mode:You can choose here different modes for the overview. ATTENTION: If you type here > 1 read below the field "Overview-ID". Legend: 1 = It will displayed the federal states at first, 2 = It will displayed the administrative districts at first, 3 = It will displayed the cities at first, 4 = It will displayed the overview
-  overviewMode              = 1
-  
-  #cat=Yellow Page (mh_branchenbuch) - Overview//b; type=string; label=Overview-ID:If you set the Overview-Mode > 1, then you must do here some settings. If overviewMode == 2, then you must set here a ID for a federal state. If overviewMode == 3, then you must set here a ID for a federal state and for a administrative district (id1,id2) and if overviewMode == 4, see 3 but you must add a id for the city! (id1,id2,id3)
-  overviewID                  = 
-  
-  #cat=Yellow Page (mh_branchenbuch) - Overview//c; type=string; label=Sortorder:You can set here a order on how the Entries should be displayed in the overview. The default order is: XXL*** > XXL** > XL * > L > M > S > XS (XS=7, S=0, M=1, L=2, XL*=3, XXL**=4, XXL***=5)
-  overviewSort                = 5,4,3,2,1,0,7
-  
-  #cat=Yellow Page (mh_branchenbuch) - Overview//d; type=int+; label=Latest N entries:How much entries should be displayed in the OVERVIEW-LATEST-VIEW (after you selected a city)
-  limitLatestOverview         = 3
-  
-  #cat=Yellow Page (mh_branchenbuch) - Overview//f; type=string; label=Sort by...:Choose here "name" to sort the categories in the overview by his name (ASC/DESC) or choose "sorting" to sort the cateogires by the list-view in the backend, where you can sort the categories with the sort-arrows
-  cat_sortBy                  = name
-  
-  #cat=Yellow Page (mh_branchenbuch) - Overview/enable; type=boolean; label=Show empty categories?:Uncheck this if you dont want that categories displayed which have no entries
-  show_empty_cats             = 1
-  
-  #cat=Yellow Page (mh_branchenbuch) - Overview/enable; type=boolean; label=Show empty cities?:Uncheck this if you dont want that cities displayed which have no entries
-  show_empty_cities           = 1
-  
-  #cat=Yellow Page (mh_branchenbuch) - Overview/enable; type=boolean; label=Sum of entries behind a Category?:Uncheck this if you dont want that the sum of entries should be displayed behind a category
-  show_cat_count              = 1
-  
-  #cat=Yellow Page (mh_branchenbuch) - Overview//g; type=int+; label=Category-Image maximum height:Maximum height for a category image
-  catImgMaxHeight             =
-  
-  #cat=Yellow Page (mh_branchenbuch) - Overview//h; type=int+; label=Category-Image maximum width:Maximum width for a category image
-  catImgMaxWidth              = 150
-  
-  #cat=Yellow Page (mh_branchenbuch) - Overview//i; type=string; label=Image parameters:Additional image parameters, Example: style="border:1px solid black" or onclick="javascript:doThat();"
-  catImageParams              =
-  
-  #cat=Yellow Page (mh_branchenbuch) - Overview//j; type=string; label=API-Key for GoogleMap:You need a API-Key to use Google-Maps!
-  map_api                     =
-
-  #cat=Yellow Page (mh_branchenbuch) - Overview//k; type=int[1-19]; label=Map Zoom #1:Zoom level in the beginning for the map located in the administrative districts. Possible value: 1 (far) - 17/19 (near)
-  map_zoom1                   = 6
-  
-  #cat=Yellow Page (mh_branchenbuch) - Overview//l; type=int[1-19]; label=Map Zoom #2:Zoom level in the beginning for the map located in the federal states. Possible value: 1 (far) - 17/19 (near)
-  map_zoom2                   = 9
-  
-  #cat=Yellow Page (mh_branchenbuch) - Overview//m; type=int[1-19]; label=Map Zoom #3:Zoom level in the beginning for the map located in the cities. Possible value: 1 (far) - 17/19 (near)
-  map_zoom3                   = 12
-  
-  #cat=Yellow Page (mh_branchenbuch) - Overview//m; type=int[1-19]; label=Map Zoom #4:Zoom level in the beginning for the map located in the detail-view. Possible value: 1 (far) - 17/19 (near)
-  map_zoom4                   = 14
-  
-  #cat=Yellow Page (mh_branchenbuch) - Overview/enable; type=boolean; label=Map show image:Check this to show the Company-Image in the "Map-Info-Tab" 
-  map_showImage               = 0
-  
-  #cat=Yellow Page (mh_branchenbuch) - Banner rotation//; type=int+; label=How much images should be displayed?
-  rotationLimit             = 1
-  
-  #cat=Yellow Page (mh_branchenbuch) - Banner rotation//; type=string; label=Exclude entries in rotation:Exclude a special type of entries, just enter the ID here (XS=7, S=0, M=1, L=2, XL*=3, XXL**=4, XXL***=5). Example: You dont want that the entries with the type L, XL and S should be displayed? Just insert "2,3,0"
-  rotationExclude           = 
-  
-  #cat=Yellow Page (mh_branchenbuch) - Banner rotation//; type=string; label=Link-Target:Opens the link when someone click on the banner in a new window (_blank) or in the same (_self)
-  rotationTarget            = _blank
-  
-  #cat=Yellow Page (mh_branchenbuch) - Banner rotation//; type=int+; label=Redirection time:Time in seconds when the user will be redirected to the website of the entry
-  redirectTime              = 5
-}
+plugin.tx_mhbranchenbuch_pi1 {
+  #cat=Yellow Page (mh_branchenbuch) - General//d; type=string; label=Mail of a administrator: This user will become notified if someone makes a new entry or modified his entry and different other notifactions. All notifications can enabled/disabled here!
+  admin =
+  
+  #cat=Yellow Page (mh_branchenbuch) - General/file/a; type=file[html,htm,tmpl,txt]; label=Template File: HTML-template file. The localisation find you under "typo3conf/ext/mh_branchenbuch/pi1/locallang.xml".
+  templateFile = EXT:mh_branchenbuch/res/template.html
+  
+  #cat=Yellow Page (mh_branchenbuch) - General//b; type=int+; label=Single-Pid: Page-Id where is the SINGLE-VIEW located.
+  single_pid = 
+  
+  #cat=Yellow Page (mh_branchenbuch) - General//c; type=int+; label=Search-Pid: Page-Id where is the SEARCH-VIEW located.
+  search_pid = 
+  
+  #cat=Yellow Page (mh_branchenbuch) - General//d; type=int+; label=LATEST entries:How much entries should be displayed in the LATEST-VIEW
+  limitLatest               = 5
+  
+  #cat=Yellow Page (mh_branchenbuch) - General//e; type=int+; label=Max entries per user:You can limit the number of entries that a user can do. Set this to 0 to set it to unlimited.
+  maxEntriesPerUser         = 0
+  
+  #cat=Yellow Page (mh_branchenbuch) - General//; type=string; label=Title of the last "letter":The last letter in the Alphabetic-Menu will show all entries
+  letterAll                 = All
+  
+  #cat=Yellow Page (mh_branchenbuch) - General//; type=string; label=Sort LIST-VIEW by...:Choose here "f.firma" to sort the LIST-View by the name of the companies (ASC/DESC). Example: f.firma ASC. Other possible fields are: f.crdate (by date), f.firma (company), f.typ (type), f.sorting (manual sorting in backend) and much other, look at the database! 
+  listSort                  = tx_mhbranchenbuch_firmen.firma ASC
+  
+  #cat=Yellow Page (mh_branchenbuch) - General/enable; type=boolean; label=Dont link Root-Node of a Subtree:This is for the treeview (Categories). If you dont want that the main categories should be available to choice when you have subcategories in it then select this.
+  dontLinkMainNode          = 0
+  
+  #cat=Yellow Page (mh_branchenbuch) - General//; type=options[captcha,sr_freecap]; label=Captcha-Extension:Which captcha extension do you want to use? sr_freecap or captcha
+  captcha                    = captcha
+  
+  #cat=Yellow Page (mh_branchenbuch) - General//; type=string; label=Datetime:See http://php.net/date for more
+  datetime                   = d.m.y G:i
+  
+  #cat=Yellow Page (mh_branchenbuch) - Default entries/file; type=file[html,htm,tmpl,txt]; label=Placeholder-Image:Placeholder-Image for Entries without uploaded image
+  noImage                   = EXT:mh_branchenbuch/res/noImage.gif
+  
+  #cat=Yellow Page (mh_branchenbuch) - Default entries/enable; type=boolean; label=Mail-Type:Check this to send mails over a form or uncheck this to send mails direct over your local mail-program
+  mailTyp                   = 1
+  
+  #cat=Yellow Page (mh_branchenbuch) - Default entries//; type=int+; label=Image maximum height:Maximum height for uploaded images
+  imgMaxHeight              = 150
+  
+  #cat=Yellow Page (mh_branchenbuch) - Default entries//; type=int+; label=Image maximum width:Maximum width for uploaded images
+  imgMaxWidth               = 150
+  
+  #cat=Yellow Page (mh_branchenbuch) - Default entries//; type=string; label=Mail-Header:Here you can set a Mail-Header, it will be displayed in the first line of the email
+  mail_header               =
+  
+  #cat=Yellow Page (mh_branchenbuch) - Default entries//; type=string; label=Mail-From: From who comes the mail?
+  mail_from                 = sender <sendermail>
+    
+  #cat=Yellow Page (mh_branchenbuch) - Default entries//; type=string; label=Image parameters:Additional image parameters, Example: style="border:1px solid black" or onclick="javascript:doThat();"
+  imageParams               = 
+   
+  #cat=Yellow Page (mh_branchenbuch) - Default entries/enable; type=boolean; label=Title-Link:Should the title in a entry be linked to the website or the detail-view?
+  linkTitle                 = 1
+  
+  #cat=Yellow Page (mh_branchenbuch) - Default entries//; type=string; label=Link-Type:Which type of entries should be linked? XS=7, S=0, M=1, L=2, XL*=3, XXL**=4, XXL***=5
+  linkType                  = 0,1,2,3,4,5,7
+  
+  #cat=Yellow Page (mh_branchenbuch) - Default entries//; type=string; label=Link-Target:Opens the link in the "link-field" of a entry in a new window (_blank) or in the same (_self)
+  linkTarget                = _blank
+  
+  #cat=Yellow Page (mh_branchenbuch) - Default entries/enable; type=boolean; label=Direct redirect:Set this to redirect direct to a Company-Website if someone clicks on the Image. Uncheck this to set a Pre-Page bevor.
+  directRedirect            = 1
+  
+  #cat=Yellow Page (mh_branchenbuch) - Default entries//; type=int+; label=Render Mode for Images:This is the render mode for images of all entries. If it set to 1 and no details about the company are available, then the image have a link to the website from the company. Otherwise it will redirect to the detail-view of this entry. On render mode 2 the image open in a pop-up. Supports imagelightbox2 and pmkslimbox.
+  imageRenderMode           = 1
+  
+  #cat=Yellow Page (mh_branchenbuch) - Default entries/enable; type=boolean; label=Activate/Deactivate vCard Note:It seems there is a probleme when HTML is in the Detailfield of a entry. Better deactivate then the vCard note field.
+  vCard_note                = 1
+  
+  #cat=Yellow Page (mh_branchenbuch) - Search-View/enable; type=boolean; label=Show XS-Entries in the searchresults?:Here you can set if the smallest entries (XS) will be displayed in the searchresults
+  search_showXS             = 1
+
+  #cat=Yellow Page (mh_branchenbuch) - Search-View//; type=int+; label=Minimum number of characters for Keyword1:(Who/What)
+  minLengthKeyword1         = 3
+  
+  #cat=Yellow Page (mh_branchenbuch) - Search-View//; type=int+; label=Minimum number of characters for Keyword2:(Where)
+  minLengthKeyword2         = 3
+  
+  #cat=Yellow Page (mh_branchenbuch) - Search-View//; type=string; label=Search tables:Here are the database-tables that are will be searched for a keyword. Possible: keywords,adresse (address),firma (company), custom1, custom2, custom3
+  search_tables             = firma,keywords
+  
+  #cat=Yellow Page (mh_branchenbuch) - Search-View//; type=string; label=Sortorder:You can set here a order on how the Entries should be displayed in the searchresults. The default order is: XXL*** > XXL** > XL * > L > M > S > XS (XS=7, S=0, M=1, L=2, XL*=3, XXL**=4, XXL***=5)
+  searchSort                = 5,4,3,2,1,0,7
+  
+  #cat=Yellow Page (mh_branchenbuch) - FE-Form//; type=string; label=Required fields:You can set here some fields that must fill up in the form to be valid. Example: you have a input field like this: "<input type="text" name="tx_mh_branchenbuch_postVar[company]" />". To make this inputfield as a "must have"-field, you just type the name between the [..] in the field below. Example: feForm_required = company,example2,example3 ...
+  feForm_required           = agbcheck,firma,typ
+  
+  #cat=Yellow Page (mh_branchenbuch) - FE-Form/enable; type=boolean; label=Notify on a new entry?:A email will be send to the administrator if a user makes a new entry
+  feForm_report             = 1
+
+  #cat=Yellow Page (mh_branchenbuch) - FE-Form//; type=int+; label=Image upload size:Maximum size of the uploaded image in kilobyte (kb)
+  feForm_maxsize            = 500
+   
+  #cat=Yellow Page (mh_branchenbuch) - FE-Form/enable; type=boolean; label=Can user create a new city?:This will be possible in the FE-Form at step 3
+  feForm_createCity         = 1
+  
+  #cat=Yellow Page (mh_branchenbuch) - FE-Form/enable; type=boolean; label=Can FE-User edit his own entries?
+  FEedit                    = 1
+
+  #cat=Yellow Page (mh_branchenbuch) - FE-Form/enable; type=boolean; label=Can FE-User delete his own entries?:Does not work yet!
+  FEdelete                  = 0
+  
+  #cat=Yellow Page (mh_branchenbuch) - FE-Form//a; type=string; label=Active fields XS-Entry:Set here the fields which be allowed to fill up in the FE-Form. Fields available: nothing, keywords, upload, detail. More information about that find you in the Manual!
+  feForm_fields_xs          = nothing
+  
+  #cat=Yellow Page (mh_branchenbuch) - FE-Form//b; type=string; label=Active fields S-Entry:Set here the fields which be allowed to fill up in the FE-Form. Fields available: nothing, keywords, upload, detail. More information about that find you in the Manual!
+  feForm_fields_s           = keywords
+  
+  #cat=Yellow Page (mh_branchenbuch) - FE-Form//c; type=string; label=Active fields M-Entry:Set here the fields which be allowed to fill up in the FE-Form. Fields available: nothing, keywords, upload, detail. More information about that find you in the Manual!
+  feForm_fields_m           = keywords,upload
+  
+  #cat=Yellow Page (mh_branchenbuch) - FE-Form//d; type=string; label=Active fields L-Entry:Set here the fields which be allowed to fill up in the FE-Form. Fields available: nothing, keywords, upload, detail. More information about that find you in the Manual!
+  feForm_fields_l           = keywords,upload,detail
+  
+  #cat=Yellow Page (mh_branchenbuch) - FE-Form//e; type=string; label=Active fields XL*-Entry:Set here the fields which be allowed to fill up in the FE-Form. Fields available: nothing, keywords, upload, detail. More information about that find you in the Manual!
+  feForm_fields_xl          = keywords,upload,detail
+  
+  #cat=Yellow Page (mh_branchenbuch) - FE-Form//f; type=string; label=Active fields XXL**-Entry:Set here the fields which be allowed to fill up in the FE-Form. Fields available: nothing, keywords, upload, detail. More information about that find you in the Manual!
+  feForm_fields_xxl         = keywords,upload,detail
+  
+  #cat=Yellow Page (mh_branchenbuch) - FE-Form//g; type=string; label=Active fields XXL***-Entry:Set here the fields which be allowed to fill up in the FE-Form. Fields available: nothing, keywords, upload, detail. More information about that find you in the Manual!
+  feForm_fields_xxl2        = keywords,upload,detail
+  
+  #cat=Yellow Page (mh_branchenbuch) - FE-Form//g; type=string; label=Active fields Advertise-Entry:Set here the fields which be allowed to fill up in the FE-Form. Fields available: nothing, keywords, upload, detail. More information about that find you in the Manual!
+  feForm_fields_advertise   = nothing
+  
+  #cat=Yellow Page (mh_branchenbuch) - FE-Form//h; type=int+; label=Keywords XS-Entry:Number of keywords that can user add
+  feForm_keywords_xs        = 0
+  
+  #cat=Yellow Page (mh_branchenbuch) - FE-Form//i; type=int+; label=Keywords S-Entry:Number of keywords that can user add
+  feForm_keywords_s         = 5
+  
+  #cat=Yellow Page (mh_branchenbuch) - FE-Form//j; type=int+; label=Keywords M-Entry:Number of keywords that can user add
+  feForm_keywords_m         = 10
+  
+  #cat=Yellow Page (mh_branchenbuch) - FE-Form//k; type=int+; label=Keywords L-Entry:Number of keywords that can user add
+  feForm_keywords_l         = 10
+  
+  #cat=Yellow Page (mh_branchenbuch) - FE-Form//l; type=int+; label=Keywords XL-Entry:Number of keywords that can user add
+  feForm_keywords_xl        = 15
+  
+  #cat=Yellow Page (mh_branchenbuch) - FE-Form//m; type=int+; label=Keywords XXL**-Entry:Number of keywords that can user add
+  feForm_keywords_xxl       = 20
+  
+  #cat=Yellow Page (mh_branchenbuch) - FE-Form//n; type=int+; label=Keywords XXL***-Entry:Number of keywords that can user add
+  feForm_keywords_xxl2      = 25
+  
+  #cat=Yellow Page (mh_branchenbuch) - FE-Form//o; type=int+; label=Number of upload fields:How much pictures can a user upload
+  feForm_uploadFields       = 1
+  
+  #cat=Yellow Page (mh_branchenbuch) - FE-Form//p; type=int+; label=Number of Categories (XS):Number of Categories that a user can choose
+  feForm_categories_xs      = 1
+  
+  #cat=Yellow Page (mh_branchenbuch) - FE-Form//q; type=int+; label=Number of Categories (S):Number of Categories that a user can choose
+  feForm_categories_s       = 2
+  
+  #cat=Yellow Page (mh_branchenbuch) - FE-Form//r; type=int+; label=Number of Categories (M):Number of Categories that a user can choose
+  feForm_categories_m       = 3
+  
+  #cat=Yellow Page (mh_branchenbuch) - FE-Form//s; type=int+; label=Number of Categories (L):Number of Categories that a user can choose
+  feForm_categories_l       = 4
+  
+  #cat=Yellow Page (mh_branchenbuch) - FE-Form//t; type=int+; label=Number of Categories (XL):Number of Categories that a user can choose
+  feForm_categories_xl      = 5
+  
+  #cat=Yellow Page (mh_branchenbuch) - FE-Form//u; type=int+; label=Number of Categories (XXL):Number of Categories that a user can choose
+  feForm_categories_xxl     = 8
+  
+  #cat=Yellow Page (mh_branchenbuch) - FE-Form//v; type=int+; label=Number of Categories (XXL2):Number of Categories that a user can choose
+  feForm_categories_xxl2    = 8
+   
+  #cat=Yellow Page (mh_branchenbuch) - Tagcloud/enable; type=boolean; label=Count entries?:Should behind of every cloud a counter be displayed which the count of the entries in it?
+  countEntrys               = 1
+   
+  #cat=Yellow Page (mh_branchenbuch) - Tagcloud//c; type=int+; label=Minium font size:Minimum font size of a cloud
+  minFontSize               = 10
+  
+  #cat=Yellow Page (mh_branchenbuch) - Tagcloud//b; type=int+; label=Maximum font size:Maximum font size of a cloud
+  maxFontSize               = 42
+  
+  #cat=Yellow Page (mh_branchenbuch) - Tagcloud//d; type=string; label=Colors of the clouds (random)
+  CloudColors               = red,green,blue,black,grey,purple,darkblue,orange,gold,mediumseagrenn,olive,midnightblue
+  
+  #cat=Yellow Page (mh_branchenbuch) - Tagcloud/enable; type=boolean; label=Clickable-Clouds:Create a link for every cloud to get a overview about all entries in it
+  TagCloudLink              = 1
+
+  #cat=Yellow Page (mh_branchenbuch) - Overview//e; type=string; label=Rootline seperator:This will inserted between 2 items on a rootline
+  overviewPathSeperator     = &nbsp;>&nbsp;
+    
+  #cat=Yellow Page (mh_branchenbuch) - Overview//a; type=int[1-4]; label=Overview-Mode:You can choose here different modes for the overview. ATTENTION: If you type here > 1 read below the field "Overview-ID". Legend: 1 = It will displayed the federal states at first, 2 = It will displayed the administrative districts at first, 3 = It will displayed the cities at first, 4 = It will displayed the overview
+  overviewMode              = 1
+  
+  #cat=Yellow Page (mh_branchenbuch) - Overview//b; type=string; label=Overview-ID:If you set the Overview-Mode > 1, then you must do here some settings. If overviewMode == 2, then you must set here a ID for a federal state. If overviewMode == 3, then you must set here a ID for a federal state and for a administrative district (id1,id2) and if overviewMode == 4, see 3 but you must add a id for the city! (id1,id2,id3)
+  overviewID                  = 
+  
+  #cat=Yellow Page (mh_branchenbuch) - Overview//c; type=string; label=Sortorder:You can set here a order on how the Entries should be displayed in the overview. The default order is: XXL*** > XXL** > XL * > L > M > S > XS (XS=7, S=0, M=1, L=2, XL*=3, XXL**=4, XXL***=5)
+  overviewSort                = 5,4,3,2,1,0,7
+  
+  #cat=Yellow Page (mh_branchenbuch) - Overview//d; type=int+; label=Latest N entries:How much entries should be displayed in the OVERVIEW-LATEST-VIEW (after you selected a city)
+  limitLatestOverview         = 3
+  
+  #cat=Yellow Page (mh_branchenbuch) - Overview//f; type=string; label=Sort by...:Choose here "name" to sort the categories in the overview by his name (ASC/DESC) or choose "sorting" to sort the cateogires by the list-view in the backend, where you can sort the categories with the sort-arrows
+  cat_sortBy                  = name
+  
+  #cat=Yellow Page (mh_branchenbuch) - Overview/enable; type=boolean; label=Show empty categories?:Uncheck this if you dont want that categories displayed which have no entries
+  show_empty_cats             = 1
+  
+  #cat=Yellow Page (mh_branchenbuch) - Overview/enable; type=boolean; label=Show empty cities?:Uncheck this if you dont want that cities displayed which have no entries
+  show_empty_cities           = 1
+  
+  #cat=Yellow Page (mh_branchenbuch) - Overview/enable; type=boolean; label=Sum of entries behind a Category?:Uncheck this if you dont want that the sum of entries should be displayed behind a category
+  show_cat_count              = 1
+  
+  #cat=Yellow Page (mh_branchenbuch) - Overview//g; type=int+; label=Category-Image maximum height:Maximum height for a category image
+  catImgMaxHeight             =
+  
+  #cat=Yellow Page (mh_branchenbuch) - Overview//h; type=int+; label=Category-Image maximum width:Maximum width for a category image
+  catImgMaxWidth              = 150
+  
+  #cat=Yellow Page (mh_branchenbuch) - Overview//i; type=string; label=Image parameters:Additional image parameters, Example: style="border:1px solid black" or onclick="javascript:doThat();"
+  catImageParams              =
+  
+  #cat=Yellow Page (mh_branchenbuch) - Overview//j; type=string; label=API-Key for GoogleMap:You need a API-Key to use Google-Maps!
+  map_api                     =
+
+  #cat=Yellow Page (mh_branchenbuch) - Overview//k; type=int[1-19]; label=Map Zoom #1:Zoom level in the beginning for the map located in the administrative districts. Possible value: 1 (far) - 17/19 (near)
+  map_zoom1                   = 6
+  
+  #cat=Yellow Page (mh_branchenbuch) - Overview//l; type=int[1-19]; label=Map Zoom #2:Zoom level in the beginning for the map located in the federal states. Possible value: 1 (far) - 17/19 (near)
+  map_zoom2                   = 9
+  
+  #cat=Yellow Page (mh_branchenbuch) - Overview//m; type=int[1-19]; label=Map Zoom #3:Zoom level in the beginning for the map located in the cities. Possible value: 1 (far) - 17/19 (near)
+  map_zoom3                   = 12
+  
+  #cat=Yellow Page (mh_branchenbuch) - Overview//m; type=int[1-19]; label=Map Zoom #4:Zoom level in the beginning for the map located in the detail-view. Possible value: 1 (far) - 17/19 (near)
+  map_zoom4                   = 14
+  
+  #cat=Yellow Page (mh_branchenbuch) - Overview/enable; type=boolean; label=Map show image:Check this to show the Company-Image in the "Map-Info-Tab" 
+  map_showImage               = 0
+  
+  #cat=Yellow Page (mh_branchenbuch) - Banner rotation//; type=int+; label=How much images should be displayed?
+  rotationLimit             = 1
+  
+  #cat=Yellow Page (mh_branchenbuch) - Banner rotation//; type=string; label=Exclude entries in rotation:Exclude a special type of entries, just enter the ID here (XS=7, S=0, M=1, L=2, XL*=3, XXL**=4, XXL***=5). Example: You dont want that the entries with the type L, XL and S should be displayed? Just insert "2,3,0"
+  rotationExclude           = 
+  
+  #cat=Yellow Page (mh_branchenbuch) - Banner rotation//; type=string; label=Link-Target:Opens the link when someone click on the banner in a new window (_blank) or in the same (_self)
+  rotationTarget            = _blank
+  
+  #cat=Yellow Page (mh_branchenbuch) - Banner rotation//; type=int+; label=Redirection time:Time in seconds when the user will be redirected to the website of the entry
+  redirectTime              = 5
+}

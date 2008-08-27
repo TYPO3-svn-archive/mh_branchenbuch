@@ -1,21 +1,21 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
-<T3locallang>
-    <meta type="array">
-        <type>module</type>
-        <description>Labels for Dashboard Widgets</description>
-    </meta>
-    <data type="array">
-        <languageKey index="default" type="array">
-            <label index="hidden">Hidden Entries</label>
-            <label index="latest">Latest Entries</label>
-            <label index="title">Company Directory (mh_branchenbuch)</label>
-            <label index="rssfeed">News from Martin-Hesse.info (DevBlog)</label>
-        </languageKey>
-        <languageKey index="de" type="array">
-            <label index="hidden">Versteckte Einträge</label>
-            <label index="latest">Letzten Einträge</label>
-            <label index="title">Branchenbuch (mh_branchenbuch)</label>
-            <label index="rssfeed">Neuigkeiten auf Martin-Hesse.info (DevBlog)</label>
-        </languageKey>
-    </data>
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<T3locallang>
+    <meta type="array">
+        <type>module</type>
+        <description>Labels for Dashboard Widgets</description>
+    </meta>
+    <data type="array">
+        <languageKey index="default" type="array">
+            <label index="hidden">Hidden Entries</label>
+            <label index="latest">Latest Entries</label>
+            <label index="title">Company Directory (mh_branchenbuch)</label>
+            <label index="rssfeed">News from Martin-Hesse.info (DevBlog)</label>
+        </languageKey>
+        <languageKey index="de" type="array">
+            <label index="hidden">Versteckte Einträge</label>
+            <label index="latest">Letzten Einträge</label>
+            <label index="title">Branchenbuch (mh_branchenbuch)</label>
+            <label index="rssfeed">Neuigkeiten auf Martin-Hesse.info (DevBlog)</label>
+        </languageKey>
+    </data>
 </T3locallang>

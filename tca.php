@@ -46,6 +46,19 @@ $TCA["tx_mhbranchenbuch_firmen"] = array (
 				)
 			)
 		),
+		'sys_language_uid' => Array (
+			'exclude' => 1,
+			'label' => 'LLL:EXT:lang/locallang_general.php:LGL.language',
+			'config' => Array (
+				'type' => 'select',
+				'foreign_table' => 'sys_language',
+				'foreign_table_where' => 'ORDER BY sys_language.title',
+				'items' => Array(
+					Array('LLL:EXT:lang/locallang_general.php:LGL.allLanguages',-1),
+					Array('LLL:EXT:lang/locallang_general.php:LGL.default_value',0)
+				)
+			)
+		),
 		"cruser_id" => Array (		
 			"exclude" => 1,		
 			"label" => "LLL:EXT:mh_branchenbuch/locallang_db.xml:tx_mhbranchenbuch_firmen.owner",		
@@ -300,9 +313,9 @@ $TCA["tx_mhbranchenbuch_firmen"] = array (
 				"max_size" => 1000,	
 				"uploadfolder" => "uploads/tx_mhbranchenbuch",
 				"show_thumbs" => 1,	
-				"size" => 1,	
+				"size" => 5,	
 				"minitems" => 0,
-				"maxitems" => 1,
+				"maxitems" => 50,
 			)
 		),	
 		"keywords" => Array (	
@@ -370,7 +383,7 @@ $TCA["tx_mhbranchenbuch_firmen"] = array (
 		"0" => array("showitem" => "hidden;;1;;1-1-1, cruser_id, kategorie;;;;3-3-3, bundesland, landkreis, ort, firma, forename, lastname, typ, adresse, zip, city, telefon, fax, handy, link, video, email, custom1, custom2, custom3, bild, keywords, detail;;;richtext[cut|copy|paste|formatblock|textcolor|bold|italic|underline|left|center|right|orderedlist|unorderedlist|outdent|indent|link|table|image|line|chMode]:rte_transform[mode=ts_css|imgpath=uploads/mh_branchenbuch/rte/], map_lat, map_lng, hit_count, job")
 	),
 	"palettes" => array (
-		"1" => array("showitem" => "starttime, endtime")
+		"1" => array("showitem" => "starttime, endtime, sys_language_uid")
 	)
 );
 

@@ -12,6 +12,7 @@ CREATE TABLE tx_mhbranchenbuch_firmen (
   hidden tinyint(4) default '0',
   starttime int(11) default '0',
   endtime int(11) default '0',
+  sys_language_uid int(11) DEFAULT '0' NOT NULL,
   kategorie blob,
   firma tinytext,
   forename tinytext,
